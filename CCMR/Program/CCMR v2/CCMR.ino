@@ -64,25 +64,25 @@ void Mix()
   CCMR.valves.H2_needle_idle();
 }
 
-//void check_H2()
-//{
-//  
-//  if ( abs(CCMR.sensors.H2_pressure() - desired_H2_pressure) > H2_pressure_tolerance )
-//  {
-//    
-// if (CCMR.sensors.H2_pressure() > desired_H2_pressure)
-// {   
-//   CCMR.items.Electrolyzer_1(false);  
-//   CCMR.items.Electrolyzer_2(false);
-// }
-// else
-// {
-//   CCMR.items.Electrolyzer_1(true); 
-//   CCMR.items.Electrolyzer_2(true);
-// }
-//  }
-//  
-//}
+void check_H2()
+{
+  
+  if ( abs(CCMR.sensors.H2_pressure_Electrolyzer() - desired_H2_pressure) > H2_pressure_tolerance )
+  {
+    
+ if (CCMR.sensors.H2_pressure_Electrolyzer() > desired_H2_pressure)
+ {   
+   CCMR.items.Electrolyzer_1(false);  
+   CCMR.items.Electrolyzer_2(false);
+ }
+ else
+ {
+   CCMR.items.Electrolyzer_1(true);  
+   CCMR.items.Electrolyzer_2(true);
+ }
+  }
+  
+}
 
 void check_Oven()
 {
