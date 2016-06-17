@@ -43,22 +43,7 @@ CCMR.valves.Water_reflux_CH4(false);
 void loop()
 {
 
-	check_danger();
-	check_water();
-	check_H2();
-	//check_Oven();
-	readmsg();
-	if (ok)
-	{
-		
-		//Mix();
-		
-	}
-	else
-	{
-		CCMR.valves.CO2(false);
-		CCMR.valves.H2(false);
-	}
+	
 	
 }
 
@@ -79,23 +64,25 @@ void Mix()
   CCMR.valves.H2_needle_idle();
 }
 
-void check_H2()
-{
-  
-  if ( abs(CCMR.sensors.H2_pressure() - desired_H2_pressure) > H2_pressure_tolerance )
-  {
-    
- if (CCMR.sensors.H2_pressure() > desired_H2_pressure)
- {   
-   CCMR.items.Electrolyzer(false);  
- }
- else
- {
-   CCMR.items.Electrolyzer(true); 
- }
-  }
-  
-}
+//void check_H2()
+//{
+//  
+//  if ( abs(CCMR.sensors.H2_pressure() - desired_H2_pressure) > H2_pressure_tolerance )
+//  {
+//    
+// if (CCMR.sensors.H2_pressure() > desired_H2_pressure)
+// {   
+//   CCMR.items.Electrolyzer_1(false);  
+//   CCMR.items.Electrolyzer_2(false);
+// }
+// else
+// {
+//   CCMR.items.Electrolyzer_1(true); 
+//   CCMR.items.Electrolyzer_2(true);
+// }
+//  }
+//  
+//}
 
 void check_Oven()
 {
@@ -118,9 +105,9 @@ void check_Oven()
 	
 
 }
-void check_danger()
+/*oid check_danger()
 {
-	if((CCMR.sensors.Oven_temp() < 300) || (CCMR.sensors.H2_pressure() < 400))
+	if((CCMR.sensors.Oven_temp() < 300) || (CCMR.sensors.H2() < 400))
 	{
 		ok = false;
 	}
@@ -137,7 +124,7 @@ void check_danger()
 	{
 		CCMR.lights.Caution(false);
 	}
-}
+}*/
 void check_water()
 {
 	if (CCMR.sensors.H2_water(1 && 2))

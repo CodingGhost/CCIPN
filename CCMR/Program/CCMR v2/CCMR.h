@@ -1,4 +1,3 @@
-
 #pragma once
 #include <HardwareSerial.h>
 #include "Arduino.h"
@@ -18,28 +17,19 @@ int CO2_reset = 25;
 int H2_reset = 85;
 byte AD[23];
 byte RT[1];
-#define define_adresses (
-PCF8575 PCF;
-MAX1238 MAX_1;
-AD7828  AD;
-TMP100 TMP;
-PCA9545 PCA;
-MAX5815 MAX_2;
-HTY_1 HT_1;
-HTY_2 HT_2;
-SM5812 SM_1;
-SM5812 SM_2;
-)
+#define define_adresses AD7828 AD_1; PCF8575 PCF;TMP100 TMP;PCA9545 PCA;MAX1238 MAX_1;MAX5815 MAX_2;HTY_1 HT_1;HTY_2 HT_2;SM5812 SM_1;SM5812 SM_2;CVAI DA;
+
 
 class Utils
 {
 public:
-define_adresses
+ define_adresses
 void channel_switch(int num)
   {
+	 
   if (num == 0)
   {
-    I2C(addr_switch,0xF0);   
+    I2C(PCA.adress,0xF0);   
   }
   else if (num == 1)
   {
@@ -47,7 +37,7 @@ void channel_switch(int num)
   }
   else if (num == 2)
   {
-    I2C(addr_switch,0xF2);
+    I2C(PCA.adress,0xF2);
   }
   else if (num == 3)
   {
@@ -79,7 +69,7 @@ void channel_switch(int num)
 
   void write16(uint8_t v_A,uint8_t v_B,uint8_t addr)
   {
-
+	  
     Wire.beginTransmission(addr);
     Wire.write(v_A);
     Wire.write(v_B);
@@ -170,6 +160,7 @@ void channel_switch(int num)
 
   void I2CWRITE(uint8_t address, uint8_t pin, uint8_t value)
   {
+	  
     value = !value;
     I2Cread(address); 
     //_data=State_Lights; //SIMULATE
@@ -223,10 +214,11 @@ class Sensors
   Utils utils;
 
 public:
+	define_adresses
 	int Oven_temp()
 	{
-		Wire.beginTransmission(addr_AD);
-		Wire.requestFrom(addr_AD, byte(24));
+		Wire.beginTransmission(MAX_1.adress);
+		Wire.requestFrom(MAX_1.adress, byte(24));
 		//------------------------
 		AD[0] = Wire.read();
 		AD[1] = Wire.read();
@@ -252,7 +244,7 @@ public:
 		AD[21] = Wire.read();
 		AD[22] = Wire.read();
 		AD[23] = Wire.read();
-		Wire.endTransmission(addr_AD);
+		Wire.endTransmission(MAX_1.adress);
 		int output = word(AD[6], AD[7]);
 		output = output & 0x0FFF;
 		double x = output; 
@@ -275,8 +267,8 @@ public:
   int cooler()
   {
     utils.channel_switch(2);
-    Wire.beginTransmission(0x48);
-    Wire.requestFrom((int)0x48, 2);
+    Wire.beginTransmission(AD_1.adress);
+    Wire.requestFrom((int)AD_1.adress, 2);
     //int a =  word(Wire.read(),Wire.read());
 	int a = ((Wire.read() << 8) + Wire.read());
 	Serial.print("raw: ");
@@ -324,10 +316,10 @@ public:
     {
     case 1:
       { 
-        utils.I2C(addr_Sensors,0xAC);
+        utils.I2C(AD_1.adress,0xAC);
         // delay(1);
-        Wire.beginTransmission(addr_Sensors);
-        Wire.requestFrom(addr_Sensors, byte(2));
+        Wire.beginTransmission(AD_1.adress);
+        Wire.requestFrom(AD_1.adress, byte(2));
         volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
          //Serial.write("1:");
@@ -341,10 +333,10 @@ public:
       }
     case 2:
       { 
-        utils.I2C(addr_Sensors,0xDC);
+        utils.I2C(AD_1.adress,0xDC);
         // delay(1);
-        Wire.beginTransmission(addr_Sensors);
-        Wire.requestFrom(addr_Sensors, byte(2));
+        Wire.beginTransmission(AD_1.adress);
+        Wire.requestFrom(AD_1.adress, byte(2));
         volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
          //Serial.write("2:");
@@ -366,10 +358,10 @@ public:
     {
     case 1:
       { 
-        utils.I2C(addr_Sensors3,0xFC);
+        utils.I2C(0x00,0xFC);
         // delay(1);
-        Wire.beginTransmission(addr_Sensors3);
-        Wire.requestFrom(addr_Sensors3, byte(2));
+        Wire.beginTransmission(0x00);
+        Wire.requestFrom(0x00, byte(2));
         volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
         Serial.write("1:");
@@ -383,10 +375,10 @@ public:
       }
     case 2:
       { 
-        utils.I2C(addr_Sensors3,0xBC);
+        utils.I2C(0x00,0xBC);
         // delay(1);
-        Wire.beginTransmission(addr_Sensors3);
-        Wire.requestFrom(addr_Sensors3, byte(2));
+        Wire.beginTransmission(0x00);
+        Wire.requestFrom(0x00, byte(2));
         volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
         Serial.write("2:");
@@ -406,9 +398,9 @@ public:
 
   int H2_valve()
   {
-    utils.I2C(addr_AD1,0xFC);
-    Wire.beginTransmission(addr_AD1);
-    Wire.requestFrom(addr_AD1, byte(2));
+    utils.I2C(0x00,0xFC);
+    Wire.beginTransmission(0x00);
+    Wire.requestFrom(0x00, byte(2));
     int val(((Wire.read() << 8) + Wire.read()));
     Wire.endTransmission();
     //Serial.println(val);
@@ -416,9 +408,9 @@ public:
   }
   int CO2_valve()
   {
-    utils.I2C(addr_AD1,0xBC);
-    Wire.beginTransmission(addr_AD1);
-    Wire.requestFrom(addr_AD1, byte(2));
+    utils.I2C(0x00,0xBC);
+    Wire.beginTransmission(0x00);
+    Wire.requestFrom(0x00, byte(2));
     int val = (((Wire.read() << 8) + Wire.read()));
     //Serial.println(val);
     Wire.endTransmission();
@@ -434,8 +426,8 @@ public:
   }
   int CO2_pressure()
   {
-    Wire.beginTransmission(addr_AD);
-    Wire.requestFrom(addr_AD, byte(24));
+    Wire.beginTransmission(0x00);
+    Wire.requestFrom(0x00, byte(24));
     //------------------------
     AD[0] = Wire.read();
     AD[1] = Wire.read();
@@ -461,17 +453,17 @@ public:
     AD[21] = Wire.read();
     AD[22] = Wire.read();
     AD[23] = Wire.read();
-    Wire.endTransmission(addr_AD);
+    Wire.endTransmission(0x00);
     int output = word(AD[18], AD[19]);
     output = output & 0x0FFF;
     float fout = output;
     double p = (((fout / 5000) - 0.04) / 0.009)*10;
     return p;
   }
-  int H2_pressure()
+  int H2_pressure_Electrolyzer()
   {
-    Wire.beginTransmission(addr_AD);
-    Wire.requestFrom(addr_AD, byte(24));
+    Wire.beginTransmission(MAX_1.adress);
+    Wire.requestFrom(MAX_1.adress, byte(24));
     //------------------------
     AD[0] = Wire.read();
     AD[1] = Wire.read();
@@ -497,7 +489,7 @@ public:
     AD[21] = Wire.read();
     AD[22] = Wire.read();
     AD[23] = Wire.read();
-    Wire.endTransmission(addr_AD);
+    Wire.endTransmission(MAX_1.adress);
     int output = word(AD[16], AD[17]);
     output = output & 0x0FFF;
     float fout = output;
@@ -516,6 +508,7 @@ class Lights
   Utils utils;
 
 public:
+	define_adresses
 	void test()
 	{
 		pinMode(13, OUTPUT);
@@ -526,11 +519,11 @@ public:
 
     if (state)
     {
-      utils.I2CWRITE_M(addr_Valves,2,1); //A6
+      utils.I2CWRITE_M(0x00,2,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(addr_Valves,2,0); //A6
+      utils.I2CWRITE_M(0x00,2,0); //A6
     }
 
   }
@@ -541,11 +534,11 @@ public:
     if (state)
     {
 
-      utils.I2CWRITE_M(addr_Valves,0,1); //A4
+      utils.I2CWRITE_M(0x00,0,1); //A4
     }
     else
     {
-      utils.I2CWRITE_M(addr_Valves,0,0); //A4
+      utils.I2CWRITE_M(0x00,0,0); //A4
     }
   }
 
@@ -553,11 +546,11 @@ public:
   {
     if (state)
     {
-      utils.I2CWRITE_M(addr_Valves,1,1); //A6
+      utils.I2CWRITE_M(0x00,1,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(addr_Valves,1,0); //A6
+      utils.I2CWRITE_M(0x00,1,0); //A6
     }
   }
 
@@ -565,13 +558,13 @@ public:
   {
     if (state)
     {
-      utils.I2CWRITE_M(addr_Valves,1,1);  //A4+A2
-      utils.I2CWRITE_M(addr_Valves,0,1);  //A4+A2
+      utils.I2CWRITE_M(0x00,1,1);  //A4+A2
+      utils.I2CWRITE_M(0x00,0,1);  //A4+A2
     }
     else
     {
-      utils.I2CWRITE_M(addr_Valves,1,0);  //A4+A2
-      utils.I2CWRITE_M(addr_Valves,0,0);//A4+A2
+      utils.I2CWRITE_M(0x00,1,0);  //A4+A2
+      utils.I2CWRITE_M(0x00,0,0);//A4+A2
     }
   }
 }; 
@@ -582,15 +575,16 @@ class Valves
   Utils utils;
   Sensors sensors;
 public:
+	define_adresses
   void CO2(boolean state)
   {
     if (state)
     {
-      utils.I2CWRITE_M(addr_Valves,7,1); //A6
+      utils.I2CWRITE_M(PCF.adress,7,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(addr_Valves,7,0); //A6
+      utils.I2CWRITE_M(PCF.adress,7,0); //A6
     }
 
 
@@ -600,11 +594,11 @@ public:
   {
     if (state)
     {
-      utils.I2CWRITE_M(addr_Valves,9,1); //A6
+      utils.I2CWRITE_M(PCF.adress,9,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(addr_Valves,9,0); //A6
+      utils.I2CWRITE_M(PCF.adress,9,0); //A6
     }
   } 
 
@@ -612,11 +606,11 @@ public:
   {
     if (state)
     {
-      utils.I2CWRITE_M(addr_Valves,10,1); //A6
+      utils.I2CWRITE_M(0x00,10,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(addr_Valves,10,0); //A6
+      utils.I2CWRITE_M(0x00,10,0); //A6
     }
   } 
 
@@ -624,11 +618,11 @@ public:
   {
     if (state)
     {
-      utils.I2CWRITE_M(addr_Valves,11,1); //A6
+      utils.I2CWRITE_M(0x00,11,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(addr_Valves,11,0); //A6
+      utils.I2CWRITE_M(0x00,11,0); //A6
     }
   } 
 
@@ -648,32 +642,32 @@ public:
   {
     if (!Direction)
     {
-      utils.I2CWRITE_M(addr_Mot,1,0);    
-      utils.I2CWRITE_M(addr_Mot,6,1);
+      utils.I2CWRITE_M(0x00,1,0);    
+      utils.I2CWRITE_M(0x00,6,1);
       delay(5);
-      utils.I2CWRITE_M(addr_Mot,0,0);
-      utils.I2CWRITE_M(addr_Mot,7,1);
+      utils.I2CWRITE_M(0x00,0,0);
+      utils.I2CWRITE_M(0x00,7,1);
       delay(5);    
-      utils.I2CWRITE_M(addr_Mot,6,0);
-      utils.I2CWRITE_M(addr_Mot,1,1);     
+      utils.I2CWRITE_M(0x00,6,0);
+      utils.I2CWRITE_M(0x00,1,1);     
       delay(5);
-      utils.I2CWRITE_M(addr_Mot,7,0);
-      utils.I2CWRITE_M(addr_Mot,0,1);
+      utils.I2CWRITE_M(0x00,7,0);
+      utils.I2CWRITE_M(0x00,0,1);
       delay(5);
     }
     else
     {
-      utils.I2CWRITE_M(addr_Mot,7,0);
-      utils.I2CWRITE_M(addr_Mot,0,1);
+      utils.I2CWRITE_M(0x00,7,0);
+      utils.I2CWRITE_M(0x00,0,1);
       delay(5);
-      utils.I2CWRITE_M(addr_Mot,6,0);
-      utils.I2CWRITE_M(addr_Mot,1,1);
+      utils.I2CWRITE_M(0x00,6,0);
+      utils.I2CWRITE_M(0x00,1,1);
       delay(5);    
-      utils.I2CWRITE_M(addr_Mot,0,0);
-      utils.I2CWRITE_M(addr_Mot,7,1);   
+      utils.I2CWRITE_M(0x00,0,0);
+      utils.I2CWRITE_M(0x00,7,1);   
       delay(5);
-      utils.I2CWRITE_M(addr_Mot,1,0);    
-      utils.I2CWRITE_M(addr_Mot,6,1);
+      utils.I2CWRITE_M(0x00,1,0);    
+      utils.I2CWRITE_M(0x00,6,1);
       delay(5);
     }
   }
@@ -683,51 +677,51 @@ public:
   {
     if (!Direction)
     {
-      utils.I2CWRITE_M(addr_Mot,3,0);    
-      utils.I2CWRITE_M(addr_Mot,11,1);
+      utils.I2CWRITE_M(0x00,3,0);    
+      utils.I2CWRITE_M(0x00,11,1);
       delay(5);
-      utils.I2CWRITE_M(addr_Mot,2,0);
-      utils.I2CWRITE_M(addr_Mot,10,1);
+      utils.I2CWRITE_M(0x00,2,0);
+      utils.I2CWRITE_M(0x00,10,1);
       delay(5);    
-      utils.I2CWRITE_M(addr_Mot,11,0);
-      utils.I2CWRITE_M(addr_Mot,3,1);     
+      utils.I2CWRITE_M(0x00,11,0);
+      utils.I2CWRITE_M(0x00,3,1);     
       delay(5);
-      utils.I2CWRITE_M(addr_Mot,10,0);
-      utils.I2CWRITE_M(addr_Mot,2,1);
+      utils.I2CWRITE_M(0x00,10,0);
+      utils.I2CWRITE_M(0x00,2,1);
       delay(5);
     }
     else
     {
-      utils.I2CWRITE_M(addr_Mot,10,0);
-      utils.I2CWRITE_M(addr_Mot,2,1);
+      utils.I2CWRITE_M(0x00,10,0);
+      utils.I2CWRITE_M(0x00,2,1);
       delay(5);
-      utils.I2CWRITE_M(addr_Mot,11,0);
-      utils.I2CWRITE_M(addr_Mot,3,1);
+      utils.I2CWRITE_M(0x00,11,0);
+      utils.I2CWRITE_M(0x00,3,1);
       delay(5);    
-      utils.I2CWRITE_M(addr_Mot,2,0);
-      utils.I2CWRITE_M(addr_Mot,10,1);   
+      utils.I2CWRITE_M(0x00,2,0);
+      utils.I2CWRITE_M(0x00,10,1);   
       delay(5);
-      utils.I2CWRITE_M(addr_Mot,3,0);    
-      utils.I2CWRITE_M(addr_Mot,11,1);
+      utils.I2CWRITE_M(0x00,3,0);    
+      utils.I2CWRITE_M(0x00,11,1);
       delay(5);
     }
   }
 
   void H2_needle_idle()
   {
-    utils.I2CWRITE_M(addr_Mot,1,0);
-    utils.I2CWRITE_M(addr_Mot,6,0);
-    utils.I2CWRITE_M(addr_Mot,0,0);
-    utils.I2CWRITE_M(addr_Mot,7,0);
+    utils.I2CWRITE_M(0x00,1,0);
+    utils.I2CWRITE_M(0x00,6,0);
+    utils.I2CWRITE_M(0x00,0,0);
+    utils.I2CWRITE_M(0x00,7,0);
 
   }
 
   void CO2_needle_idle()
   {
-    utils.I2CWRITE_M(addr_Mot,3,0);
-    utils.I2CWRITE_M(addr_Mot,11,0);
-    utils.I2CWRITE_M(addr_Mot,10,0);
-    utils.I2CWRITE_M(addr_Mot,2,0);
+    utils.I2CWRITE_M(0x00,3,0);
+    utils.I2CWRITE_M(0x00,11,0);
+    utils.I2CWRITE_M(0x00,10,0);
+    utils.I2CWRITE_M(0x00,2,0);
 
   }
   void CO2_needle_reset(boolean state)
@@ -775,11 +769,11 @@ public:
   {
 	  if (state)
 	  {
-		  utils.I2CWRITE_M(addr_Mot,4, 1); //A6
+		  utils.I2CWRITE_M(0x00,4, 1); //A6
 	  }
 	  else
 	  {
-		  utils.I2CWRITE_M(addr_Mot, 4, 0); //A6
+		  utils.I2CWRITE_M(0x00, 4, 0); //A6
 	  }
   }
   void H2_needle_reset(boolean state)
@@ -866,11 +860,11 @@ public:
   {
     if (state)
     {
-      utils.I2CWRITE_M(addr_Valves,8,1); //A6
+      utils.I2CWRITE_M(PCF.adress,8,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(addr_Valves,8,0); //A6
+      utils.I2CWRITE_M(PCF.adress,8,0); //A6
     }
   } 
 
@@ -880,13 +874,13 @@ public:
     {
       for(int i = 0; i<50;++i)
       {
-        utils.I2C(addr_M_Valve,0xF3);
+        utils.I2C(0x00,0xF3);
         delay(15);
-        utils.I2C(addr_M_Valve,0xF9);
+        utils.I2C(0x00,0xF9);
         delay(15);
-        utils.I2C(addr_M_Valve,0xFC);
+        utils.I2C(0x00,0xFC);
         delay(15);
-        utils.I2C(addr_M_Valve,0xF6);
+        utils.I2C(0x00,0xF6);
         delay(15);
       }
     }
@@ -894,13 +888,13 @@ public:
     {
       for(int i=0; i<50;++i)
       {
-        utils.I2C(addr_M_Valve,0xF6);
+        utils.I2C(0x00,0xF6);
         delay(15);
-        utils.I2C(addr_M_Valve,0xFC);
+        utils.I2C(0x00,0xFC);
         delay(15);
-        utils.I2C(addr_M_Valve,0xF9);
+        utils.I2C(0x00,0xF9);
         delay(15);
-        utils.I2C(addr_M_Valve,0xF3);
+        utils.I2C(0x00,0xF3);
         delay(15);
       }
     }
@@ -912,18 +906,18 @@ class Items
 {
   Utils utils;
 public:
-  
+	define_adresses
     
   
   void Fan(boolean state)
   {
     if (state)
     {
-      utils.I2CWRITE_M(addr_Mot,8,1);
+      utils.I2CWRITE_M(0x00,8,1);
     }
     else
     {
-      utils.I2CWRITE_M(addr_Mot,8,0);
+      utils.I2CWRITE_M(0x00,8,0);
     } 
   }
 
@@ -932,40 +926,49 @@ public:
     if (state)
     {
 
-      utils.I2CWRITE_M(addr_Mot,9,1);
+      utils.I2CWRITE_M(0x00,9,1);
     }
     else
     {
 
-      utils.I2CWRITE_M(addr_Mot,9,0);
+      utils.I2CWRITE_M(0x00,9,0);
     } 
   }
 
-  void Electrolyzer(boolean state)
+  void Electrolyzer_1(boolean state)
   {
     if (state)
     {
-      utils.I2CWRITE_M(addr_Valves,5,1);
-      utils.I2CWRITE_M(addr_Valves,3,1); //A6
+      utils.I2CWRITE_M(PCF.adress,5,1);
     }
     else
     {
-      utils.I2CWRITE_M(addr_Valves,3,0);
-      utils.I2CWRITE_M(addr_Valves,5,0); //A6
+      utils.I2CWRITE_M(PCF.adress,5,0);
     }
+  }
+  void Electrolyzer_2(boolean state)
+  {
+	  if (state)
+	  {
+		  utils.I2CWRITE_M(PCF.adress, 6, 1);
+	  }
+	  else
+	  {
+		  utils.I2CWRITE_M(PCF.adress, 6, 0);
+	  }
   }
 
   void Oven(boolean state)
   {
     if (state)
     {
-      utils.I2CWRITE_M(addr_Valves,4,1);
-      utils.I2CWRITE_M(addr_Valves,6,1); //A6
+      utils.I2CWRITE_M(0x00,4,1);
+      utils.I2CWRITE_M(0x00,6,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(addr_Valves,4,0);
-      utils.I2CWRITE_M(addr_Valves,6,0); //A6
+      utils.I2CWRITE_M(0x00,4,0);
+      utils.I2CWRITE_M(0x00,6,0); //A6
     }
   }
 
@@ -980,7 +983,7 @@ class ComputerControlledMethanReactor
 {
   Utils utils;
 public:
-
+	define_adresses
   void init(boolean Flush) 
   {
     Serial.begin(9600);
@@ -1000,91 +1003,91 @@ public:
 
 
     Wire.begin();
-    utils.I2C(addr_Lights,0xff);
-    utils.I2C(addr_Valves2,0xff);
-    utils.I2C(addr_Valves3,0xff);
-    utils.I2C(addr_Valves4,0xff);
-    utils.I2C(addr_Valves4,0xff); 
-    utils.I2C(addr_Items1,0xff);
-    utils.I2C(addr_Items2,0xff);
-    utils.I2C(addr_Items3,0xff);
-    utils.I2C(addr_M_Valve,0xff);
-    Wire.beginTransmission(addr_Valves);
-    Wire.write(0b11111111);
-    Wire.write(0b11111111);
-    Wire.endTransmission();
+    //utils.I2C(addr_Lights,0xff);
+    //utils.I2C(addr_Valves2,0xff);
+    //utils.I2C(addr_Valves3,0xff);
+    //utils.I2C(addr_Valves4,0xff);
+    //utils.I2C(addr_Valves4,0xff); 
+    //utils.I2C(addr_Items1,0xff);
+    //utils.I2C(addr_Items2,0xff);
+    //utils.I2C(addr_Items3,0xff);
+    //utils.I2C(0x00,0xff);
+    //Wire.beginTransmission(addr_Valves);
+    //Wire.write(0b11111111);
+    //Wire.write(0b11111111);
+    //Wire.endTransmission();
 
-    Wire.beginTransmission(addr_Mot);
-    Wire.write(0b11111111);
-    Wire.write(0b11111111);
-    Wire.endTransmission();
+    //Wire.beginTransmission(0x00);
+    //Wire.write(0b11111111);
+    //Wire.write(0b11111111);
+    //Wire.endTransmission();
 
-    utils.I2C(addr_AD,0x17);
-    utils.I2C(addr_AD,0xD2);
-    utils.I2C(addr_RT,0x00);
+    //utils.I2C(addr_AD,0x17);
+    //utils.I2C(addr_AD,0xD2);
+    //utils.I2C(addr_RT,0x00);
 
-    Wire.beginTransmission(addr_DA);
-    Wire.write(Sw_Reset[0]);
-    Wire.write(Sw_Reset[1]);
-    Wire.write(Sw_Reset[2]);
-    Wire.endTransmission();
+    //Wire.beginTransmission(addr_DA);
+    //Wire.write(Sw_Reset[0]);
+    //Wire.write(Sw_Reset[1]);
+    //Wire.write(Sw_Reset[2]);
+    //Wire.endTransmission();
 
-    Wire.beginTransmission(addr_DA);
-    Wire.write(Set_Ref[0]);
-    Wire.write(Set_Ref[1]);
-    Wire.write(Set_Ref[2]);
-    Wire.endTransmission();
+    //Wire.beginTransmission(addr_DA);
+    //Wire.write(Set_Ref[0]);
+    //Wire.write(Set_Ref[1]);
+    //Wire.write(Set_Ref[2]);
+    //Wire.endTransmission();
 
-    Wire.beginTransmission(addr_DA);
-    Wire.write(Code_Load[0]);
-    Wire.write(Code_Load[1]);
-    Wire.write(Code_Load[2]);
-    Wire.endTransmission();
+    //Wire.beginTransmission(addr_DA);
+    //Wire.write(Code_Load[0]);
+    //Wire.write(Code_Load[1]);
+    //Wire.write(Code_Load[2]);
+    //Wire.endTransmission();
 
-    Wire.beginTransmission(addr_AD);
-    Wire.requestFrom(addr_AD, byte(24));
-    //------------------------
-    AD[0] = Wire.read();
-    AD[1] = Wire.read();
-    AD[2] = Wire.read();
-    AD[3] = Wire.read();
-    AD[4] = Wire.read();
-    AD[5] = Wire.read();
-    AD[6] = Wire.read();
-    AD[7] = Wire.read();
-    AD[8] = Wire.read();
-    AD[9] = Wire.read();
-    AD[10] = Wire.read();
-    AD[11] = Wire.read();
-    AD[12] = Wire.read();
-    AD[13] = Wire.read();
-    AD[14] = Wire.read();
-    AD[15] = Wire.read();
-    AD[16] = Wire.read();
-    AD[17] = Wire.read();
-    AD[18] = Wire.read();
-    AD[19] = Wire.read();
-    AD[20] = Wire.read();
-    AD[21] = Wire.read();
-    AD[22] = Wire.read();
-    AD[23] = Wire.read();
-    //--RT--
-    Wire.beginTransmission(addr_RT);
-    Wire.requestFrom(addr_AD, byte(2));
-    //------------------------
-    RT[0] = Wire.read();
-    RT[1] = Wire.read();
-    RTR = RT[0]*16 + RT[1]/16 ;
-    if (RTR < 2048)
-    {
-      RTR /= 16;
-    } 
-    else
-    { 
-      RTR = (RTR - 4096) / 16;
-    }
+    //Wire.beginTransmission(addr_AD);
+    //Wire.requestFrom(addr_AD, byte(24));
+    ////------------------------
+    //AD[0] = Wire.read();
+    //AD[1] = Wire.read();
+    //AD[2] = Wire.read();
+    //AD[3] = Wire.read();
+    //AD[4] = Wire.read();
+    //AD[5] = Wire.read();
+    //AD[6] = Wire.read();
+    //AD[7] = Wire.read();
+    //AD[8] = Wire.read();
+    //AD[9] = Wire.read();
+    //AD[10] = Wire.read();
+    //AD[11] = Wire.read();
+    //AD[12] = Wire.read();
+    //AD[13] = Wire.read();
+    //AD[14] = Wire.read();
+    //AD[15] = Wire.read();
+    //AD[16] = Wire.read();
+    //AD[17] = Wire.read();
+    //AD[18] = Wire.read();
+    //AD[19] = Wire.read();
+    //AD[20] = Wire.read();
+    //AD[21] = Wire.read();
+    //AD[22] = Wire.read();
+    //AD[23] = Wire.read();
+    ////--RT--
+    //Wire.beginTransmission(addr_RT);
+    //Wire.requestFrom(addr_AD, byte(2));
+    ////------------------------
+    //RT[0] = Wire.read();
+    //RT[1] = Wire.read();
+    //RTR = RT[0]*16 + RT[1]/16 ;
+    //if (RTR < 2048)
+    //{
+    //  RTR /= 16;
+    //} 
+    //else
+    //{ 
+    //  RTR = (RTR - 4096) / 16;
+    //}
 
-    Wire.endTransmission();
+    //Wire.endTransmission();
     
     Serial.println("\nCCMR program initialized");
     if (debug)
@@ -1192,15 +1195,17 @@ public:
 			Serial.println("PREPRODUCING H2");
 			valves.CO2_needle_idle();
 			valves.H2_needle_idle();
-				items.Electrolyzer(true);
-				while (sensors.H2_pressure() < 500)
+				items.Electrolyzer_1(true);
+				items.Electrolyzer_2(true);
+				while (sensors.H2_pressure_Electrolyzer() < 500)
 				{
 					delay(2000);
 					Serial.print("Pressure: ");
-						Serial.print(sensors.H2_pressure());
+						Serial.print(sensors.H2_pressure_Electrolyzer());
 					Serial.println(" mbar");
 				}
-				items.Electrolyzer(false);
+				items.Electrolyzer_1(false);
+				items.Electrolyzer_2(false);
 		}
 	}
 	
