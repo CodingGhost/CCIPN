@@ -6,6 +6,7 @@ boolean debug = false;
 boolean Ready = false;
 boolean Caution = false;
 boolean Running = false;
+boolean _init = false;
 byte State_Lights = 0b11111111;  
 int volt;
 int st = 0;
@@ -23,13 +24,13 @@ byte RT[1];
 class Utils
 {
 public:
- define_adresses
+ 
 void channel_switch(int num)
   {
 	 
   if (num == 0)
   {
-    I2C(PCA.adress,0xF0);   
+    I2C(PCA9545::adress,0xF0);   
   }
   else if (num == 1)
   {
@@ -37,7 +38,7 @@ void channel_switch(int num)
   }
   else if (num == 2)
   {
-    I2C(PCA.adress,0xF2);
+    I2C(PCA9545::adress,0xF2);
   }
   else if (num == 3)
   {
@@ -92,7 +93,13 @@ void channel_switch(int num)
 
   void I2CWRITE_M(uint8_t address, uint8_t pin, boolean value)
   {
-
+	  if (!_init)
+	  {
+	  if (pin <= 4)
+	  {
+		  pin = NULL;
+	  }
+  }
     value = !value;
     I2Customread(address,2); 
 
@@ -117,7 +124,7 @@ void channel_switch(int num)
     }
     else
     {
-      pin-=8;
+      pin-=10;
       if (value == 0) 
       {
 
@@ -214,11 +221,31 @@ class Sensors
   Utils utils;
 
 public:
-	define_adresses
+	boolean Halt()
+	{
+		
+
+		//utils.I2C(PCF8575::adress, 0xBC);
+		// delay(1);
+		Wire.beginTransmission(PCF8575::adress);
+		Wire.requestFrom(PCF8575::adress,byte(2));
+		int read = Wire.read()&0b00010000;
+		Wire.read();
+		Wire.endTransmission();
+		if (read > 1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+		
+	}
 	int Oven_temp()
 	{
-		Wire.beginTransmission(MAX_1.adress);
-		Wire.requestFrom(MAX_1.adress, byte(24));
+		Wire.beginTransmission(MAX1238::adress);
+		Wire.requestFrom(MAX1238::adress, byte(24));
 		//------------------------
 		AD[0] = Wire.read();
 		AD[1] = Wire.read();
@@ -244,7 +271,7 @@ public:
 		AD[21] = Wire.read();
 		AD[22] = Wire.read();
 		AD[23] = Wire.read();
-		Wire.endTransmission(MAX_1.adress);
+		Wire.endTransmission(MAX1238::adress);
 		int output = word(AD[6], AD[7]);
 		output = output & 0x0FFF;
 		double x = output; 
@@ -267,8 +294,8 @@ public:
   int cooler()
   {
     utils.channel_switch(2);
-    Wire.beginTransmission(AD_1.adress);
-    Wire.requestFrom((int)AD_1.adress, 2);
+    Wire.beginTransmission(AD7828::adress);
+    Wire.requestFrom((int)AD7828::adress, 2);
     //int a =  word(Wire.read(),Wire.read());
 	int a = ((Wire.read() << 8) + Wire.read());
 	Serial.print("raw: ");
@@ -316,10 +343,10 @@ public:
     {
     case 1:
       { 
-        utils.I2C(AD_1.adress,0xAC);
+        utils.I2C(AD7828::adress,0xAC);
         // delay(1);
-        Wire.beginTransmission(AD_1.adress);
-        Wire.requestFrom(AD_1.adress, byte(2));
+        Wire.beginTransmission(AD7828::adress);
+        Wire.requestFrom(AD7828::adress, byte(2));
         volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
          //Serial.write("1:");
@@ -333,10 +360,10 @@ public:
       }
     case 2:
       { 
-        utils.I2C(AD_1.adress,0xDC);
+        utils.I2C(AD7828::adress,0xDC);
         // delay(1);
-        Wire.beginTransmission(AD_1.adress);
-        Wire.requestFrom(AD_1.adress, byte(2));
+        Wire.beginTransmission(AD7828::adress);
+        Wire.requestFrom(AD7828::adress, byte(2));
         volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
          //Serial.write("2:");
@@ -361,7 +388,7 @@ public:
         utils.I2C(0x00,0xFC);
         // delay(1);
         Wire.beginTransmission(0x00);
-        Wire.requestFrom(0x00, byte(2));
+        Wire.requestFrom(0x00, 2);
         volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
         Serial.write("1:");
@@ -378,7 +405,7 @@ public:
         utils.I2C(0x00,0xBC);
         // delay(1);
         Wire.beginTransmission(0x00);
-        Wire.requestFrom(0x00, byte(2));
+        Wire.requestFrom(0x00, 2);
         volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
         Serial.write("2:");
@@ -400,7 +427,7 @@ public:
   {
     utils.I2C(0x00,0xFC);
     Wire.beginTransmission(0x00);
-    Wire.requestFrom(0x00, byte(2));
+    Wire.requestFrom(0x00, 2);
     int val(((Wire.read() << 8) + Wire.read()));
     Wire.endTransmission();
     //Serial.println(val);
@@ -410,7 +437,7 @@ public:
   {
     utils.I2C(0x00,0xBC);
     Wire.beginTransmission(0x00);
-    Wire.requestFrom(0x00, byte(2));
+    Wire.requestFrom(0x00, 2);
     int val = (((Wire.read() << 8) + Wire.read()));
     //Serial.println(val);
     Wire.endTransmission();
@@ -427,7 +454,7 @@ public:
   int CO2_pressure()
   {
     Wire.beginTransmission(0x00);
-    Wire.requestFrom(0x00, byte(24));
+    Wire.requestFrom(0x00, 24);
     //------------------------
     AD[0] = Wire.read();
     AD[1] = Wire.read();
@@ -462,8 +489,8 @@ public:
   }
   int H2_pressure_Electrolyzer()
   {
-    Wire.beginTransmission(MAX_1.adress);
-    Wire.requestFrom(MAX_1.adress, byte(24));
+    Wire.beginTransmission(MAX1238::adress);
+    Wire.requestFrom(MAX1238::adress, byte(24));
     //------------------------
     AD[0] = Wire.read();
     AD[1] = Wire.read();
@@ -489,7 +516,7 @@ public:
     AD[21] = Wire.read();
     AD[22] = Wire.read();
     AD[23] = Wire.read();
-    Wire.endTransmission(MAX_1.adress);
+    Wire.endTransmission(MAX1238::adress);
     int output = word(AD[16], AD[17]);
     output = output & 0x0FFF;
     float fout = output;
@@ -508,7 +535,7 @@ class Lights
   Utils utils;
 
 public:
-	define_adresses
+	
 	void test()
 	{
 		pinMode(13, OUTPUT);
@@ -575,16 +602,16 @@ class Valves
   Utils utils;
   Sensors sensors;
 public:
-	define_adresses
+	
   void CO2(boolean state)
   {
     if (state)
     {
-      utils.I2CWRITE_M(PCF.adress,7,1); //A6
+      utils.I2CWRITE_M(PCF8575::adress,11,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(PCF.adress,7,0); //A6
+      utils.I2CWRITE_M(PCF8575::adress,11,0); //A6
     }
 
 
@@ -594,11 +621,11 @@ public:
   {
     if (state)
     {
-      utils.I2CWRITE_M(PCF.adress,9,1); //A6
+      utils.I2CWRITE_M(PCF8575::adress,9,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(PCF.adress,9,0); //A6
+      utils.I2CWRITE_M(PCF8575::adress,9,0); //A6
     }
   } 
 
@@ -860,11 +887,11 @@ public:
   {
     if (state)
     {
-      utils.I2CWRITE_M(PCF.adress,8,1); //A6
+      utils.I2CWRITE_M(PCF8575::adress,8,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(PCF.adress,8,0); //A6
+      utils.I2CWRITE_M(PCF8575::adress,8,0); //A6
     }
   } 
 
@@ -906,7 +933,7 @@ class Items
 {
   Utils utils;
 public:
-	define_adresses
+	
     
   
   void Fan(boolean state)
@@ -939,22 +966,22 @@ public:
   {
     if (state)
     {
-      utils.I2CWRITE_M(PCF.adress,5,1);
+      utils.I2CWRITE_M(PCF8575::adress,5,1);
     }
     else
     {
-      utils.I2CWRITE_M(PCF.adress,5,0);
+      utils.I2CWRITE_M(PCF8575::adress,5,0);
     }
   }
   void Electrolyzer_2(boolean state)
   {
 	  if (state)
 	  {
-		  utils.I2CWRITE_M(PCF.adress, 6, 1);
+		  utils.I2CWRITE_M(PCF8575::adress, 6, 1);
 	  }
 	  else
 	  {
-		  utils.I2CWRITE_M(PCF.adress, 6, 0);
+		  utils.I2CWRITE_M(PCF8575::adress, 6, 0);
 	  }
   }
 
@@ -983,7 +1010,7 @@ class ComputerControlledMethanReactor
 {
   Utils utils;
 public:
-	define_adresses
+	
   void init(boolean Flush) 
   {
     Serial.begin(9600);
@@ -1003,6 +1030,7 @@ public:
 
 
     Wire.begin();
+	
     //utils.I2C(addr_Lights,0xff);
     //utils.I2C(addr_Valves2,0xff);
     //utils.I2C(addr_Valves3,0xff);
@@ -1088,7 +1116,7 @@ public:
     //}
 
     //Wire.endTransmission();
-    
+	
     Serial.println("\nCCMR program initialized");
     if (debug)
     {
@@ -1099,9 +1127,17 @@ public:
       Serial.write("\n") ;
     }
     delay(1000);
+
+	_init = true;
+	utils.write16(0xFF, 0xFF, PCF8575::adress);
+	_init = false;
+
 	if (Flush)
 	{
 		Serial.println("--Booting--");
+
+		
+
 		lights.Starting(true);
 		Serial.println("RESETTING VALVES");
 		valves.CO2_needle_reset(false);
@@ -1211,8 +1247,8 @@ public:
 	
     delay(500);
     Serial.write("\n\n----------READY TO BURN----------\n");
-    lights.Starting(false);
-    lights.Ready(true);
+   // lights.Starting(false);
+   // lights.Ready(true);
     Ready=true;
     delay(100);
   }
@@ -1222,13 +1258,16 @@ public:
 
 
 public:
+
   Lights lights;
   
   
   Items items;
   
-  Valves valves;
+  
   Sensors sensors;
+
+  Valves valves;
 };
 
 

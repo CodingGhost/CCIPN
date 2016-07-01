@@ -32,7 +32,7 @@
 *.dSYM/
 
 # User-specific files
-*.vmps.xml
+*__vm/
 *.vsarduino.h
 *.suo
 *.user

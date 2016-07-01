@@ -29,20 +29,16 @@ bool ok = false;
 void setup()
 {
 	
-CCMR.init(true);
-CCMR.valves.CO2_needle_idle();
-CCMR.valves.H2_needle_idle();
-CCMR.lights.Ready(false);
-CCMR.lights.Running(true);
+CCMR.init(false);
+CCMR.valves.CO2(true);
+delay(2000);
 CCMR.valves.CO2(false);
-CCMR.valves.H2(false);
-CCMR.items.Oven(false);
-CCMR.valves.Water_reflux_CH4(false);
+
 }
 
 void loop()
 {
-
+	Serial.println(CCMR.sensors.Halt());
 	
 	
 }
