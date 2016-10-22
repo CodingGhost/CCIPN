@@ -1,0 +1,200 @@
+﻿<!-- Copyright (c) Microsoft. All rights reserved. -->
+
+<Page
+    x:Class="CCMR_GUI.MainPage"
+     xmlns:controls="using:WinRTXamlToolkit.Controls"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CCMR_GUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <CollectionViewSource x:Name="DeviceListSource"/>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="1024" Height="600">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="button" Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="296,166,-296,-166" Grid.Row="9" VerticalAlignment="Top" Click="button_Click"/>
+        <TextBox x:Name="status" Grid.Column="1" HorizontalAlignment="Left" Margin="10,564,-878,-526" Grid.Row="9" TextWrapping="Wrap" Text="OUTPUT" VerticalAlignment="Top" Width="1004" Height="26"/>
+
+        <controls:Gauge x:Name="H2_pressure_gauge" Value="37"
+
+Unit="mbar"
+
+ScaleTickBrush="Transparent"
+
+TickBrush="Transparent"
+
+ScaleWidth="30" CanDrag="True" Margin="32,19,54,51" Grid.RowSpan="10" Grid.Column="1">
+
+
+
+            <controls:Gauge.NeedleBrush>
+
+                <LinearGradientBrush EndPoint="1,0">
+
+                    <GradientStop Color="Blue" />
+
+                    <GradientStop Color="Blue"
+
+Offset=".5" />
+
+                    <GradientStop Color="Black"
+
+Offset="3" />
+
+                </LinearGradientBrush>
+
+            </controls:Gauge.NeedleBrush>
+
+            <controls:Gauge.TrailBrush>
+
+                <SolidColorBrush Color="#FF187A18"
+
+Opacity="25" />
+
+            </controls:Gauge.TrailBrush>
+
+        </controls:Gauge>
+        <controls:Gauge x:Name="CO_pressure_gauge" Value="37"
+
+            Unit="mbar"
+
+            ScaleTickBrush="Transparent"
+
+            TickBrush="Transparent"
+
+            ScaleWidth="30" CanDrag="True" Margin="233,9,-197,61" Grid.RowSpan="10" Grid.Column="1">
+
+
+
+            <controls:Gauge.NeedleBrush>
+
+                <LinearGradientBrush EndPoint="1,0">
+
+                    <GradientStop Color="Black" />
+
+                    <GradientStop Color="Blue"
+
+                        Offset=".5" />
+
+                    <GradientStop Color="Black"
+
+                        Offset="3" />
+
+                </LinearGradientBrush>
+
+            </controls:Gauge.NeedleBrush>
+
+            <controls:Gauge.TrailBrush>
+
+                <SolidColorBrush Color="Green"
+
+                    Opacity="25" />
+
+            </controls:Gauge.TrailBrush>
+
+        </controls:Gauge>
+        <controls:Gauge x:Name="Oven_temp_gauge" Value="37"
+
+            Unit="°C"
+
+            ScaleTickBrush="Transparent"
+
+            TickBrush="Transparent"
+
+            ScaleWidth="30" CanDrag="True" Margin="488,9,-452,61" Grid.RowSpan="10" Grid.Column="1">
+
+
+
+            <controls:Gauge.NeedleBrush>
+
+                <LinearGradientBrush EndPoint="1,0">
+
+                    <GradientStop Color="Black" />
+
+                    <GradientStop Color="Blue"
+
+                        Offset=".5" />
+
+                    <GradientStop Color="Black"
+
+                        Offset="3" />
+
+                </LinearGradientBrush>
+
+            </controls:Gauge.NeedleBrush>
+
+            <controls:Gauge.TrailBrush>
+
+                <SolidColorBrush Color="Green"
+
+                    Opacity="25" />
+
+            </controls:Gauge.TrailBrush>
+
+        </controls:Gauge>
+        <controls:Gauge x:Name="not_sure_what" Value="37"
+
+            Unit="NS?"
+
+            ScaleTickBrush="Transparent"
+
+            TickBrush="Transparent"
+
+            ScaleWidth="30" CanDrag="True" Margin="738,9,-702,61" Grid.RowSpan="10" Grid.Column="1">
+
+
+
+            <controls:Gauge.NeedleBrush>
+
+                <LinearGradientBrush EndPoint="1,0">
+
+                    <GradientStop Color="Black" />
+
+                    <GradientStop Color="Blue"
+
+                        Offset=".5" />
+
+                    <GradientStop Color="Black"
+
+                        Offset="3" />
+
+                </LinearGradientBrush>
+
+            </controls:Gauge.NeedleBrush>
+
+            <controls:Gauge.TrailBrush>
+
+                <SolidColorBrush Color="Green"
+
+                    Opacity="25" />
+
+            </controls:Gauge.TrailBrush>
+
+        </controls:Gauge>
+        <TextBlock x:Name="textBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="108,0,0,0" TextWrapping="Wrap" Text="H2Pressure" VerticalAlignment="Top" FontSize="18"/>
+        <TextBlock x:Name="textBlock_Copy" Grid.Column="1" HorizontalAlignment="Left" Margin="336,0,-106,0" TextWrapping="Wrap" Text="CO2 Pressure" VerticalAlignment="Top" FontSize="18" />
+        <TextBlock x:Name="textBlock_Copy1" Grid.Column="1" HorizontalAlignment="Left" Margin="568,0,-379,0" TextWrapping="Wrap" Text="Oven Temperature" VerticalAlignment="Top" FontSize="18" />
+        <TextBlock x:Name="textBlock_Copy2" Grid.Column="1" HorizontalAlignment="Left" Margin="835,0,-611,0" TextWrapping="Wrap" Text="NOT DEFINED" VerticalAlignment="Top" FontSize="18"/>
+
+    </Grid>
+</Page>

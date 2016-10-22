@@ -24,7 +24,12 @@ byte RT[1];
 class Utils
 {
 public:
- 
+void Send_to_GUI(byte CMDID, byte CMDVAL)
+  {
+	Serial2.write(CMDID);
+	Serial2.write(CMDVAL);
+  }
+
 void channel_switch(int num)
   {
 	 
@@ -1118,6 +1123,9 @@ public:
     //Wire.endTransmission();
 	
     Serial.println("\nCCMR program initialized");
+	Serial.println("registering Serial --> GUI...");
+		Serial2.begin(9600);
+		Serial.println("Connection to GUI established");
     if (debug)
     {
       Serial.write(" [DEBUG MODE]\n") ;
