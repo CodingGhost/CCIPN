@@ -16,7 +16,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
+using MySql;
+using MySql.Data;
+using MySql.Data.MySqlClient;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace CCMR_GUI
@@ -32,32 +34,23 @@ namespace CCMR_GUI
         /// <summary>
         /// Private variables
         /// </summary>
+        ///   Dim Mysqlconn As MySqlConnection
+        String query;
+        MySqlCommand COMMAND;
+        MySqlConnection Mysqlconn;
         private SerialDevice serialPort = null;
         DataWriter dataWriteObject = null;
         DataReader dataReaderObject = null;
         private CancellationTokenSource ReadCancellationTokenSource;
 
+
         public MainPage()
         {
             this.InitializeComponent();
-            connect();
+            //connect();
 
         }
-        //private async void ListAvailablePorts() 
-        //{
-        //    try
-        //    {
-        //        string aqs = SerialDevice.GetDeviceSelector();
-        //        var dis = await DeviceInformation.FindAllAsync(aqs);
-
-                
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        status.Text = ex.Message;
-        //    }
-        //}
-        //Serial functions
+        //serial Functions
         private async void connect()
         {
 
@@ -231,11 +224,64 @@ namespace CCMR_GUI
         }
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            Serial_send("test123");
+            status.Text = Mysql_read("new_table","COL_A")[3];
+          
         }
-
         //Mysql functions
+         List<String> Mysql_read(String table, String column)
+        {
+            MySqlConnection connect = new MySqlConnection("Server=192.168.1.102; Database=test; Uid=root; Pwd=root;SslMode=none");
+            
+            List<String> output = new List<string>();
+            
+           
+            try
+            {
+                connect.Open();
 
+                status.Text = "connected";
+                MySqlCommand sqlcmd;
+                MySqlDataReader dr;
+
+
+
+                sqlcmd = new MySqlCommand("SELECT * FROM "+ table, connect);
+                dr = sqlcmd.ExecuteReader();
+               
+                while (dr.Read())
+                {
+                    output.Add(dr.GetString(column));
+                }
+            }
+            catch (Exception ex)
+            {
+                status.Text = ex.Message;
+            }
+            connect.Close();
+            return output;
+        }
+        void Mysql_write(String table, String column,int index)
+        {
+            MySqlConnection connect = new MySqlConnection("Server=192.168.1.102; Database=test; Uid=root; Pwd=root;SslMode=none");
+            try
+            {
+                connect.Open();
+
+                status.Text = "connected";
+                MySqlCommand sqlcmd;
+               
+
+
+
+                sqlcmd = new MySqlCommand("UPDATE `new_table` SET `COL_A`='3' WHERE `COL_A`='2'", connect);
+           
+            }
+            catch (Exception ex)
+            {
+                status.Text = ex.Message;
+            }
+            connect.Close();
+        }
         //real program
         private void handleCommands()
         {
@@ -252,6 +298,10 @@ namespace CCMR_GUI
             }
         }
 
-       
+
     }
+
+
+
+
 }

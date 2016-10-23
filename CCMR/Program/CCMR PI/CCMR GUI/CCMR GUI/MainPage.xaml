@@ -33,7 +33,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Button x:Name="button" Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="296,166,-296,-166" Grid.Row="9" VerticalAlignment="Top" Click="button_Click"/>
-        <TextBox x:Name="status" Grid.Column="1" HorizontalAlignment="Left" Margin="10,564,-878,-526" Grid.Row="9" TextWrapping="Wrap" Text="OUTPUT" VerticalAlignment="Top" Width="1004" Height="26"/>
 
         <controls:Gauge x:Name="H2_pressure_gauge" Value="37"
 
@@ -195,6 +194,7 @@ Opacity="25" />
         <TextBlock x:Name="textBlock_Copy" Grid.Column="1" HorizontalAlignment="Left" Margin="336,0,-106,0" TextWrapping="Wrap" Text="CO2 Pressure" VerticalAlignment="Top" FontSize="18" />
         <TextBlock x:Name="textBlock_Copy1" Grid.Column="1" HorizontalAlignment="Left" Margin="568,0,-379,0" TextWrapping="Wrap" Text="Oven Temperature" VerticalAlignment="Top" FontSize="18" />
         <TextBlock x:Name="textBlock_Copy2" Grid.Column="1" HorizontalAlignment="Left" Margin="835,0,-611,0" TextWrapping="Wrap" Text="NOT DEFINED" VerticalAlignment="Top" FontSize="18"/>
+        <TextBlock x:Name="status" Grid.Column="1" HorizontalAlignment="Left" Margin="10,498,-678,-513" Grid.Row="9" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="1004" Height="68"/>
 
     </Grid>
 </Page>
