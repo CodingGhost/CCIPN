@@ -32,169 +32,75 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Button x:Name="button" Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="296,166,-296,-166" Grid.Row="9" VerticalAlignment="Top" Click="button_Click"/>
-
-        <controls:Gauge x:Name="H2_pressure_gauge" Value="37"
-
-Unit="mbar"
-
-ScaleTickBrush="Transparent"
-
-TickBrush="Transparent"
-
-ScaleWidth="30" CanDrag="True" Margin="32,19,54,51" Grid.RowSpan="10" Grid.Column="1">
-
-
-
-            <controls:Gauge.NeedleBrush>
-
-                <LinearGradientBrush EndPoint="1,0">
-
-                    <GradientStop Color="Blue" />
-
-                    <GradientStop Color="Blue"
-
-Offset=".5" />
-
-                    <GradientStop Color="Black"
-
-Offset="3" />
-
-                </LinearGradientBrush>
-
-            </controls:Gauge.NeedleBrush>
-
-            <controls:Gauge.TrailBrush>
-
-                <SolidColorBrush Color="#FF187A18"
-
-Opacity="25" />
-
-            </controls:Gauge.TrailBrush>
-
-        </controls:Gauge>
-        <controls:Gauge x:Name="CO_pressure_gauge" Value="37"
-
-            Unit="mbar"
-
-            ScaleTickBrush="Transparent"
-
-            TickBrush="Transparent"
-
-            ScaleWidth="30" CanDrag="True" Margin="233,9,-197,61" Grid.RowSpan="10" Grid.Column="1">
-
-
-
-            <controls:Gauge.NeedleBrush>
-
-                <LinearGradientBrush EndPoint="1,0">
-
-                    <GradientStop Color="Black" />
-
-                    <GradientStop Color="Blue"
-
-                        Offset=".5" />
-
-                    <GradientStop Color="Black"
-
-                        Offset="3" />
-
-                </LinearGradientBrush>
-
-            </controls:Gauge.NeedleBrush>
-
-            <controls:Gauge.TrailBrush>
-
-                <SolidColorBrush Color="Green"
-
-                    Opacity="25" />
-
-            </controls:Gauge.TrailBrush>
-
-        </controls:Gauge>
-        <controls:Gauge x:Name="Oven_temp_gauge" Value="37"
-
-            Unit="°C"
-
-            ScaleTickBrush="Transparent"
-
-            TickBrush="Transparent"
-
-            ScaleWidth="30" CanDrag="True" Margin="488,9,-452,61" Grid.RowSpan="10" Grid.Column="1">
-
-
-
-            <controls:Gauge.NeedleBrush>
-
-                <LinearGradientBrush EndPoint="1,0">
-
-                    <GradientStop Color="Black" />
-
-                    <GradientStop Color="Blue"
-
-                        Offset=".5" />
-
-                    <GradientStop Color="Black"
-
-                        Offset="3" />
-
-                </LinearGradientBrush>
-
-            </controls:Gauge.NeedleBrush>
-
-            <controls:Gauge.TrailBrush>
-
-                <SolidColorBrush Color="Green"
-
-                    Opacity="25" />
-
-            </controls:Gauge.TrailBrush>
-
-        </controls:Gauge>
-        <controls:Gauge x:Name="not_sure_what" Value="37"
-
-            Unit="NS?"
-
-            ScaleTickBrush="Transparent"
-
-            TickBrush="Transparent"
-
-            ScaleWidth="30" CanDrag="True" Margin="738,9,-702,61" Grid.RowSpan="10" Grid.Column="1">
-
-
-
-            <controls:Gauge.NeedleBrush>
-
-                <LinearGradientBrush EndPoint="1,0">
-
-                    <GradientStop Color="Black" />
-
-                    <GradientStop Color="Blue"
-
-                        Offset=".5" />
-
-                    <GradientStop Color="Black"
-
-                        Offset="3" />
-
-                </LinearGradientBrush>
-
-            </controls:Gauge.NeedleBrush>
-
-            <controls:Gauge.TrailBrush>
-
-                <SolidColorBrush Color="Green"
-
-                    Opacity="25" />
-
-            </controls:Gauge.TrailBrush>
-
-        </controls:Gauge>
-        <TextBlock x:Name="textBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="108,0,0,0" TextWrapping="Wrap" Text="H2Pressure" VerticalAlignment="Top" FontSize="18"/>
-        <TextBlock x:Name="textBlock_Copy" Grid.Column="1" HorizontalAlignment="Left" Margin="336,0,-106,0" TextWrapping="Wrap" Text="CO2 Pressure" VerticalAlignment="Top" FontSize="18" />
-        <TextBlock x:Name="textBlock_Copy1" Grid.Column="1" HorizontalAlignment="Left" Margin="568,0,-379,0" TextWrapping="Wrap" Text="Oven Temperature" VerticalAlignment="Top" FontSize="18" />
-        <TextBlock x:Name="textBlock_Copy2" Grid.Column="1" HorizontalAlignment="Left" Margin="835,0,-611,0" TextWrapping="Wrap" Text="NOT DEFINED" VerticalAlignment="Top" FontSize="18"/>
         <TextBlock x:Name="status" Grid.Column="1" HorizontalAlignment="Left" Margin="10,498,-678,-513" Grid.Row="9" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="1004" Height="68"/>
+        <Pivot Title="CGUI" Width="1024" Margin="0,0,78,-9" Grid.RowSpan="9" Height="600" VerticalAlignment="Bottom">
+            <PivotItem Header="Overview">
+
+                <Grid Height="505">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="19*"/>
+                        <ColumnDefinition Width="929*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_ovenTemp}" Maximum="100" Unit="mbar"  HorizontalAlignment="Left" Margin="298,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
+                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_CO2pressure}" TrailBrush="Aqua" Maximum="100" Unit="mbar"  HorizontalAlignment="Left" Margin="-38,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
+                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_CO2}" TrailBrush="Aqua" Maximum="100" Unit="mbar"  HorizontalAlignment="Left" Margin="466,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
+                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_H2}" TrailBrush="Aqua" Maximum="100" Unit="mbar"  HorizontalAlignment="Left" Margin="130,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
+                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_H2pressure}" TrailBrush="Aqua" Maximum="100" Unit="mbar"  HorizontalAlignment="Left" Margin="634,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
+                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_H2pressure}" TrailBrush="Aqua" Maximum="100" Unit="mbar"  HorizontalAlignment="Left" Margin="802,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
+
+                    <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Height="23" Margin="22,0,0,315" TextWrapping="Wrap" Text="oven temperature" VerticalAlignment="Bottom" Width="125" Grid.ColumnSpan="2"/>
+                    <TextBlock x:Name="textBlock1_Copy" HorizontalAlignment="Left" Height="23" Margin="152,0,0,315" TextWrapping="Wrap" Text="CO2 Pressure" VerticalAlignment="Bottom" Width="125" Grid.Column="1"  TextAlignment="Center"/>
+                    <TextBlock x:Name="textBlock1_Copy1" HorizontalAlignment="Left" Height="23" Margin="320,0,0,315" TextWrapping="Wrap" Text="CO2 percentage" VerticalAlignment="Bottom" Width="125" Grid.Column="1" TextAlignment="Center"/>
+                    <TextBlock x:Name="textBlock1_Copy2" HorizontalAlignment="Left" Height="23" Margin="487,0,0,315" TextWrapping="Wrap" Text="H2 precentage" VerticalAlignment="Bottom" Width="125" Grid.Column="1" TextAlignment="Center"/>
+                    <TextBlock x:Name="textBlock1_Copy3" HorizontalAlignment="Left" Height="23" Margin="656,0,0,315" TextWrapping="Wrap" Text="H2 pressure" VerticalAlignment="Bottom" Width="125" Grid.Column="1" TextAlignment="Center"/>
+                    <TextBlock x:Name="textBlock1_Copy4" HorizontalAlignment="Left" Height="23" Margin="824,0,0,315" TextWrapping="Wrap" Text="note yet defined" VerticalAlignment="Bottom" Width="125" Grid.Column="1" TextAlignment="Center"/>
+                    <RadioButton x:Name="showmode" Content="Show Mode" Grid.Column="1" HorizontalAlignment="Right" Height="33" Margin="0,214,10,0" VerticalAlignment="Top" Width="102" Checked="showmode_Checked"/>
+                    <RadioButton x:Name="tweakmode" Content="Tweak Mode" Grid.Column="1" HorizontalAlignment="Right" Margin="0,246,10,226" VerticalAlignment="Stretch" Width="102" d:LayoutOverrides="TopPosition, BottomPosition" Checked="tweakmode_Checked"/>
+                    <controls:NumericUpDown x:Name="Num1" Grid.Column="1" HorizontalAlignment="Left" Margin="10,219,0,249" VerticalAlignment="Stretch" Width="164" d:LayoutOverrides="TopPosition, BottomPosition"/>
+                    <controls:NumericUpDown x:Name="Num2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,175" VerticalAlignment="Bottom" Width="164" Height="37"/>
+                    <controls:NumericUpDown x:Name="Num3" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,212" VerticalAlignment="Bottom" Width="164" Height="37"/>
+
+
+
+
+
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Manual Control">
+
+                <Grid Height="505">
+
+                    <Button x:Name="button2" Content="Button2" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+
+                </Grid>
+            </PivotItem>
+
+            <PivotItem Header="Settings">
+
+                <Grid Height="505">
+
+
+                    <Button x:Name="button3" Content="Button2" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+
+                </Grid>
+            </PivotItem>
+
+            <PivotItem Header="RAW">
+
+                <Grid Height="505">
+
+
+                    <Button x:Name="button5" Content="Button2" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+
+                </Grid>
+            </PivotItem>
+        </Pivot>
+        <Button x:Name="button" Content="EMERGENCY STOP" HorizontalAlignment="Stretch" Height="45" Margin="52,10,88,0" VerticalAlignment="Top" Background="#E5FF0000" d:LayoutOverrides="HorizontalAlignment"/>
+
 
     </Grid>
 </Page>

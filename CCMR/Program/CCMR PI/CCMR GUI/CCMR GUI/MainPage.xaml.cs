@@ -19,6 +19,8 @@ using Windows.UI.Xaml.Navigation;
 using MySql;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using System;
+using System.Threading;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace CCMR_GUI
@@ -28,7 +30,15 @@ namespace CCMR_GUI
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        String SERIAL_DEVICE = "\\\\?\\ACPI#BCM2836#0#{86e0d1e0-8089-11d0-9ce4-08003e301f73}";
+        //BINDINGS\\
+        public string gauge_ovenTemp = "10";
+        public string gauge_CO2pressure = "10";
+        public string gauge_CO2 = "10";
+        public string gauge_H2 = "10";
+        public string gauge_H2pressure = "10";
+        public string gauge_6 = "10";
+       //END BINDINGS\\
+            String SERIAL_DEVICE = "\\\\?\\ACPI#BCM2836#0#{86e0d1e0-8089-11d0-9ce4-08003e301f73}";
         byte cmdid;
         byte cmdval;
         /// <summary>
@@ -47,6 +57,7 @@ namespace CCMR_GUI
         public MainPage()
         {
             this.InitializeComponent();
+            this.DataContextChanged += (s, e) => this.Bindings.Update();
             //connect();
 
         }
@@ -56,6 +67,7 @@ namespace CCMR_GUI
 
             try
             {
+                
                 serialPort = await SerialDevice.FromIdAsync(SERIAL_DEVICE);
                 serialPort.WriteTimeout = TimeSpan.FromMilliseconds(1000);
                 serialPort.ReadTimeout = TimeSpan.FromMilliseconds(1000);
@@ -65,6 +77,7 @@ namespace CCMR_GUI
                 serialPort.DataBits = 8;
                 serialPort.Handshake = SerialHandshake.None;
                 ReadCancellationTokenSource = new CancellationTokenSource();
+                
             }
             catch (Exception ex)
             {
@@ -282,6 +295,12 @@ namespace CCMR_GUI
             }
             connect.Close();
         }
+
+        private void setBinding(String t, ref String upd)
+        {
+            upd = t;
+            this.Bindings.Update();
+        }
         //real program
         private void handleCommands()
         {
@@ -297,8 +316,26 @@ namespace CCMR_GUI
                     break;
             }
         }
+        
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+          
 
+        }
 
+        private void tweakmode_Checked(object sender, RoutedEventArgs e)
+        {
+            Num1.IsEnabled = true;
+            Num2.IsEnabled = true;
+            Num3.IsEnabled = true;
+        }
+
+        private void showmode_Checked(object sender, RoutedEventArgs e)
+        {
+            Num1.IsEnabled = false;
+            Num2.IsEnabled = false;
+            Num3.IsEnabled = false;
+        }
     }
 
 
