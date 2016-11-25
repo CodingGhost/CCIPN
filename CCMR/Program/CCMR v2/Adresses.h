@@ -63,6 +63,13 @@ struct SM5812
 };
 byte SM5812::adress = 0x90;
 int SM5812::bus = 1;
+struct PCF5874
+{
+	static byte adress;
+	static int bus;
+};
+byte PCF5874::adress = 0x26;
+int PCF5874::bus = 1;
 struct CVAI
 {
 	static byte adress;

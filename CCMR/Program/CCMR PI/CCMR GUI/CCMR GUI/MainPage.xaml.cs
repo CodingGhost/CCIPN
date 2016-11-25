@@ -56,8 +56,12 @@ namespace CCMR_GUI
 
         public MainPage()
         {
+            
             this.InitializeComponent();
             this.DataContextChanged += (s, e) => this.Bindings.Update();
+            //init
+            status.Text = "Initialized";
+            showmode.IsChecked = true;
             //connect();
 
         }
@@ -306,13 +310,26 @@ namespace CCMR_GUI
         {
             switch (cmdid)
             {
-                case 1:
-
+                case 101: //oven temp
+                    gauge_ovenTemp = cmdval.ToString();
                     break;
-                case 45:
-
+                case 108: //CO2 pressure
+                    gauge_ovenTemp = cmdval.ToString();
+                    break;
+                case 106: //CO2
+                    gauge_ovenTemp = cmdval.ToString();
+                    break;
+                case 107: //h2
+                    gauge_ovenTemp = cmdval.ToString();
+                    break;
+                case 109: //H2 pressure
+                    gauge_ovenTemp = cmdval.ToString();
+                    break;
+                case 102: //cooler temp
+                    gauge_ovenTemp = cmdval.ToString();
                     break;
                 default:
+                    status.Text = "ERROR #404 - Command not found!";
                     break;
             }
         }

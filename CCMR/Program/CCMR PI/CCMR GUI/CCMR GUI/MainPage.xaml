@@ -32,7 +32,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="status" Grid.Column="1" HorizontalAlignment="Left" Margin="10,498,-678,-513" Grid.Row="9" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="1004" Height="68"/>
         <Pivot Title="CGUI" Width="1024" Margin="0,0,78,-9" Grid.RowSpan="9" Height="600" VerticalAlignment="Bottom">
             <PivotItem Header="Overview">
 
@@ -60,6 +59,7 @@
                     <controls:NumericUpDown x:Name="Num1" Grid.Column="1" HorizontalAlignment="Left" Margin="10,219,0,249" VerticalAlignment="Stretch" Width="164" d:LayoutOverrides="TopPosition, BottomPosition"/>
                     <controls:NumericUpDown x:Name="Num2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,175" VerticalAlignment="Bottom" Width="164" Height="37"/>
                     <controls:NumericUpDown x:Name="Num3" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,212" VerticalAlignment="Bottom" Width="164" Height="37"/>
+                    <TextBlock x:Name="status" Grid.Column="1" HorizontalAlignment="Left" Margin="487,-32,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="462" Height="25"/>
 
 
 

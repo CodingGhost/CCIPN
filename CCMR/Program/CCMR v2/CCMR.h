@@ -2,7 +2,7 @@
 #include <HardwareSerial.h>
 #include "Arduino.h"
 #include "Adresses.h"
-boolean debug = false;
+boolean debug = true;
 boolean Ready = false;
 boolean Caution = false;
 boolean Running = false;
@@ -39,7 +39,7 @@ void channel_switch(int num)
   }
   else if (num == 1)
   {
-    //I2C(addr_switch,0xF1); //NICHT FUNKTIONSFÄHIG!!!!!!!!
+	I2C(PCA9545::adress, 0xF1);
   }
   else if (num == 2)
   {
@@ -69,7 +69,18 @@ void channel_switch(int num)
     // c++;
     //}
 
+	if (debug)
+	{
+		char temp[256];
 
+		sprintf(temp, " packets have been received from 0x%x with value 0x%x%x\n", addr, _data[0], _data[1]);
+
+		if (Ready == 1)
+		{
+			Serial.write(temp);
+		}
+
+	}
     return _data;
   }
 
@@ -86,7 +97,7 @@ void channel_switch(int num)
     {
       char temp[256];
 
-      sprintf(temp,"two packets have been sent to 0x%x with value A: 0x%x\n", addr, v_A);
+      sprintf(temp,"two packets have been sent to 0x%x with value 0x%x%x\n", addr, v_A,v_B);
 
       if (Ready == 1)
       {
@@ -101,17 +112,16 @@ void channel_switch(int num)
 	  if (!_init)
 	  {
 	  if (pin <= 4)
-	  {
-		  pin = NULL;
-	  }
-  }
+	 {
+	  pin = NULL;
+	 }
+   }
     value = !value;
     I2Customread(address,2); 
 
-    //  _data[0]=0b11111111;
+     // _data[0]=0b11111111;
     // _data[1]=0b11111111; //SIMULATE
     //Serial.write(value);
-
     if (pin < 8)
     {
       if (value == 0) 
@@ -144,7 +154,7 @@ void channel_switch(int num)
 
       //State_Lights = _data; //SIMULATE 
     }
-
+	
     write16(_data[0],_data[1], address);
   }
 
@@ -604,35 +614,67 @@ public:
 
 class Valves
 {
-  Utils utils;
+  
   Sensors sensors;
+  Utils utils;
 public:
 	
   void CO2(boolean state)
   {
+	  utils.channel_switch(1);
     if (state)
     {
-      utils.I2CWRITE_M(PCF8575::adress,11,1); //A6
+		
+			utils.I2CWRITE_M(PCF8575::adress, 14, 1);
+		//utils.I2Customread(PCF8575::adress, 2);
     }
     else
     {
-      utils.I2CWRITE_M(PCF8575::adress,11,0); //A6
+		
+			utils.I2CWRITE_M(PCF8575::adress, 14, 0);
+		
     }
 
 
   } 
 
-  void H2(boolean state)
+  void H2_in(boolean state)
   {
+	utils.channel_switch(1);
     if (state)
     {
-      utils.I2CWRITE_M(PCF8575::adress,9,1); //A6
+      utils.I2CWRITE_M(PCF8575::adress,12,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(PCF8575::adress,9,0); //A6
+      utils.I2CWRITE_M(PCF8575::adress,12,0); //A6
     }
   } 
+
+  void O2_in(boolean state)
+  {
+	  utils.channel_switch(1);
+	  if (state)
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 13, 1); //A6
+	  }
+	  else
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 13, 0); //A6
+	  }
+  }
+
+  void H2_Flowrate(int val)
+  {
+	  utils.I2CWRITE(PCF5874::adress, 3,1);
+	  delay(10);
+	  utils.I2CWRITE(PCF5874::adress, 3, 0);
+	  delay(10);
+	  utils.I2CWRITE(PCF5874::adress, 3, 1);
+	  delay(10);
+	  utils.I2CWRITE(PCF5874::adress, 3, 0);
+	  delay(10);
+  }
 
   void Flush(boolean state)
   {
@@ -890,15 +932,28 @@ public:
   }
   void Water_reflux_H2(boolean state)
   {
+	  utils.channel_switch(1);
     if (state)
     {
-      utils.I2CWRITE_M(PCF8575::adress,8,1); //A6
+      utils.I2CWRITE_M(PCF8575::adress,11,1); //A6
     }
     else
     {
-      utils.I2CWRITE_M(PCF8575::adress,8,0); //A6
+      utils.I2CWRITE_M(PCF8575::adress,11,0); //A6
     }
   } 
+
+  void Water_reflux_O2(boolean state)
+  {
+	  if (state)
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 11, 1); //A6
+	  }
+	  else
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 11, 0); //A6
+	  }
+  }
 
   void Output(boolean state)
   {
@@ -1121,7 +1176,7 @@ public:
     //}
 
     //Wire.endTransmission();
-	
+	utils.I2C(PCF5874::adress, 0xDF);
     Serial.println("\nCCMR program initialized");
 	Serial.println("registering Serial --> GUI...");
 		Serial2.begin(9600);
@@ -1160,7 +1215,7 @@ public:
 		valves.Water_reflux_H2(false);
 		Serial.print("Cleaning Valves and Pipes");
 		valves.Flush(true);
-		valves.H2(true);
+		//valves.H2(true);
 		valves.Water_reflux_CH4(true);
 		delay(1000);
 		Serial.print("<|..");
@@ -1182,7 +1237,7 @@ public:
 		Serial.print(".");
 		delay(1000);
 		Serial.print("..|>");
-		valves.H2(false);
+		//valves.H2(false);
 		valves.Flush(false);
 		valves.Water_reflux_CH4(false);
 		Serial.println(" COMPLETE");
