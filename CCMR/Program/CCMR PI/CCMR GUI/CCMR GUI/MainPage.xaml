@@ -68,13 +68,16 @@
                 </Grid>
             </PivotItem>
             <PivotItem Header="Manual Control">
-
-                <Grid Height="505">
-
-                    <Button x:Name="button2" Content="Button2" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-
-
+                <Grid Background="Red">
+                    <Image Grid.RowSpan="2" Stretch="Fill" Source="Assets/ccmr.png" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                    <Button x:Name="button1" HorizontalAlignment="Left" Margin="413,56,0,0" VerticalAlignment="Top" Width="83" Height="16"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50*" />
+                        <RowDefinition Height="50*" />
+                    </Grid.RowDefinitions>
                 </Grid>
+
+
             </PivotItem>
 
             <PivotItem Header="Settings">
@@ -100,6 +103,7 @@
             </PivotItem>
         </Pivot>
         <Button x:Name="button" Content="EMERGENCY STOP" HorizontalAlignment="Stretch" Height="45" Margin="52,10,88,0" VerticalAlignment="Top" Background="#E5FF0000" d:LayoutOverrides="HorizontalAlignment"/>
+
 
 
     </Grid>
