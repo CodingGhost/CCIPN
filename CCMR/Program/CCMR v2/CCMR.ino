@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include "CCMR.h"
+#include "Communication.h"
 //#include <avr/interrupt.h>
 //#include <TimedAction.h>
 ComputerControlledMethanReactor CCMR;
@@ -30,6 +31,7 @@ void setup()
 {
 	
 CCMR.init(false);
+Serial.setTimeout(5);
 CCMR.valves.H2_Flowrate(1);
 
 
@@ -40,6 +42,48 @@ void loop()
 	
 }
 
+void handleCommands()
+{
+	byte cmdid;
+	byte cmdval;
+	if (Serial.available())
+	{
+		cmdid = Serial.read();
+		cmdval = Serial.read();
+	}
+	switch (cmdid)
+	{
+	case CMD_start_CMD:
+	{
+
+	}
+	case CMD_CO2VALVE:
+	{
+		if (cmdval == 1)
+		{
+			CCMR.valves.CO2(true);
+		}
+		else
+		{
+			CCMR.valves.CO2(false);
+		}
+	}
+	default:
+		//status.Text = "ERROR #404 - Command not found!";
+		break;
+	}
+}
+
+void UpdateGUI()
+{
+	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.CO2());
+	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.H2_in());
+	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.H2_out());
+	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.O2_in());
+	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.O2_out());
+	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.Water_reflux_H2());
+	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.Water_Reflux_O2());
+}
 
 //void Mix()
 //{

@@ -70,7 +70,7 @@
             <PivotItem Header="Manual Control">
                 <Grid Background="Red">
                     <Image Grid.RowSpan="2" Stretch="Fill" Source="Assets/ccmr.png" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-                    <Button x:Name="button1" HorizontalAlignment="Left" Margin="413,56,0,0" VerticalAlignment="Top" Width="83" Height="16"/>
+                    <Button x:Name="button1" HorizontalAlignment="Left" Margin="413,58,0,0" VerticalAlignment="Top" Width="81" Height="14" Background="#7F005000"/>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50*" />
                         <RowDefinition Height="50*" />

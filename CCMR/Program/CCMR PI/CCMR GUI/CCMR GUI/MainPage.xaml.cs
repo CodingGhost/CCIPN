@@ -41,6 +41,7 @@ namespace CCMR_GUI
             String SERIAL_DEVICE = "\\\\?\\ACPI#BCM2836#0#{86e0d1e0-8089-11d0-9ce4-08003e301f73}";
         byte cmdid;
         byte cmdval;
+        Boolean[] Valve_stat = new Boolean[6];
         /// <summary>
         /// Private variables
         /// </summary>
@@ -299,13 +300,13 @@ namespace CCMR_GUI
             }
             connect.Close();
         }
-
         private void setBinding(String t, ref String upd)
         {
             upd = t;
             this.Bindings.Update();
         }
         //real program
+
         private void handleCommands()
         {
             switch (cmdid)
@@ -353,9 +354,9 @@ namespace CCMR_GUI
             Num2.IsEnabled = false;
             Num3.IsEnabled = false;
         }
+
+
+
+
     }
-
-
-
-
 }

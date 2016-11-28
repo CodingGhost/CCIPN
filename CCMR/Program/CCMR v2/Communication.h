@@ -12,7 +12,14 @@
 #define SNS_CO2pressure_val     108
 #define SNS_H2pressure_val      109
 
+#define STT_CO2VALVE            200
+#define STT_H2INVALVE			201
+#define STT_H2OUTVALVE			202
+#define STT_O2INVALVE			203
+#define STT_O2OUTVALVE			204
+#define STT_H2REFLUX			205
+#define STT_O2REFLUX			206
 
-#define CMD_start_CMD           200
-#define CMD_oventemp_val        201
-
+#define CMD_start_CMD           300
+#define CMD_oventemp_val        301
+#define CMD_CO2VALVE            302

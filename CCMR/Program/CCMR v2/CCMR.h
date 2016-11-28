@@ -106,7 +106,32 @@ void channel_switch(int num)
 
     }
   }
-
+  boolean I2CREAD_M(uint8_t address, uint8_t pin)
+  {
+	  I2Customread(address, 2);
+	  if (pin < 8)
+	  {
+		  if (!(_data[0] & (1 << pin)))
+		  {
+			  return true;
+		  }
+		  else
+		  {
+			  return false;
+		  }
+	  }
+	  else
+	  {
+		  if (!(_data[1] & (1 << (pin - 10))))
+		  {
+			  return true;
+		  }
+		  else
+		  {
+			  return false;
+		  }
+	  }
+  }
   void I2CWRITE_M(uint8_t address, uint8_t pin, boolean value)
   {
 	  if (!_init)
@@ -561,11 +586,11 @@ public:
 
     if (state)
     {
-      utils.I2CWRITE_M(0x00,2,1); //A6
+      utils.I2CWRITE_M(0x00,2,1); 
     }
     else
     {
-      utils.I2CWRITE_M(0x00,2,0); //A6
+      utils.I2CWRITE_M(0x00,2,0); 
     }
 
   }
@@ -588,11 +613,11 @@ public:
   {
     if (state)
     {
-      utils.I2CWRITE_M(0x00,1,1); //A6
+      utils.I2CWRITE_M(0x00,1,1); 
     }
     else
     {
-      utils.I2CWRITE_M(0x00,1,0); //A6
+      utils.I2CWRITE_M(0x00,1,0); 
     }
   }
 
@@ -618,20 +643,19 @@ class Valves
   Sensors sensors;
   Utils utils;
 public:
-	
+	//<Magnetic Valves
   void CO2(boolean state)
   {
 	  utils.channel_switch(1);
     if (state)
     {
 		
-			utils.I2CWRITE_M(PCF8575::adress, 14, 1);
-		//utils.I2Customread(PCF8575::adress, 2);
+			utils.I2CWRITE_M(PCF8575::adress, 17, 1);
     }
     else
     {
 		
-			utils.I2CWRITE_M(PCF8575::adress, 14, 0);
+			utils.I2CWRITE_M(PCF8575::adress, 17, 0);
 		
     }
 
@@ -643,30 +667,83 @@ public:
 	utils.channel_switch(1);
     if (state)
     {
-      utils.I2CWRITE_M(PCF8575::adress,12,1); //A6
+      utils.I2CWRITE_M(PCF8575::adress,12,1); 
     }
     else
     {
-      utils.I2CWRITE_M(PCF8575::adress,12,0); //A6
+      utils.I2CWRITE_M(PCF8575::adress,12,0); 
     }
   } 
+
+  void H2_out(boolean state)
+  {
+	  utils.channel_switch(1);
+	  if (state)
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 15, 1); 
+	  }
+	  else
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 15, 0); 
+	  }
+  }
 
   void O2_in(boolean state)
   {
 	  utils.channel_switch(1);
 	  if (state)
 	  {
-		  utils.I2CWRITE_M(PCF8575::adress, 13, 1); //A6
+		  utils.I2CWRITE_M(PCF8575::adress, 13, 1); 
 	  }
 	  else
 	  {
-		  utils.I2CWRITE_M(PCF8575::adress, 13, 0); //A6
+		  utils.I2CWRITE_M(PCF8575::adress, 13, 0); 
 	  }
   }
 
+  void O2_out(boolean state)
+  {
+	  utils.channel_switch(1);
+	  if (state)
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 16, 1); 
+	  }
+	  else
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 16, 0); 
+	  }
+  }
+
+  void Water_reflux_H2(boolean state)
+  {
+	  utils.channel_switch(1);
+    if (state)
+    {
+      utils.I2CWRITE_M(PCF8575::adress,11,1); 
+    }
+    else
+    {
+      utils.I2CWRITE_M(PCF8575::adress,11,0); 
+    }
+  } 
+
+  void Water_reflux_O2(boolean state)
+  {
+	  if (state)
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 10, 1); 
+	  }
+	  else
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 10, 0); 
+	  }
+  }
+  //>Magnetic Valves
+
+  //<Needle Valves
   void H2_Flowrate(int val)
   {
-	  utils.I2CWRITE(PCF5874::adress, 3,1);
+	  utils.I2CWRITE(PCF5874::adress, 3, 1);
 	  delay(10);
 	  utils.I2CWRITE(PCF5874::adress, 3, 0);
 	  delay(10);
@@ -675,318 +752,7 @@ public:
 	  utils.I2CWRITE(PCF5874::adress, 3, 0);
 	  delay(10);
   }
-
-  void Flush(boolean state)
-  {
-    if (state)
-    {
-      utils.I2CWRITE_M(0x00,10,1); //A6
-    }
-    else
-    {
-      utils.I2CWRITE_M(0x00,10,0); //A6
-    }
-  } 
-
-  void Carrier_Gas(boolean state)
-  {
-    if (state)
-    {
-      utils.I2CWRITE_M(0x00,11,1); //A6
-    }
-    else
-    {
-      utils.I2CWRITE_M(0x00,11,0); //A6
-    }
-  } 
-
-  void Gaschromatograph(boolean state)
-  {
-    if (state)
-    {
-
-    }
-    else
-    {
-
-    }
-  } 
-
-  void H2_needle(boolean Direction)
-  {
-    if (!Direction)
-    {
-      utils.I2CWRITE_M(0x00,1,0);    
-      utils.I2CWRITE_M(0x00,6,1);
-      delay(5);
-      utils.I2CWRITE_M(0x00,0,0);
-      utils.I2CWRITE_M(0x00,7,1);
-      delay(5);    
-      utils.I2CWRITE_M(0x00,6,0);
-      utils.I2CWRITE_M(0x00,1,1);     
-      delay(5);
-      utils.I2CWRITE_M(0x00,7,0);
-      utils.I2CWRITE_M(0x00,0,1);
-      delay(5);
-    }
-    else
-    {
-      utils.I2CWRITE_M(0x00,7,0);
-      utils.I2CWRITE_M(0x00,0,1);
-      delay(5);
-      utils.I2CWRITE_M(0x00,6,0);
-      utils.I2CWRITE_M(0x00,1,1);
-      delay(5);    
-      utils.I2CWRITE_M(0x00,0,0);
-      utils.I2CWRITE_M(0x00,7,1);   
-      delay(5);
-      utils.I2CWRITE_M(0x00,1,0);    
-      utils.I2CWRITE_M(0x00,6,1);
-      delay(5);
-    }
-  }
-
-
-  void CO2_needle(boolean Direction)
-  {
-    if (!Direction)
-    {
-      utils.I2CWRITE_M(0x00,3,0);    
-      utils.I2CWRITE_M(0x00,11,1);
-      delay(5);
-      utils.I2CWRITE_M(0x00,2,0);
-      utils.I2CWRITE_M(0x00,10,1);
-      delay(5);    
-      utils.I2CWRITE_M(0x00,11,0);
-      utils.I2CWRITE_M(0x00,3,1);     
-      delay(5);
-      utils.I2CWRITE_M(0x00,10,0);
-      utils.I2CWRITE_M(0x00,2,1);
-      delay(5);
-    }
-    else
-    {
-      utils.I2CWRITE_M(0x00,10,0);
-      utils.I2CWRITE_M(0x00,2,1);
-      delay(5);
-      utils.I2CWRITE_M(0x00,11,0);
-      utils.I2CWRITE_M(0x00,3,1);
-      delay(5);    
-      utils.I2CWRITE_M(0x00,2,0);
-      utils.I2CWRITE_M(0x00,10,1);   
-      delay(5);
-      utils.I2CWRITE_M(0x00,3,0);    
-      utils.I2CWRITE_M(0x00,11,1);
-      delay(5);
-    }
-  }
-
-  void H2_needle_idle()
-  {
-    utils.I2CWRITE_M(0x00,1,0);
-    utils.I2CWRITE_M(0x00,6,0);
-    utils.I2CWRITE_M(0x00,0,0);
-    utils.I2CWRITE_M(0x00,7,0);
-
-  }
-
-  void CO2_needle_idle()
-  {
-    utils.I2CWRITE_M(0x00,3,0);
-    utils.I2CWRITE_M(0x00,11,0);
-    utils.I2CWRITE_M(0x00,10,0);
-    utils.I2CWRITE_M(0x00,2,0);
-
-  }
-  void CO2_needle_reset(boolean state)
-  {
-    if (state)
-    {
-
-      if (sensors.CO2_valve() < 2000)
-      {
-		 
-        while (sensors.CO2_valve() < 2000)
-        {
-          CO2_needle(true); 
-        }
-      }
-      else
-      {
-        while (sensors.CO2_valve() > 2000)
-        {
-          CO2_needle(false); 
-        }
-      }
-
-    }
-
-    else
-    {
-      if (sensors.CO2_valve() < 300)
-      {
-        while (sensors.CO2_valve() < 300)
-        {
-          CO2_needle(true); 
-        }
-      }
-      else
-      {
-        while (sensors.CO2_valve() > 300)
-        {
-          CO2_needle(false); 
-        }
-      }
-    }
-  }
-  void Water_reflux_CH4(boolean state)
-  {
-	  if (state)
-	  {
-		  utils.I2CWRITE_M(0x00,4, 1); //A6
-	  }
-	  else
-	  {
-		  utils.I2CWRITE_M(0x00, 4, 0); //A6
-	  }
-  }
-  void H2_needle_reset(boolean state)
-  {
-    if (state)
-    {
-
-      if (sensors.H2_valve() < 2000)
-      {
-        while (sensors.H2_valve() < 2000)
-        {
-          H2_needle(true); 
-        }
-      }
-      else
-      {
-        while (sensors.H2_valve() > 2000)
-        {
-          H2_needle(false); 
-        }
-      }
-
-    }
-
-    else
-    {
-      if (sensors.H2_valve() < 200)
-      {
-        while (sensors.H2_valve() < 200)
-        {
-          H2_needle(true); 
-        }
-      }
-      else
-      {
-        while (sensors.H2_valve() > 200)
-        {
-          H2_needle(false); 
-        }
-      }
-    }
-  }
-
-  void H2_needle_percent(int perc)
-  {
-	  int val = 1800 / 100 * perc + 200;
-	  if (sensors.H2_valve() < val)
-	  {
-		  while (sensors.H2_valve() < val)
-		  {
-			  H2_needle(true);
-		  }
-	  }
-	  else
-	  {
-		  while (sensors.H2_valve() > val)
-		  {
-			  H2_needle(false);
-		  }
-	  }
-
-  }
-
-  void CO2_needle_percent(int perc)
-  {
-	  int val = 1700 / 100 * perc + 300;
-	  if (sensors.CO2_valve() < val)
-	  {
-		  while (sensors.CO2_valve() < val)
-		  {
-			  CO2_needle(true);
-		  }
-	  }
-	  else
-	  {
-		  while (sensors.CO2_valve() > val)
-		  {
-			  CO2_needle(false);
-		  }
-	  }
-
-  }
-  void Water_reflux_H2(boolean state)
-  {
-	  utils.channel_switch(1);
-    if (state)
-    {
-      utils.I2CWRITE_M(PCF8575::adress,11,1); //A6
-    }
-    else
-    {
-      utils.I2CWRITE_M(PCF8575::adress,11,0); //A6
-    }
-  } 
-
-  void Water_reflux_O2(boolean state)
-  {
-	  if (state)
-	  {
-		  utils.I2CWRITE_M(PCF8575::adress, 11, 1); //A6
-	  }
-	  else
-	  {
-		  utils.I2CWRITE_M(PCF8575::adress, 11, 0); //A6
-	  }
-  }
-
-  void Output(boolean state)
-  {
-    if (state)
-    {
-      for(int i = 0; i<50;++i)
-      {
-        utils.I2C(0x00,0xF3);
-        delay(15);
-        utils.I2C(0x00,0xF9);
-        delay(15);
-        utils.I2C(0x00,0xFC);
-        delay(15);
-        utils.I2C(0x00,0xF6);
-        delay(15);
-      }
-    }
-    else
-    {
-      for(int i=0; i<50;++i)
-      {
-        utils.I2C(0x00,0xF6);
-        delay(15);
-        utils.I2C(0x00,0xFC);
-        delay(15);
-        utils.I2C(0x00,0xF9);
-        delay(15);
-        utils.I2C(0x00,0xF3);
-        delay(15);
-      }
-    }
-  }
-
+  //>Needle Valves
 };
 
 class Items
@@ -1033,6 +799,7 @@ public:
       utils.I2CWRITE_M(PCF8575::adress,5,0);
     }
   }
+
   void Electrolyzer_2(boolean state)
   {
 	  if (state)
@@ -1050,15 +817,77 @@ public:
     if (state)
     {
       utils.I2CWRITE_M(0x00,4,1);
-      utils.I2CWRITE_M(0x00,6,1); //A6
+      utils.I2CWRITE_M(0x00,6,1); 
     }
     else
     {
       utils.I2CWRITE_M(0x00,4,0);
-      utils.I2CWRITE_M(0x00,6,0); //A6
+      utils.I2CWRITE_M(0x00,6,0); 
     }
   }
 
+  void Pump(boolean state)
+  {
+	  utils.channel_switch(1);
+	  if (state)
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 14, 1);
+	  }
+	  else
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 14, 0);
+	  }
+  }
+
+
+};
+
+class Sys_stat
+{
+	Utils utils;
+public:
+	//<Magnetic Valves
+	boolean CO2()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 17);
+	}
+
+	boolean H2_in()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 12);
+	}
+
+	boolean H2_out()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 15);
+	}
+
+	boolean O2_in()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 13);
+	}
+
+	boolean O2_out()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 16);
+	}
+
+	boolean Water_reflux_H2()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 11);
+	}
+
+	boolean Water_reflux_O2()
+	{
+		return utils.I2CREAD_M(PCF8575::adress, 10);
+	}
+	//>Magnetic Valves
 
 
 };
@@ -1068,9 +897,9 @@ public:
 
 class ComputerControlledMethanReactor
 {
-  Utils utils;
+  
 public:
-	
+	Utils utils;
   void init(boolean Flush) 
   {
     Serial.begin(9600);
@@ -1176,7 +1005,10 @@ public:
     //}
 
     //Wire.endTransmission();
+
+	//INIT
 	utils.I2C(PCF5874::adress, 0xDF);
+	//END INIT
     Serial.println("\nCCMR program initialized");
 	Serial.println("registering Serial --> GUI...");
 		Serial2.begin(9600);
@@ -1329,6 +1161,10 @@ public:
   
   
   Sensors sensors;
+
+
+  Sys_stat sys_stat;
+
 
   Valves valves;
 };

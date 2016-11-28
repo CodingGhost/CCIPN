@@ -26,7 +26,6 @@
 #define __ATTR_PURE__
 #define __ATTR_CONST__
 #define __inline__
-#define __asm__ 
 #define __volatile__
 #define __AVR__
 typedef void *__builtin_va_list;
@@ -44,24 +43,7 @@ typedef unsigned char byte;
 extern "C" void __cxa_pure_virtual() {;}
 #include <arduino.h>
 #include <pins_arduino.h> 
-#undef F
-#define F(string_literal) ((const PROGMEM char *)(string_literal))
-#undef PSTR
-#define PSTR(string_literal) ((const PROGMEM char *)(string_literal))
 #undef cli
 #define cli()
-#define pgm_read_byte(address_short)
-#define pgm_read_word(address_short)
-#define pgm_read_word2(address_short)
-#define digitalPinToPort(P)
-#define digitalPinToBitMask(P) 
-#define digitalPinToTimer(P)
-#define analogInPinToBit(P)
-#define portOutputRegister(P)
-#define portInputRegister(P)
-#define portModeRegister(P)
-#include <CCMR.ino>
-#include <Adresses.h>
-#include <CCMR.h>
-#include <Communication.h>
+#include "CCMR.ino"
 #endif
