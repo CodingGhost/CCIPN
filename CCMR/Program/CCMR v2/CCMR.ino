@@ -26,7 +26,10 @@ int Cooler_temperature_tolerance = 5;
 
 //##############################################\\
 
-bool ok = false;
+unsigned long previousMillis_A = 0;
+unsigned long previousMillis_B = 0;
+unsigned long previousMillis_C = 0;
+
 void setup()
 {
 	
@@ -39,8 +42,48 @@ CCMR.valves.H2_Flowrate(1);
 
 void loop()
 {
-	
+	Timed_loop();
+	continousLoop();
 }
+void Timed_loop()
+{
+	unsigned long currentMillis = millis();
+	if (currentMillis - previousMillis_A >= 100)
+	{
+		previousMillis_A = currentMillis;
+		FastLoop();
+	}
+	if (currentMillis - previousMillis_B >= 500)
+	{
+		previousMillis_B = currentMillis;
+		MidLoop();
+	}
+	if (currentMillis - previousMillis_C >= 2000)
+	{
+		previousMillis_C = currentMillis;
+		SlowLoop();
+	}
+}
+
+//LOOPS
+void continousLoop()
+{
+
+}
+void FastLoop()
+{
+
+}
+void MidLoop()
+{
+	handleCommands();
+	UpdateGUI();
+}
+void SlowLoop()
+{
+
+}
+
 
 void handleCommands()
 {
@@ -57,7 +100,7 @@ void handleCommands()
 	{
 
 	}
-	case CMD_CO2VALVE:
+	case STT_CO2VALVE:
 	{
 		if (cmdval == 1)
 		{
@@ -68,6 +111,78 @@ void handleCommands()
 			CCMR.valves.CO2(false);
 		}
 	}
+
+	case STT_H2INVALVE:
+	{
+		if (cmdval == 1)
+		{
+			CCMR.valves.H2_in(true);
+		}
+		else
+		{
+			CCMR.valves.H2_in(false);
+		}
+	}
+
+	case STT_H2OUTVALVE:
+	{
+		if (cmdval == 1)
+		{
+			CCMR.valves.H2_out(true);
+		}
+		else
+		{
+			CCMR.valves.H2_out(false);
+		}
+	}
+
+	case STT_H2REFLUX:
+	{
+		if (cmdval == 1)
+		{
+			CCMR.valves.Water_reflux_H2(true);
+		}
+		else
+		{
+			CCMR.valves.Water_reflux_H2(false);
+		}
+	}
+
+	case STT_O2INVALVE:
+	{
+		if (cmdval == 1)
+		{
+			CCMR.valves.O2_in(true);
+		}
+		else
+		{
+			CCMR.valves.O2_in(false);
+		}
+	}
+
+	case STT_O2OUTVALVE:
+	{
+		if (cmdval == 1)
+		{
+			CCMR.valves.O2_out(true);
+		}
+		else
+		{
+			CCMR.valves.O2_out(false);
+		}
+	}
+
+	case STT_O2REFLUX:
+	{
+		if (cmdval == 1)
+		{
+			CCMR.valves.Water_reflux_O2(true);
+		}
+		else
+		{
+			CCMR.valves.Water_reflux_O2(false);
+		}
+	}
 	default:
 		//status.Text = "ERROR #404 - Command not found!";
 		break;
@@ -76,13 +191,13 @@ void handleCommands()
 
 void UpdateGUI()
 {
-	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.CO2());
-	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.H2_in());
-	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.H2_out());
-	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.O2_in());
-	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.O2_out());
-	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.Water_reflux_H2());
-	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.Water_Reflux_O2());
+	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.CO2()/*? 1 : 0*/);
+	CCMR.utils.Send_to_GUI(STT_H2INVALVE, CCMR.sys_stat.H2_in());
+	CCMR.utils.Send_to_GUI(STT_H2OUTVALVE, CCMR.sys_stat.H2_out());
+	CCMR.utils.Send_to_GUI(STT_O2INVALVE, CCMR.sys_stat.O2_in());
+	CCMR.utils.Send_to_GUI(STT_O2OUTVALVE, CCMR.sys_stat.O2_out());
+	CCMR.utils.Send_to_GUI(STT_H2REFLUX, CCMR.sys_stat.Water_reflux_H2());
+	CCMR.utils.Send_to_GUI(STT_O2REFLUX, CCMR.sys_stat.Water_reflux_O2());
 }
 
 //void Mix()

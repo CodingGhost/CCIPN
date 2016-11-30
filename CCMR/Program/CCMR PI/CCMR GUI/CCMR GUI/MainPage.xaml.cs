@@ -19,8 +19,7 @@ using Windows.UI.Xaml.Navigation;
 using MySql;
 using MySql.Data;
 using MySql.Data.MySqlClient;
-using System;
-using System.Threading;
+using Windows.UI;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace CCMR_GUI
@@ -37,13 +36,34 @@ namespace CCMR_GUI
         public string gauge_H2 = "10";
         public string gauge_H2pressure = "10";
         public string gauge_6 = "10";
-       //END BINDINGS\\
-            String SERIAL_DEVICE = "\\\\?\\ACPI#BCM2836#0#{86e0d1e0-8089-11d0-9ce4-08003e301f73}";
+
+        public string P000 = "Nothing";
+        public string P001 = "Nothing";
+        public string P002 = "Nothing";
+        public string P003 = "Nothing";
+        public string P004 = "Nothing";
+        public string FT000 = "Nothing";
+        public string FT002 = "Nothing";
+        public string FT003 = "Nothing";
+        public string FL001 = "Nothing";
+        public string STM001 = "Nothing";
+        public string FS001 = "Nothing";
+        public string GK004 = "Nothing";
+        public string FL000 = "Nothing";
+        //END BINDINGS\\
+        String SERIAL_DEVICE = "\\\\?\\ACPI#BCM2836#0#{86e0d1e0-8089-11d0-9ce4-08003e301f73}";
         byte cmdid;
         byte cmdval;
         Boolean[] Valve_stat = new Boolean[6];
         /// <summary>
         /// Private variables
+       Boolean CO2VALVE    = false;
+       Boolean H2INVALVE   = false;
+       Boolean H2OUTVALVE  = false;
+       Boolean O2INVALVE   = false;
+       Boolean O2OUTVALVE  = false;
+       Boolean H2REFLUX    = false;
+       Boolean O2REFLUX    = false;
         /// </summary>
         ///   Dim Mysqlconn As MySqlConnection
         String query;
@@ -53,18 +73,39 @@ namespace CCMR_GUI
         DataWriter dataWriteObject = null;
         DataReader dataReaderObject = null;
         private CancellationTokenSource ReadCancellationTokenSource;
+        SolidColorBrush Green =  new SolidColorBrush(Color.FromArgb(40, 0, 255, 0));
+        SolidColorBrush Red = new SolidColorBrush(Color.FromArgb(40, 255, 0, 0));
+
+        byte active = 1;
+        byte inactive = 0;
 
 
         public MainPage()
         {
-            
             this.InitializeComponent();
             this.DataContextChanged += (s, e) => this.Bindings.Update();
             //init
-            status.Text = "Initialized";
+            status.Text = "GUI Initialized";
             showmode.IsChecked = true;
-            //connect();
 
+            //scroller.MouseRightClickedAndHoverChildControl += OnMouseHoverChildControl;
+
+            //connect();
+        }
+
+        public void tweakmode_Checked(object sender, RoutedEventArgs e)
+        {
+            Num1.IsEnabled = true;
+            Num2.IsEnabled = true;
+            Num3.IsEnabled = true;
+            //buttonx.Background = new SolidColorBrush(Color.FromArgb(40, 255, 0, 0));
+        }
+        public void showmode_Checked(object sender, RoutedEventArgs e)
+        {
+            Num1.IsEnabled = false;
+            Num2.IsEnabled = false;
+            Num3.IsEnabled = false;
+            // buttonx.Background = new SolidColorBrush(Color.FromArgb(40, 0, 255, 0));
         }
         //serial Functions
         private async void connect()
@@ -100,7 +141,7 @@ namespace CCMR_GUI
                     dataWriteObject = new DataWriter(serialPort.OutputStream);
 
                     //Launch the WriteAsync task to perform the write
-                    await WriteAsync(_text);
+                    await Writetext(_text);
                 }
                 else
                 {
@@ -121,7 +162,7 @@ namespace CCMR_GUI
                 }
             }
         }
-        private async Task WriteAsync(String text)
+        private async Task Writetext(String text)
         {
             Task<UInt32> storeAsyncTask;
 
@@ -141,6 +182,27 @@ namespace CCMR_GUI
                 }
 
             }
+        }
+
+        private async Task Send_to_CCMR(byte cmdid, byte cmdval)
+        {
+            Task<UInt32> storeAsyncTask;
+
+
+            // Load the text from the sendText input text box to the dataWriter object
+            dataWriteObject.WriteByte(cmdid);
+            dataWriteObject.WriteByte(cmdval);
+            // Launch an async task to complete the write operation
+            storeAsyncTask = dataWriteObject.StoreAsync().AsTask();
+
+                UInt32 bytesWritten = await storeAsyncTask;
+                if (bytesWritten > 0)
+                {
+                    status.Text += "||bytes written successfully!";
+                
+                }
+
+            
         }
         private async void Listen()
         {
@@ -329,34 +391,97 @@ namespace CCMR_GUI
                 case 102: //cooler temp
                     gauge_ovenTemp = cmdval.ToString();
                     break;
+
+                case 200:
+                    CO2VALVE = cmdval==1 ? true:false;
+                    break;
+                case 201:
+                    H2INVALVE = cmdval == 1 ? true : false;
+                    break;
+                case 202:
+                    H2OUTVALVE = cmdval == 1 ? true : false;
+                    break;
+                case 203:
+                    O2INVALVE = cmdval == 1 ? true : false;
+                    break;
+                case 204:
+                    O2OUTVALVE = cmdval == 1 ? true : false;
+                    break;
+                case 205:
+                    H2REFLUX = cmdval == 1 ? true : false;
+                    break;
+                case 206:
+                    O2REFLUX = cmdval == 1 ? true : false;
+                    break;
+                case 207:
+                    status.Text += " >> Connection established";
+                    break;
                 default:
                     status.Text = "ERROR #404 - Command not found!";
                     break;
             }
+
+            btn_CO2OUT.Background = CO2VALVE ? Green : Red ;
+            btn_H2IN.Background = H2INVALVE ? Green : Red;
+            btn_H2OUT.Background = H2OUTVALVE ? Green : Red;
+            btn_O2IN.Background = O2INVALVE ? Green : Red;
+            btn_O2OUT.Background = O2OUTVALVE ? Green : Red;
+            btn_H2WATER.Background = H2REFLUX ? Green : Red;
+            btn_O2WATER.Background = O2REFLUX ? Green : Red;
+
         }
-        
-        private void button1_Click(object sender, RoutedEventArgs e)
+
+       
+
+        private async void btn_02IN_Click(object sender, RoutedEventArgs e)
         {
-          
-
+            if (O2INVALVE)
+            {
+                await Send_to_CCMR(203, O2INVALVE ? inactive : active); 
+            }
         }
-
-        private void tweakmode_Checked(object sender, RoutedEventArgs e)
+        private async void btn_H2IN_Click(object sender, RoutedEventArgs e)
         {
-            Num1.IsEnabled = true;
-            Num2.IsEnabled = true;
-            Num3.IsEnabled = true;
+            if (H2INVALVE)
+            {
+                await Send_to_CCMR(203,H2INVALVE ? inactive : active);
+            }
         }
-
-        private void showmode_Checked(object sender, RoutedEventArgs e)
+        private async void btn_H2WATER_Click(object sender, RoutedEventArgs e)
         {
-            Num1.IsEnabled = false;
-            Num2.IsEnabled = false;
-            Num3.IsEnabled = false;
+            if (H2REFLUX)
+            {
+                await Send_to_CCMR(203,H2REFLUX ? inactive : active);
+            }
         }
-
-
-
+        private async void btn_O2WATER_Click(object sender, RoutedEventArgs e)
+        {
+            if (O2REFLUX)
+            {
+                await Send_to_CCMR(203,O2REFLUX ? inactive : active);
+            }
+        }
+        private async void btn_O2OUT_Click(object sender, RoutedEventArgs e)
+        {
+            if (O2OUTVALVE)
+            {
+                await Send_to_CCMR(203,O2OUTVALVE ? inactive : active);
+            }
+        }
+        private async void btn_H2OUT_Click(object sender, RoutedEventArgs e)
+        {
+            if (H2OUTVALVE)
+            {
+                await Send_to_CCMR(203,H2OUTVALVE ? inactive : active);
+            }
+        }
+        private async void btn_CO2OUT_Click(object sender, RoutedEventArgs e)
+        {
+            if (CO2VALVE)
+            {
+                await Send_to_CCMR(203,CO2VALVE ? inactive : active);
+            }
+        }
 
     }
 }

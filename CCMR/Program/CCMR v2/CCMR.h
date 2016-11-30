@@ -580,6 +580,9 @@ public:
 	{
 		pinMode(13, OUTPUT);
 		digitalWrite(13, HIGH);
+		delay(1000);
+	    digitalWrite(13, LOW);
+
 	}
   void Caution(boolean state) 
   {
@@ -1035,53 +1038,53 @@ public:
 
 		lights.Starting(true);
 		Serial.println("RESETTING VALVES");
-		valves.CO2_needle_reset(false);
-		delay(500);
-		valves.H2_needle_reset(true);
-		Serial.println("refluxing water.."); //TODO: ventil nach dem ofen!!!!!!!
-		valves.Flush(true);
-		delay(1000);
-		valves.Flush(false);
-		valves.Water_reflux_H2(true);
-		delay(3000);
-		valves.Water_reflux_H2(false);
-		Serial.print("Cleaning Valves and Pipes");
-		valves.Flush(true);
-		//valves.H2(true);
-		valves.Water_reflux_CH4(true);
-		delay(1000);
-		Serial.print("<|..");
-		delay(1000);
-		Serial.print(".");
-		delay(1000);
-		Serial.print(".");
-		delay(1000);
-		Serial.print(".");
-		delay(1000);
-		Serial.print(".");
-		delay(1000);
-		Serial.print(".");
-		delay(1000);
-		Serial.print(".");
-		delay(1000);
-		Serial.print(".");
-		delay(1000);
-		Serial.print(".");
-		delay(1000);
-		Serial.print("..|>");
-		//valves.H2(false);
-		valves.Flush(false);
-		valves.Water_reflux_CH4(false);
-		Serial.println(" COMPLETE");
-		delay(200);
-		Serial.println("SETTING STANDART MIX...");
-		Serial.println("CO2...");
-		valves.CO2_needle_percent(CO2_reset);
-		Serial.println("H2...");
-		valves.H2_needle_percent(H2_reset);
-		Serial.println("SYSTEM BOOTUP COMPLETE");
-		Serial.println("USER INPUT REQUIRED!");
-		Serial.println("PREHEAT OVEN ?");
+		//valves.CO2_needle_reset(false);
+		//delay(500);
+		//valves.H2_needle_reset(true);
+		//Serial.println("refluxing water.."); //TODO: ventil nach dem ofen!!!!!!!
+		//valves.Flush(true);
+		//delay(1000);
+		//valves.Flush(false);
+		//valves.Water_reflux_H2(true);
+		//delay(3000);
+		//valves.Water_reflux_H2(false);
+		//Serial.print("Cleaning Valves and Pipes");
+		//valves.Flush(true);
+		////valves.H2(true);
+		//valves.Water_reflux_CH4(true);
+		//delay(1000);
+		//Serial.print("<|..");
+		//delay(1000);
+		//Serial.print(".");
+		//delay(1000);
+		//Serial.print(".");
+		//delay(1000);
+		//Serial.print(".");
+		//delay(1000);
+		//Serial.print(".");
+		//delay(1000);
+		//Serial.print(".");
+		//delay(1000);
+		//Serial.print(".");
+		//delay(1000);
+		//Serial.print(".");
+		//delay(1000);
+		//Serial.print(".");
+		//delay(1000);
+		//Serial.print("..|>");
+		////valves.H2(false);
+		//valves.Flush(false);
+		//valves.Water_reflux_CH4(false);
+		//Serial.println(" COMPLETE");
+		//delay(200);
+		//Serial.println("SETTING STANDART MIX...");
+		//Serial.println("CO2...");
+		//valves.CO2_needle_percent(CO2_reset);
+		//Serial.println("H2...");
+		//valves.H2_needle_percent(H2_reset);
+		//Serial.println("SYSTEM BOOTUP COMPLETE");
+		//Serial.println("USER INPUT REQUIRED!");
+		//Serial.println("PREHEAT OVEN ?");
 		bool in = false;
 		bool heat = false;
 		if (!debug)
@@ -1124,8 +1127,8 @@ public:
 				Serial.println("PREHEATING ABORTED");
 			}
 			Serial.println("PREPRODUCING H2");
-			valves.CO2_needle_idle();
-			valves.H2_needle_idle();
+		/*	valves.CO2_needle_idle();
+			valves.H2_needle_idle();*/
 				items.Electrolyzer_1(true);
 				items.Electrolyzer_2(true);
 				while (sensors.H2_pressure_Electrolyzer() < 500)
@@ -1162,9 +1165,7 @@ public:
   
   Sensors sensors;
 
-
   Sys_stat sys_stat;
-
 
   Valves valves;
 };
