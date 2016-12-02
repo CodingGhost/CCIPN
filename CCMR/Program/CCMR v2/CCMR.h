@@ -2,6 +2,7 @@
 #include <HardwareSerial.h>
 #include "Arduino.h"
 #include "Adresses.h"
+#include "Communication.h"
 boolean debug = true;
 boolean Ready = false;
 boolean Caution = false;
@@ -254,6 +255,60 @@ public:
   //status 0 --> Lights
   //status 1 --> Valves
   //status 2 --> items
+};
+
+class Sys_stat
+{
+	Utils utils;
+public:
+	//<Magnetic Valves
+	boolean CO2()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 17);
+	}
+
+	boolean H2_in()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 12);
+	}
+
+	boolean H2_out()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 15);
+	}
+
+	boolean O2_in()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 13);
+	}
+
+	boolean O2_out()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 16);
+	}
+
+	boolean Water_reflux_H2()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 11);
+	}
+
+	boolean Water_reflux_O2()
+	{
+		return utils.I2CREAD_M(PCF8575::adress, 14);
+	}
+	boolean Pump()
+	{
+		return utils.I2CREAD_M(PCF8575::adress, 14);
+	}
+	//>Magnetic Valves
+
+
 };
 
 class Sensors
@@ -642,7 +697,7 @@ public:
 
 class Valves
 {
-  
+	Sys_stat sys_stat;
   Sensors sensors;
   Utils utils;
 public:
@@ -661,7 +716,7 @@ public:
 			utils.I2CWRITE_M(PCF8575::adress, 17, 0);
 		
     }
-
+	utils.Send_to_GUI(STT_CO2VALVE, sys_stat.CO2());
 
   } 
 
@@ -676,6 +731,7 @@ public:
     {
       utils.I2CWRITE_M(PCF8575::adress,12,0); 
     }
+	utils.Send_to_GUI(STT_H2INVALVE, sys_stat.H2_in());
   } 
 
   void H2_out(boolean state)
@@ -689,6 +745,7 @@ public:
 	  {
 		  utils.I2CWRITE_M(PCF8575::adress, 15, 0); 
 	  }
+	  utils.Send_to_GUI(STT_H2OUTVALVE, sys_stat.H2_out());
   }
 
   void O2_in(boolean state)
@@ -702,6 +759,7 @@ public:
 	  {
 		  utils.I2CWRITE_M(PCF8575::adress, 13, 0); 
 	  }
+	  utils.Send_to_GUI(STT_O2INVALVE,sys_stat.O2_in());
   }
 
   void O2_out(boolean state)
@@ -715,6 +773,7 @@ public:
 	  {
 		  utils.I2CWRITE_M(PCF8575::adress, 16, 0); 
 	  }
+	  utils.Send_to_GUI(STT_O2OUTVALVE, sys_stat.O2_out());
   }
 
   void Water_reflux_H2(boolean state)
@@ -728,6 +787,7 @@ public:
     {
       utils.I2CWRITE_M(PCF8575::adress,11,0); 
     }
+	utils.Send_to_GUI(STT_H2REFLUX, sys_stat.Water_reflux_H2());
   } 
 
   void Water_reflux_O2(boolean state)
@@ -740,6 +800,7 @@ public:
 	  {
 		  utils.I2CWRITE_M(PCF8575::adress, 10, 0); 
 	  }
+	  utils.Send_to_GUI(STT_O2REFLUX, sys_stat.Water_reflux_O2());
   }
   //>Magnetic Valves
 
@@ -760,6 +821,7 @@ public:
 
 class Items
 {
+	Sys_stat sys_stat;
   Utils utils;
 public:
 	
@@ -840,60 +902,13 @@ public:
 	  {
 		  utils.I2CWRITE_M(PCF8575::adress, 14, 0);
 	  }
+	  utils.Send_to_GUI(STT_PUMP, sys_stat.Pump());
   }
 
 
 };
 
-class Sys_stat
-{
-	Utils utils;
-public:
-	//<Magnetic Valves
-	boolean CO2()
-	{
-		utils.channel_switch(1);
-		return utils.I2CREAD_M(PCF8575::adress, 17);
-	}
 
-	boolean H2_in()
-	{
-		utils.channel_switch(1);
-		return utils.I2CREAD_M(PCF8575::adress, 12);
-	}
-
-	boolean H2_out()
-	{
-		utils.channel_switch(1);
-		return utils.I2CREAD_M(PCF8575::adress, 15);
-	}
-
-	boolean O2_in()
-	{
-		utils.channel_switch(1);
-		return utils.I2CREAD_M(PCF8575::adress, 13);
-	}
-
-	boolean O2_out()
-	{
-		utils.channel_switch(1);
-		return utils.I2CREAD_M(PCF8575::adress, 16);
-	}
-
-	boolean Water_reflux_H2()
-	{
-		utils.channel_switch(1);
-		return utils.I2CREAD_M(PCF8575::adress, 11);
-	}
-
-	boolean Water_reflux_O2()
-	{
-		return utils.I2CREAD_M(PCF8575::adress, 10);
-	}
-	//>Magnetic Valves
-
-
-};
 
 
 //########################################################################################################################################\\  
@@ -906,6 +921,7 @@ public:
   void init(boolean Flush) 
   {
     Serial.begin(9600);
+	Serial2.begin(9600);
     Sw_Reset[0] = 0x51;
     Sw_Reset[1] = 0x00;
     Sw_Reset[2] = 0x00;

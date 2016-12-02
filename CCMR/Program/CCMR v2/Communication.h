@@ -19,7 +19,8 @@
 #define STT_O2OUTVALVE			204
 #define STT_H2REFLUX			205
 #define STT_O2REFLUX			206
-#define STT_HEARTBEAT           207
+#define STT_PUMP				207
+#define STT_HEARTBEAT           208
 
 #define CMD_start_CMD           300
 #define CMD_oventemp_val        301

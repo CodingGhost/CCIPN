@@ -58,7 +58,7 @@ void Timed_loop()
 		previousMillis_B = currentMillis;
 		MidLoop();
 	}
-	if (currentMillis - previousMillis_C >= 2000)
+	if (currentMillis - previousMillis_C >= 5000)
 	{
 		previousMillis_C = currentMillis;
 		SlowLoop();
@@ -77,7 +77,6 @@ void FastLoop()
 void MidLoop()
 {
 	handleCommands();
-	UpdateGUI();
 }
 void SlowLoop()
 {
@@ -89,16 +88,16 @@ void handleCommands()
 {
 	byte cmdid;
 	byte cmdval;
-	if (Serial.available())
+	if (Serial2.available())
 	{
-		cmdid = Serial.read();
-		cmdval = Serial.read();
+		cmdid = Serial2.read();
+		cmdval = Serial2.read();
 	}
 	switch (cmdid)
 	{
 	case CMD_start_CMD:
 	{
-
+		break;
 	}
 	case STT_CO2VALVE:
 	{
@@ -110,6 +109,7 @@ void handleCommands()
 		{
 			CCMR.valves.CO2(false);
 		}
+		break;
 	}
 
 	case STT_H2INVALVE:
@@ -122,6 +122,7 @@ void handleCommands()
 		{
 			CCMR.valves.H2_in(false);
 		}
+		break;
 	}
 
 	case STT_H2OUTVALVE:
@@ -134,6 +135,7 @@ void handleCommands()
 		{
 			CCMR.valves.H2_out(false);
 		}
+		break;
 	}
 
 	case STT_H2REFLUX:
@@ -146,6 +148,7 @@ void handleCommands()
 		{
 			CCMR.valves.Water_reflux_H2(false);
 		}
+		break;
 	}
 
 	case STT_O2INVALVE:
@@ -158,6 +161,7 @@ void handleCommands()
 		{
 			CCMR.valves.O2_in(false);
 		}
+		break;
 	}
 
 	case STT_O2OUTVALVE:
@@ -170,6 +174,7 @@ void handleCommands()
 		{
 			CCMR.valves.O2_out(false);
 		}
+		break;
 	}
 
 	case STT_O2REFLUX:
@@ -182,22 +187,25 @@ void handleCommands()
 		{
 			CCMR.valves.Water_reflux_O2(false);
 		}
-	}
-	default:
-		//status.Text = "ERROR #404 - Command not found!";
 		break;
 	}
-}
 
-void UpdateGUI()
-{
-	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.CO2()/*? 1 : 0*/);
-	CCMR.utils.Send_to_GUI(STT_H2INVALVE, CCMR.sys_stat.H2_in());
-	CCMR.utils.Send_to_GUI(STT_H2OUTVALVE, CCMR.sys_stat.H2_out());
-	CCMR.utils.Send_to_GUI(STT_O2INVALVE, CCMR.sys_stat.O2_in());
-	CCMR.utils.Send_to_GUI(STT_O2OUTVALVE, CCMR.sys_stat.O2_out());
-	CCMR.utils.Send_to_GUI(STT_H2REFLUX, CCMR.sys_stat.Water_reflux_H2());
-	CCMR.utils.Send_to_GUI(STT_O2REFLUX, CCMR.sys_stat.Water_reflux_O2());
+	case STT_PUMP:
+	{
+		if (cmdval == 1)
+		{
+			CCMR.items.Pump(true);
+		}
+		else
+		{
+			CCMR.items.Pump(false);
+		}
+		break;
+	}
+	default:
+
+		break;
+	}
 }
 
 //void Mix()

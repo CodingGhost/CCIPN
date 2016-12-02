@@ -79,7 +79,7 @@
                         <Button x:Name="btn_H2OUT" Content="" Height="37" Margin="1425,353,0,0" VerticalAlignment="Top" Width="141" Background= "#66FF0000" Click="btn_H2OUT_Click" RenderTransformOrigin="0.789,1.571"/>
                         <Button x:Name="btn_CO2OUT" Content="" Margin="755,581,0,574" VerticalAlignment="Stretch" Width="71" Background= "#66FF0000" Click="btn_CO2OUT_Click" RenderTransformOrigin="0.789,1.571" d:LayoutOverrides="HorizontalAlignment, TopPosition, BottomPosition"/>
                         <Button x:Name="btn_V2_006" Content="" Height="36" Margin="421,0,0,99" VerticalAlignment="Bottom" Width="70" Background= "#66FF0000" RenderTransformOrigin="0.789,1.571" d:LayoutOverrides="HorizontalAlignment"/>
-
+                        <Button x:Name="btn_PM_000" Content="" Height="283" Margin="1231,123,0,0" VerticalAlignment="Top" Width="87" Background= "#66FF0000" Click="btn_PM000_Click" RenderTransformOrigin="0.789,1.571"/>
                         <Rectangle Fill="#6600FFFF" Height="36" Margin="684,71,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="36">
                             <ToolTipService.ToolTip>
                                 <TextBlock Text="{x:Bind P000}" FontSize="20"/>

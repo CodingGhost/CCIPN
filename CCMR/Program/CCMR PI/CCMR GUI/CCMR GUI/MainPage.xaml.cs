@@ -64,6 +64,7 @@ namespace CCMR_GUI
        Boolean O2OUTVALVE  = false;
        Boolean H2REFLUX    = false;
        Boolean O2REFLUX    = false;
+       Boolean PUMP        = false;
         /// </summary>
         ///   Dim Mysqlconn As MySqlConnection
         String query;
@@ -73,8 +74,8 @@ namespace CCMR_GUI
         DataWriter dataWriteObject = null;
         DataReader dataReaderObject = null;
         private CancellationTokenSource ReadCancellationTokenSource;
-        SolidColorBrush Green =  new SolidColorBrush(Color.FromArgb(40, 0, 255, 0));
-        SolidColorBrush Red = new SolidColorBrush(Color.FromArgb(40, 255, 0, 0));
+        SolidColorBrush Green =  new SolidColorBrush(Color.FromArgb(102, 0, 255, 0));
+        SolidColorBrush Red = new SolidColorBrush(Color.FromArgb(102, 255, 0, 0));
 
         byte active = 1;
         byte inactive = 0;
@@ -90,7 +91,7 @@ namespace CCMR_GUI
 
             //scroller.MouseRightClickedAndHoverChildControl += OnMouseHoverChildControl;
 
-            //connect();
+            connect();
         }
 
         public void tweakmode_Checked(object sender, RoutedEventArgs e)
@@ -187,7 +188,7 @@ namespace CCMR_GUI
         private async Task Send_to_CCMR(byte cmdid, byte cmdval)
         {
             Task<UInt32> storeAsyncTask;
-
+            dataWriteObject = new DataWriter(serialPort.OutputStream);
 
             // Load the text from the sendText input text box to the dataWriter object
             dataWriteObject.WriteByte(cmdid);
@@ -435,53 +436,53 @@ namespace CCMR_GUI
 
         private async void btn_02IN_Click(object sender, RoutedEventArgs e)
         {
-            if (O2INVALVE)
-            {
+           
                 await Send_to_CCMR(203, O2INVALVE ? inactive : active); 
-            }
+          
         }
         private async void btn_H2IN_Click(object sender, RoutedEventArgs e)
         {
-            if (H2INVALVE)
-            {
-                await Send_to_CCMR(203,H2INVALVE ? inactive : active);
-            }
+           
+                await Send_to_CCMR(201,H2INVALVE ? inactive : active);
+           
         }
         private async void btn_H2WATER_Click(object sender, RoutedEventArgs e)
         {
-            if (H2REFLUX)
-            {
-                await Send_to_CCMR(203,H2REFLUX ? inactive : active);
-            }
+           
+                await Send_to_CCMR(205,H2REFLUX ? inactive : active);
+           
         }
         private async void btn_O2WATER_Click(object sender, RoutedEventArgs e)
         {
-            if (O2REFLUX)
-            {
-                await Send_to_CCMR(203,O2REFLUX ? inactive : active);
-            }
+           
+                await Send_to_CCMR(206,O2REFLUX ? inactive : active);
+           
         }
         private async void btn_O2OUT_Click(object sender, RoutedEventArgs e)
         {
-            if (O2OUTVALVE)
-            {
-                await Send_to_CCMR(203,O2OUTVALVE ? inactive : active);
-            }
+            
+                await Send_to_CCMR(204,O2OUTVALVE ? inactive : active);
+            
         }
         private async void btn_H2OUT_Click(object sender, RoutedEventArgs e)
         {
-            if (H2OUTVALVE)
-            {
-                await Send_to_CCMR(203,H2OUTVALVE ? inactive : active);
-            }
+            
+                await Send_to_CCMR(202,H2OUTVALVE ? inactive : active);
+           
         }
         private async void btn_CO2OUT_Click(object sender, RoutedEventArgs e)
         {
-            if (CO2VALVE)
-            {
-                await Send_to_CCMR(203,CO2VALVE ? inactive : active);
-            }
+            
+                await Send_to_CCMR(200,CO2VALVE ? inactive : active);
+           
         }
+        private async void btn_PM000_Click(object sender, RoutedEventArgs e)
+        {
+
+            await Send_to_CCMR(207, PUMP ? inactive : active);
+
+        }
+        
 
     }
 }
