@@ -84,7 +84,7 @@ void MidLoop()
 }
 void SlowLoop()
 {
-
+	updateGUI();
 }
 
 
@@ -211,7 +211,18 @@ void handleCommands()
 		break;
 	}
 }
+void updateGUI()
+{
+	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.CO2());
+	CCMR.utils.Send_to_GUI(STT_H2INVALVE, CCMR.sys_stat.H2_in());
+	CCMR.utils.Send_to_GUI(STT_H2OUTVALVE, CCMR.sys_stat.H2_out());
+	CCMR.utils.Send_to_GUI(STT_O2INVALVE, CCMR.sys_stat.O2_in());
+	CCMR.utils.Send_to_GUI(STT_O2OUTVALVE, CCMR.sys_stat.O2_out());
+	CCMR.utils.Send_to_GUI(STT_H2REFLUX, CCMR.sys_stat.Water_reflux_H2());
+	CCMR.utils.Send_to_GUI(STT_O2REFLUX, CCMR.sys_stat.Water_reflux_O2());
 
+	utils.Send_to_GUI(SNS_H2Storagepressure_val, CCMR.sensors.H2_storagepressure());
+}
 //void Mix()
 //{
 //  if ( abs(CCMR.sensors.H2_percentage() - 80) > CO2_percentage_tolerance)

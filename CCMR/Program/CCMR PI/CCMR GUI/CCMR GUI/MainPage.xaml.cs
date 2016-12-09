@@ -117,7 +117,7 @@ namespace CCMR_GUI
                 
                 serialPort = await SerialDevice.FromIdAsync(SERIAL_DEVICE);
                 serialPort.WriteTimeout = TimeSpan.FromMilliseconds(1000);
-                serialPort.ReadTimeout = TimeSpan.FromMilliseconds(1000);
+                serialPort.ReadTimeout = TimeSpan.FromMilliseconds(20); //IMPORTANT!!!!!!
                 serialPort.BaudRate = 9600;
                 serialPort.Parity = SerialParity.None;
                 serialPort.StopBits = SerialStopBitCount.One;
@@ -387,7 +387,8 @@ namespace CCMR_GUI
                     gauge_ovenTemp = cmdval.ToString();
                     break;
                 case 109: //H2 pressure
-                    gauge_ovenTemp = cmdval.ToString();
+                    gauge_H2pressure = cmdval.ToString();
+                    P003 = cmdval.ToString();
                     break;
                 case 102: //cooler temp
                     gauge_ovenTemp = cmdval.ToString();

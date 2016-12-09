@@ -9,8 +9,8 @@
 #define SNS_CHwater_val         105
 #define SNS_CO2_val             106
 #define SNS_H2_val              107
-#define SNS_CO2pressure_val     108
-#define SNS_H2pressure_val      109
+#define SNS_CO2storagepressure_val     108
+#define SNS_H2Storagepressure_val      109
 
 #define STT_CO2VALVE            200
 #define STT_H2INVALVE			201
@@ -25,3 +25,13 @@
 #define CMD_start_CMD           300
 #define CMD_oventemp_val        301
 #define CMD_CO2VALVE            302
+
+
+
+
+
+
+
+//misc
+#define open 1
+#define close 0

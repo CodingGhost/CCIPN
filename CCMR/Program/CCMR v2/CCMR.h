@@ -323,31 +323,11 @@ public:
 		Wire.beginTransmission(MAX1238::adress);
 		Wire.requestFrom(MAX1238::adress, byte(24));
 		//------------------------
-		//for(int i = 0;i <= 24)
-		AD[0] = Wire.read();
-		AD[1] = Wire.read();
-		AD[2] = Wire.read();
-		AD[3] = Wire.read();
-		AD[4] = Wire.read();
-		AD[5] = Wire.read();
-		AD[6] = Wire.read();
-		AD[7] = Wire.read();
-		AD[8] = Wire.read();
-		AD[9] = Wire.read();
-		AD[10] = Wire.read();
-		AD[11] = Wire.read();
-		AD[12] = Wire.read();
-		AD[13] = Wire.read();
-		AD[14] = Wire.read();
-		AD[15] = Wire.read();
-		AD[16] = Wire.read();
-		AD[17] = Wire.read();
-		AD[18] = Wire.read();
-		AD[19] = Wire.read();
-		AD[20] = Wire.read();
-		AD[21] = Wire.read();
-		AD[22] = Wire.read();
-		AD[23] = Wire.read();
+		for (int i = 0; i <= 23; i++)
+		{
+			AD[i] = Wire.read();
+		}
+		
 		Wire.endTransmission(MAX1238::adress);
 		int output = word(AD[12], AD[13]); //AIN 6
 		output = output & 0x0FFF;
@@ -384,30 +364,10 @@ public:
 		Wire.beginTransmission(MAX1238::adress);
 		Wire.requestFrom(MAX1238::adress, byte(24));
 		//------------------------
-		AD[0] = Wire.read();
-		AD[1] = Wire.read();
-		AD[2] = Wire.read();
-		AD[3] = Wire.read();
-		AD[4] = Wire.read();
-		AD[5] = Wire.read();
-		AD[6] = Wire.read();
-		AD[7] = Wire.read();
-		AD[8] = Wire.read();
-		AD[9] = Wire.read();
-		AD[10] = Wire.read();
-		AD[11] = Wire.read();
-		AD[12] = Wire.read();
-		AD[13] = Wire.read();
-		AD[14] = Wire.read();
-		AD[15] = Wire.read();
-		AD[16] = Wire.read();
-		AD[17] = Wire.read();
-		AD[18] = Wire.read();
-		AD[19] = Wire.read();
-		AD[20] = Wire.read();
-		AD[21] = Wire.read();
-		AD[22] = Wire.read();
-		AD[23] = Wire.read();
+		for (int i = 0; i <= 23; i++)
+		{
+			AD[i] = Wire.read();
+		}
 		Wire.endTransmission(MAX1238::adress);
 		int output = word(AD[6], AD[7]);
 		output = output & 0x0FFF;
@@ -586,30 +546,10 @@ public:
     Wire.beginTransmission(0x00);
     Wire.requestFrom(0x00, 24);
     //------------------------
-    AD[0] = Wire.read();
-    AD[1] = Wire.read();
-    AD[2] = Wire.read();
-    AD[3] = Wire.read();
-    AD[4] = Wire.read();
-    AD[5] = Wire.read();
-    AD[6] = Wire.read();
-    AD[7] = Wire.read();
-    AD[8] = Wire.read();
-    AD[9] = Wire.read();
-    AD[10] = Wire.read();
-    AD[11] = Wire.read();
-    AD[12] = Wire.read();
-    AD[13] = Wire.read();
-    AD[14] = Wire.read();
-    AD[15] = Wire.read();
-    AD[16] = Wire.read();
-    AD[17] = Wire.read();
-    AD[18] = Wire.read();
-    AD[19] = Wire.read();
-    AD[20] = Wire.read();
-    AD[21] = Wire.read();
-    AD[22] = Wire.read();
-    AD[23] = Wire.read();
+	for (int i = 0; i <= 23; i++)
+	{
+		AD[i] = Wire.read();
+	}
     Wire.endTransmission(0x00);
     int output = word(AD[18], AD[19]);
     output = output & 0x0FFF;
@@ -622,30 +562,10 @@ public:
     Wire.beginTransmission(MAX1238::adress);
     Wire.requestFrom(MAX1238::adress, byte(24));
     //------------------------
-    AD[0] = Wire.read();
-    AD[1] = Wire.read();
-    AD[2] = Wire.read();
-    AD[3] = Wire.read();
-    AD[4] = Wire.read();
-    AD[5] = Wire.read();
-    AD[6] = Wire.read();
-    AD[7] = Wire.read();
-    AD[8] = Wire.read();
-    AD[9] = Wire.read();
-    AD[10] = Wire.read();
-    AD[11] = Wire.read();
-    AD[12] = Wire.read();
-    AD[13] = Wire.read();
-    AD[14] = Wire.read();
-    AD[15] = Wire.read();
-    AD[16] = Wire.read();
-    AD[17] = Wire.read();
-    AD[18] = Wire.read();
-    AD[19] = Wire.read();
-    AD[20] = Wire.read();
-    AD[21] = Wire.read();
-    AD[22] = Wire.read();
-    AD[23] = Wire.read();
+	for (int i = 0; i <= 23; i++)
+	{
+		AD[i] = Wire.read();
+	}
     Wire.endTransmission(MAX1238::adress);
     int output = word(AD[16], AD[17]);
     output = output & 0x0FFF;
@@ -752,7 +672,7 @@ public:
 		
     }
 	utils.Send_to_GUI(STT_CO2VALVE, sys_stat.CO2());
-
+	utils.channel_switch(0);
   } 
 
   void H2_in(boolean state)
@@ -767,6 +687,7 @@ public:
       utils.I2CWRITE_M(PCF8575::adress,12,0); 
     }
 	utils.Send_to_GUI(STT_H2INVALVE, sys_stat.H2_in());
+	utils.channel_switch(0);
   } 
 
   void H2_out(boolean state)
@@ -781,6 +702,7 @@ public:
 		  utils.I2CWRITE_M(PCF8575::adress, 15, 0); 
 	  }
 	  utils.Send_to_GUI(STT_H2OUTVALVE, sys_stat.H2_out());
+	  utils.channel_switch(0);
   }
 
   void O2_in(boolean state)
@@ -795,6 +717,7 @@ public:
 		  utils.I2CWRITE_M(PCF8575::adress, 13, 0); 
 	  }
 	  utils.Send_to_GUI(STT_O2INVALVE,sys_stat.O2_in());
+	  utils.channel_switch(0);
   }
 
   void O2_out(boolean state)
@@ -809,6 +732,7 @@ public:
 		  utils.I2CWRITE_M(PCF8575::adress, 16, 0); 
 	  }
 	  utils.Send_to_GUI(STT_O2OUTVALVE, sys_stat.O2_out());
+	  utils.channel_switch(0);
   }
 
   void Water_reflux_H2(boolean state) //?
@@ -823,10 +747,12 @@ public:
       utils.I2CWRITE_M(PCF8575::adress,11,0); 
     }
 	utils.Send_to_GUI(STT_H2REFLUX, sys_stat.Water_reflux_H2());
+	utils.channel_switch(0);
   } 
 
   void Water_reflux_O2(boolean state)
   {
+	  utils.channel_switch(1);
 	  if (state)
 	  {
 		  utils.I2CWRITE_M(PCF8575::adress, 10, 1); 
@@ -836,21 +762,47 @@ public:
 		  utils.I2CWRITE_M(PCF8575::adress, 10, 0); 
 	  }
 	  utils.Send_to_GUI(STT_O2REFLUX, sys_stat.Water_reflux_O2());
+	  utils.channel_switch(0);
   }
   //>Magnetic Valves
 
   //<Needle Valves
-  void H2_Flowrate(int val)
+  void H2_Flowrate_step(int val, int dir = 3)
   {
-	  
-	  utils.I2CWRITE(PCF8574::adress, 2, 1);
-	  delay(10);
-	  utils.I2CWRITE(PCF8574::adress, 2, 0);
-	  delay(10);
-	  utils.I2CWRITE(PCF8574::adress, 2, 1);
-	  delay(10);
-	  utils.I2CWRITE(PCF8574::adress, 2, 0);
-	 delay(10);
+	  if (val >= 0 && val <= 100)
+	  {
+		  const int bot = 400;
+		  const int top = 2700;
+		  val = 23.00*val + 400.0;
+			  if (dir != 3)
+			  {
+				  if (sensors.H2_outvalve() < val)
+				  {
+					  utils.I2CWRITE(PCF8574::adress, 2, open);
+				  }
+				  else
+				  {
+					  utils.I2CWRITE(PCF8574::adress, 2, close);
+				  }
+				  utils.I2CWRITE(PCF8574::adress, 2, 0);
+				  utils.I2CWRITE(PCF8574::adress, 2, 1);
+			  }
+			  else
+			  {
+				  if (dir == open)
+				  {
+					  utils.I2CWRITE(PCF8574::adress, 1, open);
+					  utils.I2CWRITE(PCF8574::adress, 2, 0);
+					  utils.I2CWRITE(PCF8574::adress, 2, 1);
+				  }
+				  else
+				  {
+					  utils.I2CWRITE(PCF8574::adress, 1, close);
+					  utils.I2CWRITE(PCF8574::adress, 2, 0);
+					  utils.I2CWRITE(PCF8574::adress, 2, 1);
+				  }
+			  }
+	  }
   }
   //>Needle Valves
 };
