@@ -1,0 +1,5 @@
+CHannels auf 0 resetten;
+For loops bei MAX1238
+add tooltip
+Pressure fragwürdig?
+Flowrate sensor ( zu: 400 || auf: 2700)

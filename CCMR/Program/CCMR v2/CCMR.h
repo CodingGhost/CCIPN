@@ -3,7 +3,7 @@
 #include "Arduino.h"
 #include "Adresses.h"
 #include "Communication.h"
-boolean debug = true;
+boolean debug = false;
 boolean Ready = false;
 boolean Caution = false;
 boolean Running = false;
@@ -316,7 +316,49 @@ class Sensors
   Utils utils;
 
 public:
-	boolean Halt()
+	//new
+	int H2_storagepressure()
+	{
+		utils.channel_switch(MAX1238::bus);
+		Wire.beginTransmission(MAX1238::adress);
+		Wire.requestFrom(MAX1238::adress, byte(24));
+		//------------------------
+		//for(int i = 0;i <= 24)
+		AD[0] = Wire.read();
+		AD[1] = Wire.read();
+		AD[2] = Wire.read();
+		AD[3] = Wire.read();
+		AD[4] = Wire.read();
+		AD[5] = Wire.read();
+		AD[6] = Wire.read();
+		AD[7] = Wire.read();
+		AD[8] = Wire.read();
+		AD[9] = Wire.read();
+		AD[10] = Wire.read();
+		AD[11] = Wire.read();
+		AD[12] = Wire.read();
+		AD[13] = Wire.read();
+		AD[14] = Wire.read();
+		AD[15] = Wire.read();
+		AD[16] = Wire.read();
+		AD[17] = Wire.read();
+		AD[18] = Wire.read();
+		AD[19] = Wire.read();
+		AD[20] = Wire.read();
+		AD[21] = Wire.read();
+		AD[22] = Wire.read();
+		AD[23] = Wire.read();
+		Wire.endTransmission(MAX1238::adress);
+		int output = word(AD[12], AD[13]); //AIN 6
+		output = output & 0x0FFF;
+		float fout = output;
+		//double p = (((fout / 5000) - 0.04) / 0.009) * 10;
+		double p = (fout / 5000 - 0.04) / 0.00369 * 10 + 22;
+		utils.channel_switch(0);
+		return p;
+	}
+	//old
+  boolean Halt()
 	{
 		
 
@@ -337,7 +379,7 @@ public:
 		}
 		
 	}
-	int Oven_temp()
+  int Oven_temp()
 	{
 		Wire.beginTransmission(MAX1238::adress);
 		Wire.requestFrom(MAX1238::adress, byte(24));
@@ -376,16 +418,13 @@ public:
 		return degree(output);
 
 	}
-	double degree(double x) {
+  double degree(double x) {
 		return  1.2094505374378798e+001 * pow(x, 0)
 			+ 7.2936082213848244e-002 * pow(x, 1)
 			+ 1.1321194483966676e-004 * pow(x, 2)
 			+ -6.6277232428908262e-008 * pow(x, 3)
 			+ 1.2238390800688889e-011 * pow(x, 4); //nicht genau
 	}
-
-
-
   int cooler()
   {
     utils.channel_switch(2);
@@ -473,7 +512,6 @@ public:
       }
     }   
   }
-
   boolean CH_water(int num)
   {
     switch (num)
@@ -515,14 +553,11 @@ public:
       }
     }   
   }
-
-
-
-  int H2_valve()
+  int H2_outvalve()
   {
-    utils.I2C(0x00,0xFC);
-    Wire.beginTransmission(0x00);
-    Wire.requestFrom(0x00, 2);
+    utils.I2C(AD7828::adress,0x8C);
+    Wire.beginTransmission(AD7828::adress);
+    Wire.requestFrom(AD7828::adress, byte(2));
     int val(((Wire.read() << 8) + Wire.read()));
     Wire.endTransmission();
     //Serial.println(val);
@@ -776,7 +811,7 @@ public:
 	  utils.Send_to_GUI(STT_O2OUTVALVE, sys_stat.O2_out());
   }
 
-  void Water_reflux_H2(boolean state)
+  void Water_reflux_H2(boolean state) //?
   {
 	  utils.channel_switch(1);
     if (state)
@@ -807,14 +842,15 @@ public:
   //<Needle Valves
   void H2_Flowrate(int val)
   {
-	  utils.I2CWRITE(PCF5874::adress, 3, 1);
+	  
+	  utils.I2CWRITE(PCF8574::adress, 2, 1);
 	  delay(10);
-	  utils.I2CWRITE(PCF5874::adress, 3, 0);
+	  utils.I2CWRITE(PCF8574::adress, 2, 0);
 	  delay(10);
-	  utils.I2CWRITE(PCF5874::adress, 3, 1);
+	  utils.I2CWRITE(PCF8574::adress, 2, 1);
 	  delay(10);
-	  utils.I2CWRITE(PCF5874::adress, 3, 0);
-	  delay(10);
+	  utils.I2CWRITE(PCF8574::adress, 2, 0);
+	 delay(10);
   }
   //>Needle Valves
 };
@@ -1026,7 +1062,13 @@ public:
     //Wire.endTransmission();
 
 	//INIT
-	utils.I2C(PCF5874::adress, 0xDF);
+	utils.channel_switch(1);
+	utils.I2C(PCF8574::adress, 0xDF);
+	utils.I2C(MAX1238::adress, 0x17);
+	utils.I2C(MAX1238::adress, 0XD2);
+	
+	utils.channel_switch(0);
+	// bus 
 	//END INIT
     Serial.println("\nCCMR program initialized");
 	Serial.println("registering Serial --> GUI...");
@@ -1179,11 +1221,13 @@ public:
   Items items;
   
   
-  Sensors sensors;
 
   Sys_stat sys_stat;
 
   Valves valves;
+
+  Sensors sensors;
+
 };
 
 

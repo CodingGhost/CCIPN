@@ -415,6 +415,9 @@ namespace CCMR_GUI
                     O2REFLUX = cmdval == 1 ? true : false;
                     break;
                 case 207:
+                    PUMP = cmdval == 1 ? true : false;
+                    break;
+                case 208:
                     status.Text += " >> Connection established";
                     break;
                 default:
@@ -429,6 +432,7 @@ namespace CCMR_GUI
             btn_O2OUT.Background = O2OUTVALVE ? Green : Red;
             btn_H2WATER.Background = H2REFLUX ? Green : Red;
             btn_O2WATER.Background = O2REFLUX ? Green : Red;
+            btn_PM_000.Background = PUMP ? Green : Red;
 
         }
 
