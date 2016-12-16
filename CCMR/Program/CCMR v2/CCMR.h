@@ -300,7 +300,7 @@ public:
 
 	boolean Water_reflux_O2()
 	{
-		return utils.I2CREAD_M(PCF8575::adress, 14);
+		return utils.I2CREAD_M(PCF8575::adress, 10);
 	}
 	boolean Pump()
 	{
@@ -774,18 +774,21 @@ public:
 		  const int bot = 400;
 		  const int top = 2700;
 		  val = 23.00*val + 400.0;
-			  if (dir != 3)
+			  if (dir == 3)
 			  {
+				  if (abs(sensors.H2_outvalve() - val) > 20)
+				  { 
 				  if (sensors.H2_outvalve() < val)
 				  {
-					  utils.I2CWRITE(PCF8574::adress, 2, open);
+					 utils.I2CWRITE(PCF8574::adress, 1, open);
 				  }
-				  else
+				  else if (sensors.H2_outvalve() > val)
 				  {
-					  utils.I2CWRITE(PCF8574::adress, 2, close);
+					  utils.I2CWRITE(PCF8574::adress, 1, close);
 				  }
 				  utils.I2CWRITE(PCF8574::adress, 2, 0);
 				  utils.I2CWRITE(PCF8574::adress, 2, 1);
+				  }
 			  }
 			  else
 			  {
@@ -891,6 +894,7 @@ public:
 		  utils.I2CWRITE_M(PCF8575::adress, 14, 0);
 	  }
 	  utils.Send_to_GUI(STT_PUMP, sys_stat.Pump());
+	  utils.channel_switch(1);
   }
 
 

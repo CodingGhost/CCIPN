@@ -35,6 +35,7 @@ void setup()
 	
 CCMR.init(false);
 Serial.setTimeout(5);
+
 //CCMR.valves.H2_Flowrate(1);
 
 // richtung ändern CCMR.utils.I2CWRITE(PCF8574::adress, 1, 1);
@@ -69,6 +70,9 @@ void Timed_loop()
 void continousLoop()
 {
 	//CCMR.valves.H2_Flowrate(1);
+	//.println(CCMR.sensors.H2_outvalve());
+	delay(4);
+	CCMR.valves.H2_Flowrate_step(50);
 	Serial.println(CCMR.sensors.H2_outvalve());
 }
 void FastLoop()
@@ -78,13 +82,14 @@ void FastLoop()
 void MidLoop()
 {
 	
-	//handleCommands();
+	handleCommands();
 	//Serial.print("Pressure: ");
 	//Serial.println(CCMR.sensors.H2_storagepressure());
 }
 void SlowLoop()
 {
-	updateGUI();
+	//updateGUI();
+	Serial.println("slowloop!");
 }
 
 
@@ -213,14 +218,15 @@ void handleCommands()
 }
 void updateGUI()
 {
-	CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.CO2());
+	/*CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.CO2());
 	CCMR.utils.Send_to_GUI(STT_H2INVALVE, CCMR.sys_stat.H2_in());
 	CCMR.utils.Send_to_GUI(STT_H2OUTVALVE, CCMR.sys_stat.H2_out());
 	CCMR.utils.Send_to_GUI(STT_O2INVALVE, CCMR.sys_stat.O2_in());
 	CCMR.utils.Send_to_GUI(STT_O2OUTVALVE, CCMR.sys_stat.O2_out());
 	CCMR.utils.Send_to_GUI(STT_H2REFLUX, CCMR.sys_stat.Water_reflux_H2());
 	CCMR.utils.Send_to_GUI(STT_O2REFLUX, CCMR.sys_stat.Water_reflux_O2());
-
+	CCMR.utils.Send_to_GUI(STT_PUMP, CCMR.sys_stat.Pump());*/
+	
 	utils.Send_to_GUI(SNS_H2Storagepressure_val, CCMR.sensors.H2_storagepressure());
 }
 //void Mix()

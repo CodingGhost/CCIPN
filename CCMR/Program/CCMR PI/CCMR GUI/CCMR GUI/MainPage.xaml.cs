@@ -256,7 +256,11 @@ namespace CCMR_GUI
 
             // Create a task object to wait for data on the serialPort.InputStream
             loadAsyncTask = dataReaderObject.LoadAsync(ReadBufferLength).AsTask(cancellationToken);
-
+            uint t = dataReaderObject.UnconsumedBufferLength;
+            if (t > 1000)
+            {
+                throw new OverflowException();
+            }
             // Launch the task and wait
             UInt32 bytesRead = await loadAsyncTask;
             if (bytesRead > 0)
@@ -376,22 +380,28 @@ namespace CCMR_GUI
             {
                 case 101: //oven temp
                     gauge_ovenTemp = cmdval.ToString();
+                    this.Bindings.Update();
                     break;
                 case 108: //CO2 pressure
                     gauge_ovenTemp = cmdval.ToString();
+                    this.Bindings.Update();
                     break;
                 case 106: //CO2
                     gauge_ovenTemp = cmdval.ToString();
+                    this.Bindings.Update();
                     break;
                 case 107: //h2
                     gauge_ovenTemp = cmdval.ToString();
+                    this.Bindings.Update();
                     break;
                 case 109: //H2 pressure
                     gauge_H2pressure = cmdval.ToString();
                     P003 = cmdval.ToString();
+                    this.Bindings.Update();
                     break;
                 case 102: //cooler temp
                     gauge_ovenTemp = cmdval.ToString();
+                    this.Bindings.Update();
                     break;
 
                 case 200:
@@ -441,9 +451,8 @@ namespace CCMR_GUI
 
         private async void btn_02IN_Click(object sender, RoutedEventArgs e)
         {
-           
-                await Send_to_CCMR(203, O2INVALVE ? inactive : active); 
-          
+            await Send_to_CCMR(203, O2INVALVE ? inactive : active); 
+
         }
         private async void btn_H2IN_Click(object sender, RoutedEventArgs e)
         {

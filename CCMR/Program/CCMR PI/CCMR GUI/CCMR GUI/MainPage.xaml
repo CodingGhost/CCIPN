@@ -73,8 +73,8 @@
                         <Image Stretch="Fill" Source="Assets/ccmr.png" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                         <Button x:Name="btn_O2IN" Content="" Height="36" Margin="737,141,0,0" VerticalAlignment="Top" Width="141" Background= "#66FF0000" Click="btn_02IN_Click" RenderTransformOrigin="0.789,1.571"/>
                         <Button x:Name="btn_H2IN" Content="" Height="37" Margin="737,353,0,0" VerticalAlignment="Top" Width="141" Background= "#66FF0000" Click="btn_H2IN_Click" RenderTransformOrigin="0.789,1.571"/>
-                        <Button x:Name="btn_H2WATER" Content="" Height="37" Margin="262,53,0,0" VerticalAlignment="Top" Width="70" Background= "#66FF0000" Click="btn_H2WATER_Click" RenderTransformOrigin="0.789,1.571"/>
-                        <Button x:Name="btn_O2WATER" Content="" Height="36" Margin="262,440,0,0" VerticalAlignment="Top" Width="70" Background= "#66FF0000" Click="btn_O2WATER_Click" RenderTransformOrigin="0.789,1.571"/>
+                        <Button x:Name="btn_O2WATER" Content="" Height="37" Margin="262,53,0,0" VerticalAlignment="Top" Width="70" Background= "#66FF0000" Click="btn_O2WATER_Click" RenderTransformOrigin="0.789,1.571"/>
+                        <Button x:Name="btn_H2WATER" Content="" Height="36" Margin="262,440,0,0" VerticalAlignment="Top" Width="70" Background= "#66FF0000" Click="btn_H2WATER_Click" RenderTransformOrigin="0.789,1.571"/>
                         <Button x:Name="btn_O2OUT" Content="" Height="36" Margin="1425,142,0,0" VerticalAlignment="Top" Width="140" Background= "#66FF0000" Click="btn_O2OUT_Click" RenderTransformOrigin="0.789,1.571"/>
                         <Button x:Name="btn_H2OUT" Content="" Height="37" Margin="1425,353,0,0" VerticalAlignment="Top" Width="141" Background= "#66FF0000" Click="btn_H2OUT_Click" RenderTransformOrigin="0.789,1.571"/>
                         <Button x:Name="btn_CO2OUT" Content="" Margin="755,581,0,574" VerticalAlignment="Stretch" Width="71" Background= "#66FF0000" Click="btn_CO2OUT_Click" RenderTransformOrigin="0.789,1.571" d:LayoutOverrides="HorizontalAlignment, TopPosition, BottomPosition"/>
