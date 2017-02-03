@@ -36,9 +36,9 @@ void setup()
 CCMR.init(false);
 Serial.setTimeout(5);
 
-//CCMR.valves.H2_Flowrate(1);
 
 // richtung ändern CCMR.utils.I2CWRITE(PCF8574::adress, 1, 1);
+
 }
 
 void loop()
@@ -72,8 +72,8 @@ void continousLoop()
 	//CCMR.valves.H2_Flowrate(1);
 	//.println(CCMR.sensors.H2_outvalve());
 	delay(4);
-	CCMR.valves.H2_Flowrate_step(50);
-	Serial.println(CCMR.sensors.H2_outvalve());
+	CCMR.valves.CO2_Flowrate_step(0);
+	Serial.println(CCMR.sensors.CO2_valve());
 }
 void FastLoop()
 {
@@ -82,7 +82,7 @@ void FastLoop()
 void MidLoop()
 {
 	
-	handleCommands();
+	//handleCommands();
 	//Serial.print("Pressure: ");
 	//Serial.println(CCMR.sensors.H2_storagepressure());
 }

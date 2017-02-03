@@ -20,7 +20,14 @@ struct AD7828
 	static int bus;
 };
 byte AD7828::adress = 0x4B;
-int AD7828::bus = 1;
+int AD7828::bus = 0;
+struct AD7828_2
+{
+	static byte adress;
+	static int bus;
+};
+byte AD7828_2::adress = 0x4A;
+int AD7828_2::bus = 0;
 struct TMP100
 {
 	static byte adress;
@@ -77,3 +84,10 @@ struct CVAI
 };
 byte CVAI::adress = 0x10;
 int CVAI::bus = 1;
+struct PCF8574_2
+{
+	static byte adress;
+	static int bus;
+};
+byte PCF8574_2::adress = 0x25;
+int PCF8574_2::bus = 0;
