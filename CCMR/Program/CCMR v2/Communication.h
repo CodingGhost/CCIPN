@@ -36,3 +36,11 @@
 //misc
 #define open 1
 #define close 0
+
+
+
+//todo:
+/*
+neue grafik
+V3_000 graphisch
+*/

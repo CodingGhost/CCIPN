@@ -283,50 +283,61 @@ public:
 	{
 		utils.channel_switch(1);
 		return utils.I2CREAD(PCF8574_2::adress, 0);
+		utils.channel_switch(0);
 	}
 
 	boolean H2_in()
 	{
 		utils.channel_switch(1);
-		return utils.I2CREAD(PCF8574_2::adress, 4);
+		return utils.I2CREAD_M(PCF8575::adress, 12);
+		utils.channel_switch(0);
 	}
 
 	boolean H2_out()
 	{
 		utils.channel_switch(1);
-		return utils.I2CREAD_M(PCF8575::adress, 15);
+		return utils.I2CREAD(PCF8574::adress, 4);
+		utils.channel_switch(0);
 	}
 
 	boolean O2_in()
 	{
 		utils.channel_switch(1);
 		return utils.I2CREAD_M(PCF8575::adress, 13);
+		utils.channel_switch(0);
 	}
 
 	boolean O2_out()
 	{
 		utils.channel_switch(1);
 		return utils.I2CREAD_M(PCF8575::adress, 16);
+		utils.channel_switch(0);
 	}
 
 	boolean Water_reflux_H2()
 	{
 		utils.channel_switch(1);
-		return utils.I2CREAD_M(PCF8575::adress, 11);
+		return utils.I2CREAD_M(PCF8575::adress, 10);
+		utils.channel_switch(0);
 	}
 
 	boolean Water_reflux_O2()
 	{
-		return utils.I2CREAD_M(PCF8575::adress, 10);
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 11);
+		utils.channel_switch(0);
 	}
 	boolean Pump()
 	{
+		utils.channel_switch(1);
 		return utils.I2CREAD_M(PCF8575::adress, 14);
+		utils.channel_switch(0);
 	}
 	boolean Flush()
 	{
 		utils.channel_switch(1);
-		return utils.I2CREAD(PCF8574::adress, 174);
+		return utils.I2CREAD(PCF8574_2::adress, 4);
+		utils.channel_switch(0);
 	}
 	//>Magnetic Valves
 
@@ -351,11 +362,12 @@ public:
 		}
 		
 		Wire.endTransmission(MAX1238::adress);
+
 		int output = word(AD[12], AD[13]); //AIN 6
 		output = output & 0x0FFF;
 		float fout = output;
 		//double p = (((fout / 5000) - 0.04) / 0.009) * 10;
-		double p = (fout / 5000 - 0.04) / 0.00369 * 10 + 22;
+		double p = map(fout,160,3150,0,2000);
 		utils.channel_switch(0);
 		return p;
 	}
@@ -697,16 +709,19 @@ public:
 
   void H2_in(boolean state) //V2_002
   {
+	  utils.channel_switch(1);
+
     if (state)
     {
-      utils.I2CWRITE(PCF8574::adress,4,1); 
+		utils.I2CWRITE_M(PCF8575::adress, 12, 1);
     }
     else
     {
-      utils.I2CWRITE(PCF8574::adress,4,0); 
+      utils.I2CWRITE_M(PCF8575::adress,12,0); 
     }
 	utils.Send_to_GUI(STT_H2INVALVE, sys_stat.H2_in());
-	
+	utils.channel_switch(0);
+
   } 
 
   void H2_out(boolean state) //V2_004
@@ -714,11 +729,11 @@ public:
 	  utils.channel_switch(1);
 	  if (state)
 	  {
-		  utils.I2CWRITE_M(PCF8575::adress, 15, 1); 
+		  utils.I2CWRITE(PCF8574::adress, 4, 1); 
 	  }
 	  else
 	  {
-		  utils.I2CWRITE_M(PCF8575::adress, 15, 0); 
+		  utils.I2CWRITE(PCF8574::adress, 4, 0);
 	  }
 	  utils.Send_to_GUI(STT_H2OUTVALVE, sys_stat.H2_out());
 	  utils.channel_switch(0);
@@ -789,11 +804,11 @@ public:
 	  utils.channel_switch(1);
 	  if (state)
 	  {
-		  utils.I2CWRITE(PCF8574::adress, 4, 1);
+		  utils.I2CWRITE(PCF8574_2::adress, 4, 1);
 	  }
 	  else
 	  {
-		  utils.I2CWRITE(PCF8574::adress, 4, 0);
+		  utils.I2CWRITE(PCF8574_2::adress, 4, 0);
 	  }
 	  utils.Send_to_GUI(STT_FLUSH, sys_stat.Flush());
 	  utils.channel_switch(0);
@@ -1258,10 +1273,11 @@ public:
   Sys_stat sys_stat;
 
   
-
-  Sensors sensors;
   
 	  Valves valves;
+
+	  Sensors sensors;
+
 
 };
 
