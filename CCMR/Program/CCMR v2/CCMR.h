@@ -371,6 +371,87 @@ public:
 		utils.channel_switch(0);
 		return p;
 	}
+	int O2_storagepressure()
+	{
+		utils.channel_switch(MAX1238::bus);
+		Wire.beginTransmission(MAX1238::adress);
+		Wire.requestFrom(MAX1238::adress, byte(24));
+		//------------------------
+		for (int i = 0; i <= 23; i++)
+		{
+			AD[i] = Wire.read();
+		}
+
+		Wire.endTransmission(MAX1238::adress);
+
+		int output = word(AD[14], AD[15]); //AIN 7
+		output = output & 0x0FFF;
+		float fout = output;
+		//double p = (((fout / 5000) - 0.04) / 0.009) * 10;
+		double p = map(fout, 160, 3150, 0, 2000);
+		utils.channel_switch(0);
+		return p;
+	}
+	int H2_pressure_Electrolyzer()
+	{
+		Wire.beginTransmission(MAX1238::adress);
+		Wire.requestFrom(MAX1238::adress, byte(24));
+		//------------------------
+		for (int i = 0; i <= 23; i++)
+		{
+			AD[i] = Wire.read();
+		}
+		Wire.endTransmission(MAX1238::adress);
+		int output = word(AD[10], AD[11]); //AIN 5
+		output = output & 0x0FFF;
+		float fout = output;
+		double p = map(fout, 160, 3150, 0, 2000);
+		return p;
+		//Serial.println(output);
+		//Serial.print(AD[16]);
+		//Serial.print(":::");
+		//Serial.println(AD[17]);
+	}
+	int O2_pressure_Electrolyzer()
+	{
+		Wire.beginTransmission(MAX1238::adress);
+		Wire.requestFrom(MAX1238::adress, byte(24));
+		//------------------------
+		for (int i = 0; i <= 23; i++)
+		{
+			AD[i] = Wire.read();
+		}
+		Wire.endTransmission(MAX1238::adress);
+		int output = word(AD[8], AD[9]); //AIN 4
+		output = output & 0x0FFF;
+		float fout = output;
+		double p = map(fout, 160, 3150, 0, 2000);
+		return p;
+		//Serial.println(output);
+		//Serial.print(AD[16]);
+		//Serial.print(":::");
+		//Serial.println(AD[17]);
+	}
+	int H2_outvalve()
+	{
+		utils.I2C(AD7828::adress, 0x8C);
+		Wire.beginTransmission(AD7828::adress);
+		Wire.requestFrom(AD7828::adress, byte(2));
+		int val(((Wire.read() << 8) + Wire.read()));
+		Wire.endTransmission();
+		//Serial.println(val);
+		return val;
+	}
+	int CO2_valve()
+	{
+		utils.I2C(AD7828_2::adress, 0x8C);
+		Wire.beginTransmission(AD7828_2::adress);
+		Wire.requestFrom(AD7828_2::adress, byte(2));
+		int val = (((Wire.read() << 8) + Wire.read()));
+		//Serial.println(val);
+		Wire.endTransmission();
+		return val;
+	}
 	//old
   boolean Halt()
 	{
@@ -547,26 +628,7 @@ public:
       }
     }   
   }
-  int H2_outvalve()
-  {
-    utils.I2C(AD7828::adress,0x8C);
-    Wire.beginTransmission(AD7828::adress);
-    Wire.requestFrom(AD7828::adress, byte(2));
-    int val(((Wire.read() << 8) + Wire.read()));
-    Wire.endTransmission();
-    //Serial.println(val);
-    return val;
-  }
-  int CO2_valve()
-  {
-	  utils.I2C(AD7828_2::adress,0x8C);
-    Wire.beginTransmission(AD7828_2::adress);
-    Wire.requestFrom(AD7828_2::adress, byte(2));
-    int val = (((Wire.read() << 8) + Wire.read()));
-    //Serial.println(val);
-    Wire.endTransmission();
-    return val;  
-  }
+  
   int CO2_percentage()
   {
     return 20;
@@ -591,26 +653,8 @@ public:
     double p = (((fout / 5000) - 0.04) / 0.009)*10;
     return p;
   }
-  int H2_pressure_Electrolyzer()
-  {
-    Wire.beginTransmission(MAX1238::adress);
-    Wire.requestFrom(MAX1238::adress, byte(24));
-    //------------------------
-	for (int i = 0; i <= 23; i++)
-	{
-		AD[i] = Wire.read();
-	}
-    Wire.endTransmission(MAX1238::adress);
-    int output = word(AD[16], AD[17]);
-    output = output & 0x0FFF;
-    float fout = output;
-    double p = (((fout / 5000) - 0.04) / 0.009)*10;
-    return p;
-    //Serial.println(output);
-    //Serial.print(AD[16]);
-    //Serial.print(":::");
-    //Serial.println(AD[17]);
-  }
+  
+
 };
 //########################################################################################################################################\\ 
 
@@ -823,6 +867,7 @@ public:
 		  const int bot = 400;
 		  const int top = 2700;
 		  val = 23.00*val + 400.0;
+		  //map(val, 0, 100, bot, top);
 			  if (dir == 3)
 			  {
 				  if (abs(sensors.H2_outvalve() - val) > 20)
@@ -864,6 +909,7 @@ public:
 		  const int bot = 400;
 		  const int top = 2700;
 		  val = 23.00*val + 400.0;
+		  //map(val, 0, 100, bot, top);
 		  if (dir == 3)
 		  {
 			  if (abs(sensors.CO2_valve() - val) > 20)

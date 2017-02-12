@@ -65,6 +65,7 @@ namespace CCMR_GUI
        Boolean H2REFLUX    = false;
        Boolean O2REFLUX    = false;
        Boolean PUMP        = false;
+        Boolean FLUSH      = false; 
         /// </summary>
         ///   Dim Mysqlconn As MySqlConnection
         String query;
@@ -431,6 +432,9 @@ namespace CCMR_GUI
                 case 208:
                     status.Text += " >> Connection established";
                     break;
+                case 209:
+                    FLUSH = cmdval == 1 ? true : false;
+                    break;
                 default:
                     status.Text = "ERROR #404 - Command not found!";
                     break;
@@ -496,7 +500,10 @@ namespace CCMR_GUI
             await Send_to_CCMR(207, PUMP ? inactive : active);
 
         }
-        
 
+        private async void btn_FLUSH_Click(object sender, RoutedEventArgs e)
+        {
+            await Send_to_CCMR(209, FLUSH ? inactive : active);
+        }
     }
 }

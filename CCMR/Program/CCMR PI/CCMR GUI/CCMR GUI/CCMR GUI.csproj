@@ -110,7 +110,8 @@
     <None Include="CCMR GUI_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\ccmr.PNG" />
+    <Content Include="Assets\ccmr-v12.PNG" />
+    <Content Include="Assets\ccmrbck.PNG" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

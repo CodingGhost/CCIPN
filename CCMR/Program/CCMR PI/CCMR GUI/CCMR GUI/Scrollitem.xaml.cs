@@ -36,10 +36,12 @@ namespace CCMR_GUI
             // if (col == "Green") testa = "#6600FF00";
         }
 
+       
+
         /// <summary>
         /// The event that you will throw when the mouse hover the control while being clicked 
         /// </summary>
-       // public event EventHandler MouseRightClickedAndHoverChildControl;
+        // public event EventHandler MouseRightClickedAndHoverChildControl;
     }
 
 }

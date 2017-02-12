@@ -41,6 +41,5 @@
 
 //todo:
 /*
-neue grafik
-V3_000 graphisch
+
 */
