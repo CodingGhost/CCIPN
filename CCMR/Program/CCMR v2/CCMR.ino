@@ -208,6 +208,18 @@ void handleCommands()
 		}
 		break;
 	}
+	case STT_FLUSH:
+	{
+		if (cmdval == 1)
+		{
+			CCMR.valves.Flush(true);
+		}
+		else
+		{
+			CCMR.valves.Flush(false);
+		}
+		break;
+	}
 	default:
 
 		break;
