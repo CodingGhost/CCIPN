@@ -80,7 +80,7 @@ void MidLoop()
 	
 	handleCommands();
 	Serial.print("Pressure: ");
-	Serial.println(CCMR.sensors.H2_storagepressure());
+	Serial.println(CCMR.sensors.H2_pressure_Electrolyzer());
 }
 void SlowLoop()
 {

@@ -333,6 +333,12 @@ public:
 		return utils.I2CREAD_M(PCF8575::adress, 14);
 		utils.channel_switch(0);
 	}
+	boolean CH_water()
+	{
+		utils.channel_switch(1);
+		return utils.I2CREAD_M(PCF8575::adress, 11);
+		utils.channel_switch(0);
+	}
 	boolean Flush()
 	{
 		utils.channel_switch(1);
@@ -392,28 +398,9 @@ public:
 		utils.channel_switch(0);
 		return p;
 	}
-	int H2_pressure_Electrolyzer()
-	{
-		Wire.beginTransmission(MAX1238::adress);
-		Wire.requestFrom(MAX1238::adress, byte(24));
-		//------------------------
-		for (int i = 0; i <= 23; i++)
-		{
-			AD[i] = Wire.read();
-		}
-		Wire.endTransmission(MAX1238::adress);
-		int output = word(AD[10], AD[11]); //AIN 5
-		output = output & 0x0FFF;
-		float fout = output;
-		double p = map(fout, 160, 3150, 0, 2000);
-		return p;
-		//Serial.println(output);
-		//Serial.print(AD[16]);
-		//Serial.print(":::");
-		//Serial.println(AD[17]);
-	}
 	int O2_pressure_Electrolyzer()
 	{
+		utils.channel_switch(MAX1238::bus);
 		Wire.beginTransmission(MAX1238::adress);
 		Wire.requestFrom(MAX1238::adress, byte(24));
 		//------------------------
@@ -421,16 +408,37 @@ public:
 		{
 			AD[i] = Wire.read();
 		}
+
 		Wire.endTransmission(MAX1238::adress);
-		int output = word(AD[8], AD[9]); //AIN 4
+
+		int output = word(AD[10], AD[11]); //AIN 7
 		output = output & 0x0FFF;
 		float fout = output;
-		double p = map(fout, 160, 3150, 0, 2000);
+		//double p = (((fout / 5000) - 0.04) / 0.009) * 10;
+		double p = fout;//map(fout, 160, 3150, 0, 2000);
+		utils.channel_switch(0);
 		return p;
-		//Serial.println(output);
-		//Serial.print(AD[16]);
-		//Serial.print(":::");
-		//Serial.println(AD[17]);
+	}
+	int H2_pressure_Electrolyzer()
+	{
+		utils.channel_switch(MAX1238::bus);
+		Wire.beginTransmission(MAX1238::adress);
+		Wire.requestFrom(MAX1238::adress, byte(24));
+		//------------------------
+		for (int i = 0; i <= 23; i++)
+		{
+			AD[i] = Wire.read();
+		}
+
+		Wire.endTransmission(MAX1238::adress);
+
+		int output = word(AD[8], AD[9]); //AIN 7
+		output = output & 0x0FFF;
+		float fout = output;
+		//double p = (((fout / 5000) - 0.04) / 0.009) * 10;
+		double p = fout;//map(fout, 160, 3150, 0, 2000);
+		utils.channel_switch(0);
+		return p;
 	}
 	int H2_outvalve()
 	{
@@ -795,6 +803,22 @@ public:
 		  utils.I2CWRITE_M(PCF8575::adress, 13, 0); 
 	  }
 	  utils.Send_to_GUI(STT_O2INVALVE,sys_stat.O2_in());
+	  utils.channel_switch(0);
+  }
+
+
+  void CH_Water(boolean state) //V2_003
+  {
+	  utils.channel_switch(1);
+	  if (state)
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 11, 1);
+	  }
+	  else
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 11, 0);
+	  }
+	  utils.Send_to_GUI(STT_CHWATER, sys_stat.CH_water());
 	  utils.channel_switch(0);
   }
 

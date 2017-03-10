@@ -19,7 +19,7 @@
         <Button x:Name="btn_O2OUT" Content="" Height="36" Margin="1414,139,0,0" VerticalAlignment="Top" Width="140" Background= "#66FF0000" Click="btn_O2OUT_Click" RenderTransformOrigin="0.789,1.571"/>
         <Button x:Name="btn_H2OUT" Content="" Height="37" Margin="1414,350,0,0" VerticalAlignment="Top" Width="141" Background= "#66FF0000" Click="btn_H2OUT_Click" RenderTransformOrigin="0.789,1.571"/>
         <Button x:Name="btn_CO2OUT" Content="" Margin="749,578,0,577" VerticalAlignment="Stretch" Width="71" Background= "#66FF0000" Click="btn_CO2OUT_Click" RenderTransformOrigin="0.789,1.571"/>
-        <Button x:Name="btn_V2_006" Content="" Height="36" Margin="417,0,0,104" VerticalAlignment="Bottom" Width="70" Background= "#66FF0000" RenderTransformOrigin="0.789,1.571"/>
+        <Button x:Name="btn_V2_006" Content="" Height="36" Margin="417,0,0,104" VerticalAlignment="Bottom" Width="70" Background= "#66FF0000" Click="btn_CH4WATER_Click" RenderTransformOrigin="0.789,1.571"/>
         <Button x:Name="btn_PM_000" Content="" Height="283" Margin="1220,120,0,0" VerticalAlignment="Top" Width="87" Background= "#66FF0000" Click="btn_PM000_Click" RenderTransformOrigin="0.789,1.571"/>
         <Button x:Name="btn_FLUSH" Content="" Height="36" Margin="955,578,0,0" VerticalAlignment="Top" Width="70" Background= "#66FF0000" Click="btn_FLUSH_Click" RenderTransformOrigin="0.789,1.571"/>
         <Rectangle Fill="#6600FFFF" Height="36" Margin="673,68,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="36">

@@ -64,6 +64,7 @@ namespace CCMR_GUI
        Boolean O2OUTVALVE  = false;
        Boolean H2REFLUX    = false;
        Boolean O2REFLUX    = false;
+        Boolean CHWATER = false;
        Boolean PUMP        = false;
         Boolean FLUSH      = false; 
         /// </summary>
@@ -435,6 +436,9 @@ namespace CCMR_GUI
                 case 209:
                     FLUSH = cmdval == 1 ? true : false;
                     break;
+                case 210:
+                    CHWATER = cmdval == 1 ? true : false;
+                    break;
                 default:
                     status.Text = "ERROR #404 - Command not found!";
                     break;
@@ -447,6 +451,8 @@ namespace CCMR_GUI
             btn_O2OUT.Background = O2OUTVALVE ? Green : Red;
             btn_H2WATER.Background = H2REFLUX ? Green : Red;
             btn_O2WATER.Background = O2REFLUX ? Green : Red;
+            btn_FLUSH.Background = FLUSH ? Green : Red;
+            btn_CH4WATER.Background = CHWATER ? Green : Red;
             btn_PM_000.Background = PUMP ? Green : Red;
 
         }
@@ -498,6 +504,13 @@ namespace CCMR_GUI
         {
 
             await Send_to_CCMR(207, PUMP ? inactive : active);
+
+        }
+
+        private async void btn_CH4WATER_Click(object sender, RoutedEventArgs e)
+        {
+
+            await Send_to_CCMR(210, PUMP ? inactive : active);
 
         }
 
