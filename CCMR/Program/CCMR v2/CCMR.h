@@ -356,7 +356,7 @@ class Sensors
 
 public:
 	//new
-	int H2_storagepressure()
+	int H2_storagepressure() //Y
 	{
 		utils.channel_switch(MAX1238::bus);
 		Wire.beginTransmission(MAX1238::adress);
@@ -377,7 +377,7 @@ public:
 		utils.channel_switch(0);
 		return p;
 	}
-	int O2_storagepressure()
+	int O2_storagepressure()//Y
 	{
 		utils.channel_switch(MAX1238::bus);
 		Wire.beginTransmission(MAX1238::adress);
@@ -398,7 +398,7 @@ public:
 		utils.channel_switch(0);
 		return p;
 	}
-	int O2_pressure_Electrolyzer()
+	int O2_pressure_Electrolyzer()//Y
 	{
 		utils.channel_switch(MAX1238::bus);
 		Wire.beginTransmission(MAX1238::adress);
@@ -415,11 +415,11 @@ public:
 		output = output & 0x0FFF;
 		float fout = output;
 		//double p = (((fout / 5000) - 0.04) / 0.009) * 10;
-		double p = fout;//map(fout, 160, 3150, 0, 2000);
+		double p = map(fout, 155, 3500, 0, 1000);
 		utils.channel_switch(0);
 		return p;
 	}
-	int H2_pressure_Electrolyzer()
+	int H2_pressure_Electrolyzer()//Y
 	{
 		utils.channel_switch(MAX1238::bus);
 		Wire.beginTransmission(MAX1238::adress);
@@ -440,7 +440,7 @@ public:
 		utils.channel_switch(0);
 		return p;
 	}
-	int H2_outvalve()
+	int H2_outvalve()//Y
 	{
 		utils.I2C(AD7828::adress, 0x8C);
 		Wire.beginTransmission(AD7828::adress);
@@ -450,7 +450,7 @@ public:
 		//Serial.println(val);
 		return val;
 	}
-	int CO2_valve()
+	int CO2_valve()//Y
 	{
 		utils.I2C(AD7828_2::adress, 0x8C);
 		Wire.beginTransmission(AD7828_2::adress);
@@ -884,17 +884,17 @@ public:
   //>Magnetic Valves
 
   //<Needle Valves
-  void H2_Flowrate_step(int val, int dir = 3)
+  void H2_Flowrate_step(int val, int dir = 3)//Y
   {
 	  if (val >= 0 && val <= 100)
 	  {
-		  const int bot = 400;
-		  const int top = 2700;
-		  val = 23.00*val + 400.0;
+		  const int bot = 520;
+		  const int top = 1290;
+		  val = 8.1*val + 480;
 		  //map(val, 0, 100, bot, top);
 			  if (dir == 3)
 			  {
-				  if (abs(sensors.H2_outvalve() - val) > 20)
+				  if (abs(sensors.H2_outvalve() - val) > 15)
 				  { 
 				  if (sensors.H2_outvalve() < val)
 				  {
@@ -926,7 +926,7 @@ public:
 	  }
   }
 
-  void CO2_Flowrate_step(int val, int dir = 3)
+  void CO2_Flowrate_step(int val, int dir = 3)//X
   {
 	  if (val >= 0 && val <= 100)
 	  {

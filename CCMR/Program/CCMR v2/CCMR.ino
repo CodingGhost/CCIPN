@@ -68,8 +68,8 @@ void Timed_loop()
 //LOOPS
 void continousLoop()
 {
-	//Serial.println(CCMR.sensors.H2_storagepressure());
-	//delay(4);
+	CCMR.valves.H2_Flowrate_step(100);
+	delay(4);
 }
 void FastLoop()
 {
@@ -79,8 +79,8 @@ void MidLoop()
 {
 	
 	handleCommands();
-	Serial.print("Pressure: ");
-	Serial.println(CCMR.sensors.H2_pressure_Electrolyzer());
+	Serial.print("sns: ");
+	Serial.println(CCMR.sensors.H2_outvalve());
 }
 void SlowLoop()
 {

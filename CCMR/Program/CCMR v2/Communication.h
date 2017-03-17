@@ -43,4 +43,5 @@
 //todo:
 /*
 2ter switch implementierung + V2_006
+toleranz variabeln
 */
