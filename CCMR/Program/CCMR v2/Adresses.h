@@ -28,6 +28,13 @@ struct AD7828_2
 };
 byte AD7828_2::adress = 0x4A;
 int AD7828_2::bus = 0;
+struct AD7828_3
+{
+	static byte adress;
+	static int bus;
+};
+byte AD7828_3::adress = 0x48;
+int AD7828_3::bus = 1;
 struct TMP100
 {
 	static byte adress;
@@ -42,6 +49,13 @@ struct PCA9545
 };
 byte PCA9545::adress = 0x70;
 int PCA9545::bus = 0;
+struct PCA9545_2
+{
+	static byte adress;
+	static int bus;
+};
+byte PCA9545_2::adress = 0x71;
+int PCA9545_2::bus = 0;
 struct MAX5815
 {
 	static byte adress;

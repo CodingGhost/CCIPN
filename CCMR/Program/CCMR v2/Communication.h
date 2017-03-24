@@ -37,11 +37,21 @@
 //misc
 #define open 1
 #define close 0
-
+/*
+AD7828
+CH0 8C
+CH1 CC
+CH2 9C
+CH3 DC
+CH4 AC
+CH5 EC
+CH6 FC
+CH7 BC
+*/
 
 
 //todo:
 /*
 2ter switch implementierung + V2_006
-toleranz variabeln
+Switches
 */

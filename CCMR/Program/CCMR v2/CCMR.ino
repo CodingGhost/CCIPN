@@ -68,7 +68,7 @@ void Timed_loop()
 //LOOPS
 void continousLoop()
 {
-	CCMR.valves.H2_Flowrate_step(100);
+	CCMR.valves.CO2_Flowrate_step(0);
 	delay(4);
 }
 void FastLoop()
@@ -77,10 +77,10 @@ void FastLoop()
 }
 void MidLoop()
 {
-	
+	CCMR.sensors.H2_water(1);
+	CCMR.sensors.H2_water(2);
+
 	handleCommands();
-	Serial.print("sns: ");
-	Serial.println(CCMR.sensors.H2_outvalve());
 }
 void SlowLoop()
 {

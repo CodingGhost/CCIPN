@@ -30,6 +30,30 @@ void Send_to_GUI(byte CMDID, byte CMDVAL)
 	Serial2.write(CMDID);
 	Serial2.write(CMDVAL);
   }
+void channel_switch_2(int num)
+{
+
+	if (num == 0)
+	{
+		I2C(PCA9545_2::adress, 0xF0);
+	}
+	else if (num == 1)
+	{
+		I2C(PCA9545_2::adress, 0xF1);
+	}
+	else if (num == 2)
+	{
+		I2C(PCA9545_2::adress, 0xF2);
+	}
+	else if (num == 3)
+	{
+		//I2C(addr_switch,0xF4);
+	}
+	else if (num == 4)
+	{
+		//I2C(addr_switch,0xF8);
+	}
+}
 
 void channel_switch(int num)
   {
@@ -556,18 +580,19 @@ public:
   }
   boolean H2_water(int num)
   {
+	  utils.channel_switch(AD7828_3::bus);
     switch (num)
     {
     case 1:
       { 
-        utils.I2C(AD7828::adress,0xAC);
+        utils.I2C(AD7828_3::adress,0xDC);
         // delay(1);
-        Wire.beginTransmission(AD7828::adress);
-        Wire.requestFrom(AD7828::adress, byte(2));
+        Wire.beginTransmission(AD7828_3::adress);
+        Wire.requestFrom(AD7828_3::adress, byte(2));
         volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
-         //Serial.write("1:");
-         //Serial.println(volt);
+         Serial.write("1: ");
+         Serial.print(volt);
         if (volt > 4000) {
           return false;
         } 
@@ -577,14 +602,15 @@ public:
       }
     case 2:
       { 
-        utils.I2C(AD7828::adress,0xDC);
+        utils.I2C(AD7828_3::adress,0xFC);
         // delay(1);
-        Wire.beginTransmission(AD7828::adress);
-        Wire.requestFrom(AD7828::adress, byte(2));
+        Wire.beginTransmission(AD7828_3::adress);
+        Wire.requestFrom(AD7828_3::adress, byte(2));
         volt = ((Wire.read() << 8) + Wire.read());
+
         Wire.endTransmission();
-         //Serial.write("2:");
-        //Serial.println(volt);
+         Serial.write(" || 2: ");
+		 Serial.println(volt);
 
         if (volt > 3000) {
           return false;
@@ -594,6 +620,7 @@ public:
         }
       }
     }   
+	utils.channel_switch(0);
   }
   boolean CH_water(int num)
   {
@@ -930,9 +957,9 @@ public:
   {
 	  if (val >= 0 && val <= 100)
 	  {
-		  const int bot = 400;
-		  const int top = 2700;
-		  val = 23.00*val + 400.0;
+		  const int bot = 780;
+		  const int top = 1420;
+		  val = 6.4*val + 780.0;
 		  //map(val, 0, 100, bot, top);
 		  if (dir == 3)
 		  {
