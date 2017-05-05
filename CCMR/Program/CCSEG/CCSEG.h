@@ -30,34 +30,11 @@ void Send_to_GUI(byte CMDID, byte CMDVAL)
 	Serial2.write(CMDID);
 	Serial2.write(CMDVAL);
   }
-void channel_switch_2(int num)
-{
 
-	if (num == 0)
-	{
-		I2C(PCA9545_2::adress, 0xF0);
-	}
-	else if (num == 1)
-	{
-		I2C(PCA9545_2::adress, 0xF1);
-	}
-	else if (num == 2)
-	{
-		I2C(PCA9545_2::adress, 0xF2);
-	}
-	else if (num == 3)
-	{
-		//I2C(addr_switch,0xF4);
-	}
-	else if (num == 4)
-	{
-		//I2C(addr_switch,0xF8);
-	}
-}
 
 void channel_switch(int num)
   {
-	 
+	
   if (num == 0)
   {
     I2C(PCA9545::adress,0xF0);   
@@ -445,7 +422,7 @@ public:
 	}
 	int H2_pressure_Electrolyzer()//Y
 	{
-		´
+		
 		Wire.beginTransmission(MAX1238::adress);
 		Wire.requestFrom(MAX1238::adress, byte(24));
 		//------------------------
@@ -782,6 +759,8 @@ public:
 	//<Magnetic Valves
 	void Butan(boolean state) //V2_007
 	{
+		utils.channel_switch(2);
+
 		if (state)
 		{
 
@@ -793,7 +772,8 @@ public:
 			utils.I2CWRITE_M(PCF8575::adress, 11, 0);
 
 		}
-		utils.Send_to_GUI(STT_CO2VALVE, sys_stat.CO2());
+		//utils.Send_to_GUI(STT_CO2VALVE, sys_stat.CO2());
+		utils.channel_switch(0);
 	}
 	void Motor(boolean state) //V2_007
 	{

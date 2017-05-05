@@ -35,8 +35,8 @@
 
 
 //misc
-#define open 1
-#define close 0
+#define open 0
+#define close 1
 /*
 AD7828
 CH0 8C

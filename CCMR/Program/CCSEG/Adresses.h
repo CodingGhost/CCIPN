@@ -5,8 +5,8 @@ struct PCF8575
 	static byte adress;
 	static int bus;
 };
-byte PCF8575::adress = 0x21;
-int PCF8575::bus = 1;
+byte PCF8575::adress = 0x20;
+int PCF8575::bus = 2;
 struct MAX1238
 {
 	static byte adress;
@@ -47,7 +47,7 @@ struct PCA9545
 	static byte adress;
 	static int bus;
 };
-byte PCA9545::adress = 0x70;
+byte PCA9545::adress = 0x73;
 int PCA9545::bus = 0;
 struct PCA9545_2
 {
@@ -89,7 +89,7 @@ struct PCF8574
 	static byte adress;
 	static int bus;
 };
-byte PCF8574::adress = 0x26;
+byte PCF8574::adress = 0x20;
 int PCF8574::bus = 0;
 struct CVAI
 {

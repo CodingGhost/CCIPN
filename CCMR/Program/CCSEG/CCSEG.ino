@@ -53,16 +53,18 @@ void Timed_loop()
 //LOOPS
 void continousLoop()
 {
-	
+	//CCMR.valves.Butan_Flowrate_step(5);
+
 }
 void FastLoop()
 {
-
 }
 void MidLoop()
 {
-	Serial.println(CCMR.sensors.Motor_valve());
-
+	//Serial.println(CCMR.sensors.Motor_valve());
+	CCMR.valves.Butan(true);
+	delay(1000);
+	CCMR.valves.Butan(false);
 	handleCommands();
 }
 void SlowLoop()
