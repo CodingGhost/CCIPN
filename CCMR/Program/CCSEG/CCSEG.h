@@ -936,11 +936,13 @@ public:
 
   void Butan_Flowrate_step(int val, int dir = 3)
   {
+	
+	  
 	  if (val >= 0 && val <= 100)
 	  {
-		  const int bot = 520;
-		  const int top = 1290;
-		  val = 8.1*val + 480;
+		  const int bot = 600;
+		  const int top = 1096;
+		  val = 4.96*val + 600;
 		  //map(val, 0, 100, bot, top);
 		  if (dir == 3)
 		  {
@@ -1183,101 +1185,21 @@ public:
 
     Wire.begin();
 	
-    //utils.I2C(addr_Lights,0xff);
-    //utils.I2C(addr_Valves2,0xff);
-    //utils.I2C(addr_Valves3,0xff);
-    //utils.I2C(addr_Valves4,0xff);
-    //utils.I2C(addr_Valves4,0xff); 
-    //utils.I2C(addr_Items1,0xff);
-    //utils.I2C(addr_Items2,0xff);
-    //utils.I2C(addr_Items3,0xff);
-    //utils.I2C(0x00,0xff);
-    //Wire.beginTransmission(addr_Valves);
-    //Wire.write(0b11111111);
-    //Wire.write(0b11111111);
-    //Wire.endTransmission();
+   
+   
+    
+   
 
-    //Wire.beginTransmission(0x00);
-    //Wire.write(0b11111111);
-    //Wire.write(0b11111111);
-    //Wire.endTransmission();
-
-    //utils.I2C(addr_AD,0x17);
-    //utils.I2C(addr_AD,0xD2);
-    //utils.I2C(addr_RT,0x00);
-
-    //Wire.beginTransmission(addr_DA);
-    //Wire.write(Sw_Reset[0]);
-    //Wire.write(Sw_Reset[1]);
-    //Wire.write(Sw_Reset[2]);
-    //Wire.endTransmission();
-
-    //Wire.beginTransmission(addr_DA);
-    //Wire.write(Set_Ref[0]);
-    //Wire.write(Set_Ref[1]);
-    //Wire.write(Set_Ref[2]);
-    //Wire.endTransmission();
-
-    //Wire.beginTransmission(addr_DA);
-    //Wire.write(Code_Load[0]);
-    //Wire.write(Code_Load[1]);
-    //Wire.write(Code_Load[2]);
-    //Wire.endTransmission();
-
-    //Wire.beginTransmission(addr_AD);
-    //Wire.requestFrom(addr_AD, byte(24));
-    ////------------------------
-    //AD[0] = Wire.read();
-    //AD[1] = Wire.read();
-    //AD[2] = Wire.read();
-    //AD[3] = Wire.read();
-    //AD[4] = Wire.read();
-    //AD[5] = Wire.read();
-    //AD[6] = Wire.read();
-    //AD[7] = Wire.read();
-    //AD[8] = Wire.read();
-    //AD[9] = Wire.read();
-    //AD[10] = Wire.read();
-    //AD[11] = Wire.read();
-    //AD[12] = Wire.read();
-    //AD[13] = Wire.read();
-    //AD[14] = Wire.read();
-    //AD[15] = Wire.read();
-    //AD[16] = Wire.read();
-    //AD[17] = Wire.read();
-    //AD[18] = Wire.read();
-    //AD[19] = Wire.read();
-    //AD[20] = Wire.read();
-    //AD[21] = Wire.read();
-    //AD[22] = Wire.read();
-    //AD[23] = Wire.read();
-    ////--RT--
-    //Wire.beginTransmission(addr_RT);
-    //Wire.requestFrom(addr_AD, byte(2));
-    ////------------------------
-    //RT[0] = Wire.read();
-    //RT[1] = Wire.read();
-    //RTR = RT[0]*16 + RT[1]/16 ;
-    //if (RTR < 2048)
-    //{
-    //  RTR /= 16;
-    //} 
-    //else
-    //{ 
-    //  RTR = (RTR - 4096) / 16;
-    //}
-
-    //Wire.endTransmission();
+    
 
 	//INIT
-	utils.channel_switch(1);
-	utils.I2C(PCF8574::adress, 0xDF);
-	utils.I2C(PCF8574_2::adress, 0xDF);
-	utils.I2C(MAX1238::adress, 0x17);
-	utils.I2C(MAX1238::adress, 0XD2);
+	
+	utils.I2C(PCF8574::adress, 0xD7);
+	utils.channel_switch(2);
 	utils.write16(0xFF, 0xFF, PCF8575::adress);
 	utils.write8(0xFF, PCF8575::adress);
 	utils.channel_switch(0);
+	//utils.I2C(PCF8574::adress, 0xD7);
 	// bus 
 	//END INIT
     Serial.println("\nCCMR program initialized");
@@ -1295,7 +1217,7 @@ public:
     delay(1000);
 
 	_init = true;
-	utils.write16(0xFF, 0xFF, PCF8575::adress);
+	//utils.write16(0xFF, 0xFF, PCF8575::adress);
 	_init = false;
 
 	if (Flush)

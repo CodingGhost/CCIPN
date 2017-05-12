@@ -89,7 +89,7 @@ struct PCF8574
 	static byte adress;
 	static int bus;
 };
-byte PCF8574::adress = 0x20;
+byte PCF8574::adress = 0x22;
 int PCF8574::bus = 0;
 struct CVAI
 {

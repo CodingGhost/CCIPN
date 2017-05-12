@@ -3,6 +3,7 @@
 #include "Arduino.h"
 #include "Adresses.h"
 #include "Communication.h"
+#include "Wire.h"
 boolean debug = false;
 boolean Ready = false;
 boolean Caution = false;
@@ -578,6 +579,7 @@ public:
     
     
   }
+
   boolean H2_water(int num)
   {
 	  utils.channel_switch(AD7828_3::bus);
@@ -585,14 +587,17 @@ public:
     {
     case 1:
       { 
-        utils.I2C(AD7828_3::adress,0xDC);
+        utils.I2C(AD7828_3::adress,0xEC);
         // delay(1);
         Wire.beginTransmission(AD7828_3::adress);
-        Wire.requestFrom(AD7828_3::adress, byte(2));
-        volt = ((Wire.read() << 8) + Wire.read());
+        Wire.requestFrom(AD7828_3::adress, byte(2);
+       // volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
-         Serial.write("1: ");
-         Serial.print(volt);
+		Serial.write("1: ");
+         Serial.write("LO: ");
+         Serial.print(Wire.read());
+		 Serial.write(" || HI: ");
+		 Serial.print(Wire.read());
         if (volt > 4000) {
           return false;
         } 
@@ -606,11 +611,14 @@ public:
         // delay(1);
         Wire.beginTransmission(AD7828_3::adress);
         Wire.requestFrom(AD7828_3::adress, byte(2));
-        volt = ((Wire.read() << 8) + Wire.read());
+        //volt = ((Wire.read() << 8) + Wire.read());
 
         Wire.endTransmission();
-         Serial.write(" || 2: ");
-		 Serial.println(volt);
+		Serial.write(" ----- 2: ");
+		Serial.write("LO: ");
+		Serial.print(Wire.read());
+		Serial.write(" || HI: ");
+		Serial.println(Wire.read());
 
         if (volt > 3000) {
           return false;
@@ -914,25 +922,25 @@ public:
   void H2_Flowrate_step(int val, int dir = 3)//Y
   {
 	  if (val >= 0 && val <= 100)
-	  {
+	  
 		  const int bot = 520;
 		  const int top = 1290;
 		  val = 8.1*val + 480;
 		  //map(val, 0, 100, bot, top);
 			  if (dir == 3)
 			  {
-				  if (abs(sensors.H2_outvalve() - val) > 15)
-				  { 
-				  if (sensors.H2_outvalve() < val)
+				  if (abs(sensors.H2_outvalve() - val) > 50)
 				  {
-					 utils.I2CWRITE(PCF8574::adress, 1, open);
-				  }
-				  else if (sensors.H2_outvalve() > val)
-				  {
-					  utils.I2CWRITE(PCF8574::adress, 1, close);
-				  }
-				  utils.I2CWRITE(PCF8574::adress, 2, 0);
-				  utils.I2CWRITE(PCF8574::adress, 2, 1);
+					  if (sensors.H2_outvalve() < val)
+					  {
+						  utils.I2CWRITE(PCF8574::adress, 1, open);
+					  }
+					  else if (sensors.H2_outvalve() > val)
+					  {
+						  utils.I2CWRITE(PCF8574::adress, 1, close);
+					  }
+					  utils.I2CWRITE(PCF8574::adress, 2, 0);
+					  utils.I2CWRITE(PCF8574::adress, 2, 1);
 				  }
 			  }
 			  else
@@ -950,7 +958,7 @@ public:
 					  utils.I2CWRITE(PCF8574::adress, 2, 1);
 				  }
 			  }
-	  }
+	  
   }
 
   void CO2_Flowrate_step(int val, int dir = 3)//X
@@ -963,7 +971,7 @@ public:
 		  //map(val, 0, 100, bot, top);
 		  if (dir == 3)
 		  {
-			  if (abs(sensors.CO2_valve() - val) > 20)
+			  if (abs(sensors.CO2_valve() - val) > 15)
 			  {
 				  if (sensors.CO2_valve() < val)
 				  {
