@@ -7,6 +7,13 @@ struct PCF8575
 };
 byte PCF8575::adress = 0x21;
 int PCF8575::bus = 1;
+struct PSW_PCF8575
+{
+	static byte adress;
+	static int bus;
+};
+byte PSW_PCF8575::adress = 0x20;
+int PSW_PCF8575::bus = 2;
 struct MAX1238
 {
 	static byte adress;

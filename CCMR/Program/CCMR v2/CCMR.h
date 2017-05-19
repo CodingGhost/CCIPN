@@ -4,7 +4,7 @@
 #include "Adresses.h"
 #include "Communication.h"
 #include "Wire.h"
-boolean debug = false;
+boolean debug = true;
 boolean Ready = false;
 boolean Caution = false;
 boolean Running = false;
@@ -179,10 +179,10 @@ void channel_switch(int num)
   {
 	  if (!_init)
 	  {
-	  if (pin <= 4)
+	  /*if (pin <= 4)
 	 {
 	  pin = NULL;
-	 }
+	 }*/
    }
     value = !value;
     I2Customread(address,2); 
@@ -587,17 +587,15 @@ public:
     {
     case 1:
       { 
-        utils.I2C(AD7828_3::adress,0xEC);
+        utils.I2C(AD7828_3::adress,0xfc);
         // delay(1);
         Wire.beginTransmission(AD7828_3::adress);
-        Wire.requestFrom(AD7828_3::adress, byte(2);
-       // volt = ((Wire.read() << 8) + Wire.read());
+        Wire.requestFrom(AD7828_3::adress, byte(2));
+       volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
 		Serial.write("1: ");
-         Serial.write("LO: ");
-         Serial.print(Wire.read());
-		 Serial.write(" || HI: ");
-		 Serial.print(Wire.read());
+         Serial.print(volt);
+         
         if (volt > 4000) {
           return false;
         } 
@@ -611,14 +609,12 @@ public:
         // delay(1);
         Wire.beginTransmission(AD7828_3::adress);
         Wire.requestFrom(AD7828_3::adress, byte(2));
-        //volt = ((Wire.read() << 8) + Wire.read());
+        volt = ((Wire.read() << 8) + Wire.read());
 
         Wire.endTransmission();
 		Serial.write(" ----- 2: ");
-		Serial.write("LO: ");
-		Serial.print(Wire.read());
-		Serial.write(" || HI: ");
-		Serial.println(Wire.read());
+		Serial.println(volt);
+		
 
         if (volt > 3000) {
           return false;
@@ -780,6 +776,7 @@ public:
 	//<Magnetic Valves
   void CO2(boolean state) //V2_007
   {
+	  utils.channel_switch(PCF8574_2::bus);
     if (state)
     {
 		
@@ -792,6 +789,7 @@ public:
 		
     }
 	utils.Send_to_GUI(STT_CO2VALVE, sys_stat.CO2());
+	utils.channel_switch(0);
   } 
 
   void H2_in(boolean state) //V2_002
@@ -921,6 +919,7 @@ public:
   //<Needle Valves
   void H2_Flowrate_step(int val, int dir = 3)//Y
   {
+	  utils.channel_switch(PCF8574::bus);
 	  if (val >= 0 && val <= 100)
 	  
 		  const int bot = 520;
@@ -958,11 +957,13 @@ public:
 					  utils.I2CWRITE(PCF8574::adress, 2, 1);
 				  }
 			  }
-	  
+			  utils.channel_switch(0);
+
   }
 
   void CO2_Flowrate_step(int val, int dir = 3)//X
   {
+	  utils.channel_switch(PCF8574::bus);
 	  if (val >= 0 && val <= 100)
 	  {
 		  const int bot = 780;
@@ -1001,6 +1002,8 @@ public:
 			  }
 		  }
 	  }
+	  utils.channel_switch(0);
+
   }
   //>Needle Valves
 };
@@ -1015,14 +1018,19 @@ public:
   
   void Fan(boolean state)
   {
+	  utils.channel_switch_2(PSW_PCF8575::bus);
     if (state)
     {
-      utils.I2CWRITE_M(0x00,8,1);
+	 utils.I2CWRITE_M(PSW_PCF8575::adress, 0,  0); //5V oopen
+     
+
+
     }
     else
     {
-      utils.I2CWRITE_M(0x00,8,0);
+      utils.I2CWRITE_M(PSW_PCF8575::adress,0,1);
     } 
+	utils.channel_switch_2(0);
   }
 
   void Peltier(boolean state)
@@ -1041,6 +1049,7 @@ public:
 
   void Electrolyzer_1(boolean state)
   {
+	  utils.channel_switch(PCF8575::bus);
     if (state)
     {
       utils.I2CWRITE_M(PCF8575::adress,5,1);
@@ -1049,10 +1058,13 @@ public:
     {
       utils.I2CWRITE_M(PCF8575::adress,5,0);
     }
+	utils.channel_switch(0);
   }
 
   void Electrolyzer_2(boolean state)
   {
+	  utils.channel_switch(PCF8575::bus);
+
 	  if (state)
 	  {
 		  utils.I2CWRITE_M(PCF8575::adress, 6, 1);
@@ -1061,6 +1073,8 @@ public:
 	  {
 		  utils.I2CWRITE_M(PCF8575::adress, 6, 0);
 	  }
+	  utils.channel_switch(0);
+
   }
 
   void Oven(boolean state)
@@ -1221,6 +1235,9 @@ public:
 	utils.write16(0xFF, 0xFF, PCF8575::adress);
 	utils.write8(0xFF, PCF8575::adress);
 	utils.channel_switch(0);
+	utils.channel_switch_2(2);
+	utils.write16(0x00, 0x00, PSW_PCF8575::adress);
+	utils.channel_switch_2(0);
 	// bus 
 	//END INIT
     Serial.println("\nCCMR program initialized");
