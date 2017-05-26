@@ -485,6 +485,23 @@ public:
 		Wire.endTransmission();
 		return val;
 	}
+	int Room_temp()
+	{
+		utils.channel_switch(TMP100::bus);
+		Wire.beginTransmission(TMP100::adress);
+	Wire.requestFrom(TMP100::adress, byte(2));
+	//byte MSB = Wire.read();
+	//byte LSB = Wire.read();
+	                        //MSB                  //LSB  
+	int TemperatureSum = ((Wire.read() << 8) | Wire.read()) >> 4;
+
+	float celsius = TemperatureSum*0.0625;
+	Wire.endTransmission();
+	
+
+	utils.channel_switch(0);
+	return celsius;
+	}
 	//old
   boolean Halt()
 	{
@@ -509,6 +526,7 @@ public:
 	}
   int Oven_temp()
 	{
+	  utils.channel_switch(MAX1238::bus);
 		Wire.beginTransmission(MAX1238::adress);
 		Wire.requestFrom(MAX1238::adress, byte(24));
 		//------------------------
@@ -517,21 +535,19 @@ public:
 			AD[i] = Wire.read();
 		}
 		Wire.endTransmission(MAX1238::adress);
-		int output = word(AD[6], AD[7]);
+		int output = word(AD[22], AD[23]);
 		output = output & 0x0FFF;
 		double x = output; 
 		//Serial.print(output);
 		//Serial.print(" degree: ");
 		//Serial.println(degree(output));
 		return degree(output);
-
+		utils.channel_switch(0);
 	}
   double degree(double x) {
-		return  1.2094505374378798e+001 * pow(x, 0)
-			+ 7.2936082213848244e-002 * pow(x, 1)
-			+ 1.1321194483966676e-004 * pow(x, 2)
-			+ -6.6277232428908262e-008 * pow(x, 3)
-			+ 1.2238390800688889e-011 * pow(x, 4); //nicht genau
+	  return   45.41742427610426 + 0.20515848069194526*x + 0.00003967586300264838 * pow(x,2);
+			
+			
 	}
   int cooler()
   {
@@ -1021,7 +1037,7 @@ public:
 	  utils.channel_switch_2(PSW_PCF8575::bus);
     if (state)
     {
-	 utils.I2CWRITE_M(PSW_PCF8575::adress, 0,  0); //5V oopen
+	 utils.I2CWRITE_M(PSW_PCF8575::adress,0,0); //5V open
      
 
 
@@ -1033,18 +1049,38 @@ public:
 	utils.channel_switch_2(0);
   }
 
+  void Fuelcell(boolean state)
+  {
+	  utils.channel_switch_2(PCF8575::bus);
+	  if (state)
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 7, 1); //GND open
+
+
+
+	  }
+	  else
+	  {
+		  utils.I2CWRITE_M(PCF8575::adress, 7, 0);
+	  }
+	  utils.channel_switch_2(0);
+  }
+
   void Peltier(boolean state)
   {
-    if (state)
-    {
+	  utils.channel_switch_2(PSW_PCF8575::bus);
+	  if (state)
+	  {
+		  utils.I2CWRITE_M(PSW_PCF8575::adress, 6, 0); //5V open
 
-      utils.I2CWRITE_M(0x00,9,1);
-    }
-    else
-    {
 
-      utils.I2CWRITE_M(0x00,9,0);
-    } 
+
+	  }
+	  else
+	  {
+		  utils.I2CWRITE_M(PSW_PCF8575::adress, 6, 1);
+	  }
+	  utils.channel_switch_2(0);
   }
 
   void Electrolyzer_1(boolean state)
@@ -1079,16 +1115,19 @@ public:
 
   void Oven(boolean state)
   {
-    if (state)
-    {
-      utils.I2CWRITE_M(0x00,4,1);
-      utils.I2CWRITE_M(0x00,6,1); 
-    }
-    else
-    {
-      utils.I2CWRITE_M(0x00,4,0);
-      utils.I2CWRITE_M(0x00,6,0); 
-    }
+	  utils.channel_switch_2(PSW_PCF8575::bus);
+	  if (state)
+	  {
+		  utils.I2CWRITE_M(PSW_PCF8575::adress, 5, 1); //5V open
+
+
+
+	  }
+	  else
+	  {
+		  utils.I2CWRITE_M(PSW_PCF8575::adress, 5, 0);
+	  }
+	  utils.channel_switch_2(0);
   }
 
   void Pump(boolean state)
@@ -1123,109 +1162,13 @@ public:
   {
     Serial.begin(9600);
 	Serial2.begin(9600);
-    Sw_Reset[0] = 0x51;
-    Sw_Reset[1] = 0x00;
-    Sw_Reset[2] = 0x00;
-
-    Set_Ref[0] = 0x77;
-    Set_Ref[1] = 0x00;
-    Set_Ref[2] = 0x00;
-
-    Code_Load[0] = 0x33;
-    Code_Load[1] = 0x05;
-    Code_Load[2] = 0x00;
-    //deleting values
+    
 
 
 
     Wire.begin();
 	
-    //utils.I2C(addr_Lights,0xff);
-    //utils.I2C(addr_Valves2,0xff);
-    //utils.I2C(addr_Valves3,0xff);
-    //utils.I2C(addr_Valves4,0xff);
-    //utils.I2C(addr_Valves4,0xff); 
-    //utils.I2C(addr_Items1,0xff);
-    //utils.I2C(addr_Items2,0xff);
-    //utils.I2C(addr_Items3,0xff);
-    //utils.I2C(0x00,0xff);
-    //Wire.beginTransmission(addr_Valves);
-    //Wire.write(0b11111111);
-    //Wire.write(0b11111111);
-    //Wire.endTransmission();
-
-    //Wire.beginTransmission(0x00);
-    //Wire.write(0b11111111);
-    //Wire.write(0b11111111);
-    //Wire.endTransmission();
-
-    //utils.I2C(addr_AD,0x17);
-    //utils.I2C(addr_AD,0xD2);
-    //utils.I2C(addr_RT,0x00);
-
-    //Wire.beginTransmission(addr_DA);
-    //Wire.write(Sw_Reset[0]);
-    //Wire.write(Sw_Reset[1]);
-    //Wire.write(Sw_Reset[2]);
-    //Wire.endTransmission();
-
-    //Wire.beginTransmission(addr_DA);
-    //Wire.write(Set_Ref[0]);
-    //Wire.write(Set_Ref[1]);
-    //Wire.write(Set_Ref[2]);
-    //Wire.endTransmission();
-
-    //Wire.beginTransmission(addr_DA);
-    //Wire.write(Code_Load[0]);
-    //Wire.write(Code_Load[1]);
-    //Wire.write(Code_Load[2]);
-    //Wire.endTransmission();
-
-    //Wire.beginTransmission(addr_AD);
-    //Wire.requestFrom(addr_AD, byte(24));
-    ////------------------------
-    //AD[0] = Wire.read();
-    //AD[1] = Wire.read();
-    //AD[2] = Wire.read();
-    //AD[3] = Wire.read();
-    //AD[4] = Wire.read();
-    //AD[5] = Wire.read();
-    //AD[6] = Wire.read();
-    //AD[7] = Wire.read();
-    //AD[8] = Wire.read();
-    //AD[9] = Wire.read();
-    //AD[10] = Wire.read();
-    //AD[11] = Wire.read();
-    //AD[12] = Wire.read();
-    //AD[13] = Wire.read();
-    //AD[14] = Wire.read();
-    //AD[15] = Wire.read();
-    //AD[16] = Wire.read();
-    //AD[17] = Wire.read();
-    //AD[18] = Wire.read();
-    //AD[19] = Wire.read();
-    //AD[20] = Wire.read();
-    //AD[21] = Wire.read();
-    //AD[22] = Wire.read();
-    //AD[23] = Wire.read();
-    ////--RT--
-    //Wire.beginTransmission(addr_RT);
-    //Wire.requestFrom(addr_AD, byte(2));
-    ////------------------------
-    //RT[0] = Wire.read();
-    //RT[1] = Wire.read();
-    //RTR = RT[0]*16 + RT[1]/16 ;
-    //if (RTR < 2048)
-    //{
-    //  RTR /= 16;
-    //} 
-    //else
-    //{ 
-    //  RTR = (RTR - 4096) / 16;
-    //}
-
-    //Wire.endTransmission();
-
+  
 	//INIT
 	utils.channel_switch(1);
 	utils.I2C(PCF8574::adress, 0xDF);
@@ -1236,7 +1179,7 @@ public:
 	utils.write8(0xFF, PCF8575::adress);
 	utils.channel_switch(0);
 	utils.channel_switch_2(2);
-	utils.write16(0x00, 0x00, PSW_PCF8575::adress);
+	utils.write16(0b11100000, 0xFF, PSW_PCF8575::adress);
 	utils.channel_switch_2(0);
 	// bus 
 	//END INIT
@@ -1261,10 +1204,6 @@ public:
 	if (Flush)
 	{
 		Serial.println("--Booting--");
-
-		
-
-		lights.Starting(true);
 		Serial.println("RESETTING VALVES");
 		//valves.CO2_needle_reset(false);
 		//delay(500);

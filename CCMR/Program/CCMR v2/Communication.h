@@ -52,6 +52,23 @@ CH7 BC
 
 //todo:
 /*
-2ter switch implementierung + V2_006
-Switches
+O2 Druck Elektrolyse -
+H2 Druck EL -
+O2 druck speicher -
+H2/CO2 druck speicher -
+Raumtemperatur -
+Füllstand O2
+Füllstand H2
+Füllstand CH4
+Ofentemperatur
+flow CO2H2
+H2 konz.
+CO2 konz.
+HTY CO,H2
+HTY H2
+HTY O2
+
+
+CH4 konz.
+
 */

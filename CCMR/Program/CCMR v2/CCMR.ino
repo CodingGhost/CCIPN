@@ -35,8 +35,7 @@ void setup()
 	
 CCMR.init(false);
 Serial.setTimeout(5);
-CCMR.items.Fan(true);
-// richtung ändern CCMR.utils.I2CWRITE(PCF8574::adress, 1, 1);
+CCMR.items.Oven(true);
 
 }
 
@@ -80,6 +79,7 @@ void MidLoop()
 	//CCMR.sensors.H2_water(1);
 	//CCMR.sensors.H2_water(2);
 	handleCommands();
+	Serial.println(CCMR.sensors.Oven_temp());
 }
 void SlowLoop()
 {
