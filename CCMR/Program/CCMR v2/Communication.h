@@ -49,6 +49,11 @@ CH6 FC
 CH7 BC
 */
 
+/*
+
+
+
+*/
 
 //todo:
 /*
@@ -57,10 +62,10 @@ H2 Druck EL -
 O2 druck speicher -
 H2/CO2 druck speicher -
 Raumtemperatur -
-Füllstand O2
-Füllstand H2
+Füllstand O2 -
+Füllstand H2 -
 Füllstand CH4
-Ofentemperatur
+Ofentemperatur -
 flow CO2H2
 H2 konz.
 CO2 konz.

@@ -4,7 +4,7 @@
 #include "Adresses.h"
 #include "Communication.h"
 #include "Wire.h"
-boolean debug = true;
+boolean debug = false;
 boolean Ready = false;
 boolean Caution = false;
 boolean Running = false;
@@ -502,7 +502,7 @@ public:
 	utils.channel_switch(0);
 	return celsius;
 	}
-	//old
+
   boolean Halt()
 	{
 		
@@ -596,6 +596,52 @@ public:
     
   }
 
+  boolean O2_water(int num)
+  {
+	  utils.channel_switch(AD7828_3::bus);
+	  switch (num)
+	  {
+	  case 1:
+	  {
+		  utils.I2C(AD7828_3::adress, 0xec);
+		  // delay(1);
+		  Wire.beginTransmission(AD7828_3::adress);
+		  Wire.requestFrom(AD7828_3::adress, byte(2));
+		  volt = ((Wire.read() << 8) + Wire.read());
+		  Wire.endTransmission();
+		  /*Serial.write("1: ");
+		  Serial.print(volt);*/
+
+		  if (volt > 1500) {
+			  return false;
+		  }
+		  else {
+			  return true;
+		  }
+	  }
+	  case 2:
+	  {
+		  utils.I2C(AD7828_3::adress, 0xbC);
+		  // delay(1);
+		  Wire.beginTransmission(AD7828_3::adress);
+		  Wire.requestFrom(AD7828_3::adress, byte(2));
+		  volt = ((Wire.read() << 8) + Wire.read());
+
+		  Wire.endTransmission();
+		 /* Serial.write(" ----- 2: ");
+		  Serial.println(volt);*/
+
+
+		  if (volt > 2500) {
+			  return false;
+		  }
+		  else {
+			  return true;
+		  }
+	  }
+	  }
+	  utils.channel_switch(0);
+  }
   boolean H2_water(int num)
   {
 	  utils.channel_switch(AD7828_3::bus);
@@ -603,16 +649,16 @@ public:
     {
     case 1:
       { 
-        utils.I2C(AD7828_3::adress,0xfc);
+        utils.I2C(AD7828_3::adress,0xac);
         // delay(1);
         Wire.beginTransmission(AD7828_3::adress);
         Wire.requestFrom(AD7828_3::adress, byte(2));
        volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
-		Serial.write("1: ");
-         Serial.print(volt);
+		/*Serial.write("1: ");
+         Serial.print(volt);*/
          
-        if (volt > 4000) {
+        if (volt > 1600) {
           return false;
         } 
         else {
@@ -621,18 +667,18 @@ public:
       }
     case 2:
       { 
-        utils.I2C(AD7828_3::adress,0xFC);
+        utils.I2C(AD7828_3::adress,0xdC);
         // delay(1);
         Wire.beginTransmission(AD7828_3::adress);
         Wire.requestFrom(AD7828_3::adress, byte(2));
         volt = ((Wire.read() << 8) + Wire.read());
 
         Wire.endTransmission();
-		Serial.write(" ----- 2: ");
-		Serial.println(volt);
+		/*Serial.write(" ----- 2: ");
+		Serial.println(volt);*/
 		
 
-        if (volt > 3000) {
+        if (volt > 2000) {
           return false;
         } 
         else {
