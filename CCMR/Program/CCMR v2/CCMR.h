@@ -979,8 +979,9 @@ public:
   //>Magnetic Valves
 
   //<Needle Valves
-  void H2_Flowrate_step(int val, int dir = 3)//Y
+  boolean H2_Flowrate_step(int val, int dir = 3)//Y
   {
+	  boolean returnval;
 	  utils.channel_switch(PCF8574::bus);
 	  if (val >= 0 && val <= 100)
 	  
@@ -992,6 +993,7 @@ public:
 			  {
 				  if (abs(sensors.H2_outvalve() - val) > 50)
 				  {
+					   returnval = false;
 					  if (sensors.H2_outvalve() < val)
 					  {
 						  utils.I2CWRITE(PCF8574::adress, 1, open);
@@ -1002,6 +1004,10 @@ public:
 					  }
 					  utils.I2CWRITE(PCF8574::adress, 2, 0);
 					  utils.I2CWRITE(PCF8574::adress, 2, 1);
+				  }
+				  else
+				  {
+					   returnval = true;
 				  }
 			  }
 			  else
@@ -1020,11 +1026,19 @@ public:
 				  }
 			  }
 			  utils.channel_switch(0);
-
+			  return returnval;
   }
-
-  void CO2_Flowrate_step(int val, int dir = 3)//X
+  void CO2_needle_reset(int perc)
   {
+	  while (!CO2_Flowrate_step(perc));
+  }
+  void H2_needle_reset(int perc)
+  {
+	  while (!H2_Flowrate_step(perc));
+  }
+  boolean CO2_Flowrate_step(int val, int dir = 3)//X
+  {
+	  boolean returnval;
 	  utils.channel_switch(PCF8574::bus);
 	  if (val >= 0 && val <= 100)
 	  {
@@ -1036,6 +1050,7 @@ public:
 		  {
 			  if (abs(sensors.CO2_valve() - val) > 15)
 			  {
+				  returnval = false;
 				  if (sensors.CO2_valve() < val)
 				  {
 					  utils.I2CWRITE(PCF8574_2::adress, 1, open);
@@ -1046,6 +1061,10 @@ public:
 				  }
 				  utils.I2CWRITE(PCF8574_2::adress, 2, 0);
 				  utils.I2CWRITE(PCF8574_2::adress, 2, 1);
+			  }
+			  else
+			  {
+				  returnval = true;
 			  }
 		  }
 		  else
@@ -1065,7 +1084,7 @@ public:
 		  }
 	  }
 	  utils.channel_switch(0);
-
+	  return returnval;
   }
   //>Needle Valves
 };
@@ -1216,6 +1235,7 @@ public:
 	
   
 	//INIT
+	Serial.println("-initializing-");
 	utils.channel_switch(1);
 	utils.I2C(PCF8574::adress, 0xDF);
 	utils.I2C(PCF8574_2::adress, 0xDF);
@@ -1232,7 +1252,7 @@ public:
     Serial.println("\nCCMR program initialized");
 	Serial.println("registering Serial --> GUI...");
 		Serial2.begin(9600);
-		Serial.println("Connection to GUI established");
+		Serial.println("GUI Link active");
     if (debug)
     {
       Serial.write(" [DEBUG MODE]\n") ;
@@ -1251,53 +1271,53 @@ public:
 	{
 		Serial.println("--Booting--");
 		Serial.println("RESETTING VALVES");
-		//valves.CO2_needle_reset(false);
-		//delay(500);
-		//valves.H2_needle_reset(true);
-		//Serial.println("refluxing water.."); //TODO: ventil nach dem ofen!!!!!!!
-		//valves.Flush(true);
-		//delay(1000);
-		//valves.Flush(false);
-		//valves.Water_reflux_H2(true);
-		//delay(3000);
-		//valves.Water_reflux_H2(false);
-		//Serial.print("Cleaning Valves and Pipes");
-		//valves.Flush(true);
-		////valves.H2(true);
-		//valves.Water_reflux_CH4(true);
-		//delay(1000);
-		//Serial.print("<|..");
-		//delay(1000);
-		//Serial.print(".");
-		//delay(1000);
-		//Serial.print(".");
-		//delay(1000);
-		//Serial.print(".");
-		//delay(1000);
-		//Serial.print(".");
-		//delay(1000);
-		//Serial.print(".");
-		//delay(1000);
-		//Serial.print(".");
-		//delay(1000);
-		//Serial.print(".");
-		//delay(1000);
-		//Serial.print(".");
-		//delay(1000);
-		//Serial.print("..|>");
-		////valves.H2(false);
-		//valves.Flush(false);
-		//valves.Water_reflux_CH4(false);
-		//Serial.println(" COMPLETE");
-		//delay(200);
-		//Serial.println("SETTING STANDART MIX...");
-		//Serial.println("CO2...");
-		//valves.CO2_needle_percent(CO2_reset);
-		//Serial.println("H2...");
-		//valves.H2_needle_percent(H2_reset);
-		//Serial.println("SYSTEM BOOTUP COMPLETE");
-		//Serial.println("USER INPUT REQUIRED!");
-		//Serial.println("PREHEAT OVEN ?");
+		valves.CO2_needle_reset(100);
+		delay(500);
+		valves.H2_needle_reset(100);
+		Serial.println("refluxing water.."); //TODO: ventil nach dem ofen!!!!!!!
+		valves.Flush(true);
+		valves.Water_reflux_H2(true);
+		delay(2000);
+		valves.Flush(false);
+		valves.Water_reflux_H2(false);
+		Serial.print("Cleaning Valves and Pipes");
+		valves.Flush(true);
+		valves.H2_in(true);
+		valves.H2_out(true);
+		delay(1000);
+		Serial.print("<|..");
+		delay(1000);
+		Serial.print(".");
+		delay(1000);
+		Serial.print(".");
+		delay(1000);
+		Serial.print(".");
+		delay(1000);
+		Serial.print(".");
+		delay(1000);
+		Serial.print(".");
+		delay(1000);
+		Serial.print(".");
+		delay(1000);
+		Serial.print(".");
+		delay(1000);
+		Serial.print(".");
+		delay(1000);
+		Serial.print("..|>");
+		//valves.H2(false);
+		valves.Flush(false);
+		valves.H2_in(false);
+		valves.H2_out(false);
+		Serial.println(" COMPLETE");
+		delay(200);
+		Serial.println("SETTING STANDART MIX...");
+		Serial.println("CO2...");
+		valves.CO2_needle_reset(CO2_reset);
+		Serial.println("H2...");
+		valves.H2_needle_reset(H2_reset);
+		Serial.println("SYSTEM BOOTUP COMPLETE");
+		Serial.println("USER INPUT REQUIRED!");
+		Serial.println("PREHEAT OVEN ?");
 		bool in = false;
 		bool heat = false;
 		if (!debug)
@@ -1381,10 +1401,10 @@ public:
 
   
   
-	  Valves valves;
+	
 
 	  Sensors sensors;
-
+	  Valves valves;
 
 };
 
