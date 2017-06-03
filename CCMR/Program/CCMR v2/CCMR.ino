@@ -47,12 +47,12 @@ void loop()
 void Timed_loop()
 {
 	unsigned long currentMillis = millis();
-	if (currentMillis - previousMillis_A >= 100)
+	if (currentMillis - previousMillis_A >= 200)
 	{
 		previousMillis_A = currentMillis;
 		FastLoop();
 	}
-	if (currentMillis - previousMillis_B >= 500)
+	if (currentMillis - previousMillis_B >= 1000)
 	{
 		previousMillis_B = currentMillis;
 		MidLoop();
@@ -72,19 +72,16 @@ void continousLoop()
 }
 void FastLoop()
 {
-
+	handleCommands();
 }
 void MidLoop()
 {
-	//CCMR.sensors.H2_water(1);
-	//CCMR.sensors.H2_water(2);
-	handleCommands();
+	
 
 }
 void SlowLoop()
 {
-	//updateGUI();
-	//Serial.println("slowloop!");
+	updateGUI();
 }
 
 
@@ -224,9 +221,10 @@ void handleCommands()
 		break;
 	}
 }
+
 void updateGUI()
 {
-	/*CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.CO2());
+  /*CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.CO2());
 	CCMR.utils.Send_to_GUI(STT_H2INVALVE, CCMR.sys_stat.H2_in());
 	CCMR.utils.Send_to_GUI(STT_H2OUTVALVE, CCMR.sys_stat.H2_out());
 	CCMR.utils.Send_to_GUI(STT_O2INVALVE, CCMR.sys_stat.O2_in());
@@ -235,7 +233,32 @@ void updateGUI()
 	CCMR.utils.Send_to_GUI(STT_O2REFLUX, CCMR.sys_stat.Water_reflux_O2());
 	CCMR.utils.Send_to_GUI(STT_PUMP, CCMR.sys_stat.Pump());*/
 	
-	utils.Send_to_GUI(SNS_H2Storagepressure_val, CCMR.sensors.H2_storagepressure());
+	//utils.Send_to_GUI(SNS_coolerTemp_deg, CCMR.sensors.cooler());
+	//utils.Send_to_GUI(SNS_peltier_deg, CCMR.sensors.peltier());
+	//utils.Send_to_GUI(SNS_CO2_perc, CCMR.sensors.CO2_percentage());
+	//utils.Send_to_GUI(SNS_H2_perc, CCMR.sensors.H2_percentage());	
+
+	utils.Send_to_GUI(SNS_ovenTemp_deg, CCMR.sensors.Oven_temp());
+	delay(1);
+	utils.Send_to_GUI(SNS_H2water_val, CCMR.sensors.H2_water(1) ? (CCMR.sensors.H2_water(2) ? 2 : 1) : 0);//0=0;1=1;2=1&2
+	delay(1);
+	utils.Send_to_GUI(SNS_CHwater_val, CCMR.sensors.CH_water(1) ? (CCMR.sensors.CH_water(2) ? 2 : 1) : 0);//0=0;1=1;2=1&2
+	delay(1);
+	utils.Send_to_GUI(SNS_O2storagepressure_mbar, CCMR.sensors.O2_storagepressure());
+	delay(1);
+	utils.Send_to_GUI(SNS_H2Storagepressure_mbar, CCMR.sensors.H2_storagepressure());
+	delay(1);
+	utils.Send_to_GUI(SNS_CO2pressure_mbar, CCMR.sensors.CO2_pressure());
+	delay(1);
+	utils.Send_to_GUI(SNS_H2valve_perc, CCMR.sensors.H2_outvalve());
+	delay(1);
+	utils.Send_to_GUI(SNS_CO2valve_perc, CCMR.sensors.CO2_valve());
+	delay(1);
+	utils.Send_to_GUI(SNS_O2electrolyzerpressure_mbar, CCMR.sensors.O2_pressure_Electrolyzer());
+	delay(1);
+	utils.Send_to_GUI(SNS_H2electrolyzerpressure_mbar, CCMR.sensors.H2_pressure_Electrolyzer());
+	delay(1);
+	utils.Send_to_GUI(SNS_O2water_val, CCMR.sensors.O2_water(1) ? (CCMR.sensors.O2_water(2) ? 2 : 1) : 0);//0=0;1=1;2=1&2
 }
 
 void Mix()

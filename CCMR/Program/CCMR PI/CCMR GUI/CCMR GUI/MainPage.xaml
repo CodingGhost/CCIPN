@@ -70,94 +70,119 @@
 
                     <Grid Height="1192" Width="1740">
 
-        <Image Stretch="Fill" Source="Assets/ccmr-v12.png" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <Button x:Name="btn_O2IN" Content="" Height="36" Margin="732,139,0,0" VerticalAlignment="Top" Width="141" Background= "#66FF0000" Click="btn_02IN_Click" RenderTransformOrigin="0.789,1.571"/>
-        <Button x:Name="btn_H2IN" Content="" Height="37" Margin="732,350,0,0" VerticalAlignment="Top" Width="141" Background= "#66FF0000" Click="btn_H2IN_Click" RenderTransformOrigin="0.789,1.571"/>
-        <Button x:Name="btn_H2WATER" Content="" Height="37" Margin="260,51,0,0" VerticalAlignment="Top" Width="70" Background= "#66FF0000" Click="btn_H2WATER_Click" RenderTransformOrigin="0.789,1.571"/>
-        <Button x:Name="btn_O2WATER" Content="" Height="36" Margin="260,437,0,0" VerticalAlignment="Top" Width="70" Background= "#66FF0000" Click="btn_O2WATER_Click" RenderTransformOrigin="0.789,1.571"/>
-        <Button x:Name="btn_O2OUT" Content="" Height="36" Margin="1414,139,0,0" VerticalAlignment="Top" Width="140" Background= "#66FF0000" Click="btn_O2OUT_Click" RenderTransformOrigin="0.789,1.571"/>
-        <Button x:Name="btn_H2OUT" Content="" Height="37" Margin="1414,350,0,0" VerticalAlignment="Top" Width="141" Background= "#66FF0000" Click="btn_H2OUT_Click" RenderTransformOrigin="0.789,1.571"/>
-        <Button x:Name="btn_CO2OUT" Content="" Margin="749,578,0,577" VerticalAlignment="Stretch" Width="71" Background= "#66FF0000" Click="btn_CO2OUT_Click" RenderTransformOrigin="0.789,1.571"/>
-        <Button x:Name="btn_CH4WATER" Content="" Height="36" Margin="417,0,0,104" VerticalAlignment="Bottom" Width="70" Background= "#66FF0000" Click="btn_CH4WATER_Click" RenderTransformOrigin="0.789,1.571"/>
-        <Button x:Name="btn_PM_000" Content="" Height="283" Margin="1220,120,0,0" VerticalAlignment="Top" Width="87" Background= "#66FF0000" Click="btn_PM000_Click" RenderTransformOrigin="0.789,1.571"/>
-        <Button x:Name="btn_FLUSH" Content="" Height="36" Margin="955,578,0,0" VerticalAlignment="Top" Width="70" Background= "#66FF0000" Click="btn_FLUSH_Click" RenderTransformOrigin="0.789,1.571"/>
+                        <Image Stretch="Fill" Source="Assets/ccmr-v12.png" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                        <Button x:Name="btn_O2IN" Content="" Height="36" Margin="732,139,0,0" VerticalAlignment="Top" Width="141" Background= "#66FF0000" Click="btn_02IN_Click" RenderTransformOrigin="0.789,1.571"/>
+                        <Button x:Name="btn_H2IN" Content="" Height="37" Margin="732,350,0,0" VerticalAlignment="Top" Width="141" Background= "#66FF0000" Click="btn_H2IN_Click" RenderTransformOrigin="0.789,1.571"/>
+                        <Button x:Name="btn_H2WATER" Content="" Height="37" Margin="260,51,0,0" VerticalAlignment="Top" Width="70" Background= "#66FF0000" Click="btn_H2WATER_Click" RenderTransformOrigin="0.789,1.571"/>
+                        <Button x:Name="btn_O2WATER" Content="" Height="36" Margin="260,437,0,0" VerticalAlignment="Top" Width="70" Background= "#66FF0000" Click="btn_O2WATER_Click" RenderTransformOrigin="0.789,1.571"/>
+                        <Button x:Name="btn_O2OUT" Content="" Height="36" Margin="1414,139,0,0" VerticalAlignment="Top" Width="140" Background= "#66FF0000" Click="btn_O2OUT_Click" RenderTransformOrigin="0.789,1.571"/>
+                        <Button x:Name="btn_H2OUT" Content="" Height="37" Margin="1414,350,0,0" VerticalAlignment="Top" Width="141" Background= "#66FF0000" Click="btn_H2OUT_Click" RenderTransformOrigin="0.789,1.571"/>
+                        <Button x:Name="btn_CO2OUT" Content="" Margin="749,578,0,577" VerticalAlignment="Stretch" Width="71" Background= "#66FF0000" Click="btn_CO2OUT_Click" RenderTransformOrigin="0.789,1.571"/>
+                        <Button x:Name="btn_CH4WATER" Content="" Height="36" Margin="417,0,0,104" VerticalAlignment="Bottom" Width="70" Background= "#66FF0000" Click="btn_CH4WATER_Click" RenderTransformOrigin="0.789,1.571"/>
+                        <Button x:Name="btn_PM_000" Content="" Height="283" Margin="1220,120,0,0" VerticalAlignment="Top" Width="87" Background= "#66FF0000" Click="btn_PM000_Click" RenderTransformOrigin="0.789,1.571"/>
+                        <Button x:Name="btn_FLUSH" Content="" Height="36" Margin="955,578,0,0" VerticalAlignment="Top" Width="70" Background= "#66FF0000" Click="btn_FLUSH_Click" RenderTransformOrigin="0.789,1.571"/>
 
                         <Rectangle Fill="#6600FFFF" Height="36" Margin="680,71,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="36">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind P000}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Height="36" Margin="663,210,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="36">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind FT003}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Height="36" Margin="662,282,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="37">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind FT002}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Height="37" Margin="680,421,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="36">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind P001}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Height="21" Margin="457,412,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="66">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind FL001}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Height="35" Margin="0,192,361,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind P002}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Height="36" Margin="0,297,361,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind P003}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Height="36" Margin="626,0,0,507" Stroke="#4C000000" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="36">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind P004}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Margin="678,578,0,578" Stroke="#4C000000" HorizontalAlignment="Left" Width="71">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind STM001}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Margin="486,561,0,559" Stroke="#4C000000" HorizontalAlignment="Left" Width="123">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind FS001}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Margin="0,0,275,435" Stroke="#4C000000" HorizontalAlignment="Right" Width="130" Height="73" VerticalAlignment="Bottom">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind GK004}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Margin="0,0,151,435" Stroke="#4C000000" HorizontalAlignment="Right" Width="71" Height="73" VerticalAlignment="Bottom">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="NOT DEFINED" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Margin="0,0,114,525" Stroke="#4C000000" HorizontalAlignment="Right" Width="37" Height="36" VerticalAlignment="Bottom">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="NOT DEFINED" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Margin="0,0,95,387" Stroke="#4C000000" HorizontalAlignment="Right" Width="37" Height="36" VerticalAlignment="Bottom">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind FT000}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-        <Rectangle Fill="#6600FFFF" Height="19" Margin="452,202,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="65">
-            <ToolTipService.ToolTip>
-                <TextBlock Text="{x:Bind FL000}" FontSize="20"/>
-            </ToolTipService.ToolTip>
-        </Rectangle>
-    </Grid>
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind P000}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Height="36" Margin="663,210,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="36">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind FT003}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Height="36" Margin="662,282,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="37">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind FT002}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Height="37" Margin="680,421,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="36">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind P001}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Height="21" Margin="457,412,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="66">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind FL001}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Height="35" Margin="0,192,361,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind P002}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Height="36" Margin="0,297,361,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind P003}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Height="36" Margin="626,0,0,507" Stroke="#4C000000" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="36">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind P004}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Margin="678,578,0,578" Stroke="#4C000000" HorizontalAlignment="Left" Width="71">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind STM001}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Margin="486,561,0,559" Stroke="#4C000000" HorizontalAlignment="Left" Width="123">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind FS001}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Margin="0,0,275,435" Stroke="#4C000000" HorizontalAlignment="Right" Width="130" Height="73" VerticalAlignment="Bottom">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind GK004}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Margin="0,0,151,435" Stroke="#4C000000" HorizontalAlignment="Right" Width="71" Height="73" VerticalAlignment="Bottom">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="NOT DEFINED" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Margin="0,0,114,525" Stroke="#4C000000" HorizontalAlignment="Right" Width="37" Height="36" VerticalAlignment="Bottom">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="NOT DEFINED" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Margin="0,0,95,387" Stroke="#4C000000" HorizontalAlignment="Right" Width="37" Height="36" VerticalAlignment="Bottom">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind FT000}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Height="19" Margin="452,202,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="65">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind FL000}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Margin="0,0,1391,387" Stroke="#4C000000" HorizontalAlignment="Right" Width="37" Height="36" VerticalAlignment="Bottom">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind OV_TMP}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Height="71" Margin="435,123,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="88">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind WAT_O2}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Height="71" Margin="435,332,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="88">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind WAT_H2}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Height="105" Margin="593,877,0,0" Stroke="#4C000000" VerticalAlignment="Top" HorizontalAlignment="Left" Width="156">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind WAT_CH4}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                        <Rectangle Fill="#6600FFFF" Margin="1414,351,0,805" Stroke="#4C000000" HorizontalAlignment="Left" Width="71">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{x:Bind STM000}" FontSize="20"/>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                    </Grid>
 
                 </ScrollViewer>
 

@@ -47,9 +47,14 @@ namespace CCMR_GUI
         public string FT003 = "Nothing";
         public string FL001 = "Nothing";
         public string STM001 = "Nothing";
+        public string STM000 = "Nothing";
         public string FS001 = "Nothing";
         public string GK004 = "Nothing";
         public string FL000 = "Nothing";
+        public string OV_TMP = "Nothing";
+        public string WAT_O2 = "Nothing";
+        public string WAT_H2 = "Nothing";
+        public string WAT_CH4 = "Nothing";
         //END BINDINGS\\
         String SERIAL_DEVICE = "\\\\?\\ACPI#BCM2836#0#{86e0d1e0-8089-11d0-9ce4-08003e301f73}";
         byte cmdid;
@@ -57,16 +62,16 @@ namespace CCMR_GUI
         Boolean[] Valve_stat = new Boolean[6];
         /// <summary>
         /// Private variables
-       Boolean CO2VALVE    = false;
-       Boolean H2INVALVE   = false;
-       Boolean H2OUTVALVE  = false;
-       Boolean O2INVALVE   = false;
-       Boolean O2OUTVALVE  = false;
-       Boolean H2REFLUX    = false;
-       Boolean O2REFLUX    = false;
+        Boolean CO2VALVE = false;
+        Boolean H2INVALVE = false;
+        Boolean H2OUTVALVE = false;
+        Boolean O2INVALVE = false;
+        Boolean O2OUTVALVE = false;
+        Boolean H2REFLUX = false;
+        Boolean O2REFLUX = false;
         Boolean CHWATER = false;
-       Boolean PUMP        = false;
-        Boolean FLUSH      = false; 
+        Boolean PUMP = false;
+        Boolean FLUSH = false;
         /// </summary>
         ///   Dim Mysqlconn As MySqlConnection
         String query;
@@ -76,7 +81,7 @@ namespace CCMR_GUI
         DataWriter dataWriteObject = null;
         DataReader dataReaderObject = null;
         private CancellationTokenSource ReadCancellationTokenSource;
-        SolidColorBrush Green =  new SolidColorBrush(Color.FromArgb(102, 0, 255, 0));
+        SolidColorBrush Green = new SolidColorBrush(Color.FromArgb(102, 0, 255, 0));
         SolidColorBrush Red = new SolidColorBrush(Color.FromArgb(102, 255, 0, 0));
 
         byte active = 1;
@@ -116,7 +121,7 @@ namespace CCMR_GUI
 
             try
             {
-                
+
                 serialPort = await SerialDevice.FromIdAsync(SERIAL_DEVICE);
                 serialPort.WriteTimeout = TimeSpan.FromMilliseconds(1000);
                 serialPort.ReadTimeout = TimeSpan.FromMilliseconds(20); //IMPORTANT!!!!!!
@@ -126,7 +131,7 @@ namespace CCMR_GUI
                 serialPort.DataBits = 8;
                 serialPort.Handshake = SerialHandshake.None;
                 ReadCancellationTokenSource = new CancellationTokenSource();
-                
+
             }
             catch (Exception ex)
             {
@@ -198,14 +203,14 @@ namespace CCMR_GUI
             // Launch an async task to complete the write operation
             storeAsyncTask = dataWriteObject.StoreAsync().AsTask();
 
-                UInt32 bytesWritten = await storeAsyncTask;
-                if (bytesWritten > 0)
-                {
-                    status.Text += "||bytes written successfully!";
-                
-                }
+            UInt32 bytesWritten = await storeAsyncTask;
+            if (bytesWritten > 0)
+            {
+                status.Text += "||bytes written successfully!";
 
-            
+            }
+
+
         }
         private async void Listen()
         {
@@ -311,17 +316,17 @@ namespace CCMR_GUI
         }
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            status.Text = Mysql_read("new_table","COL_A")[3];
-          
+            status.Text = Mysql_read("new_table", "COL_A")[3];
+
         }
         //Mysql functions
-         List<String> Mysql_read(String table, String column)
+        List<String> Mysql_read(String table, String column)
         {
             MySqlConnection connect = new MySqlConnection("Server=192.168.1.102; Database=test; Uid=root; Pwd=root;SslMode=none");
-            
+
             List<String> output = new List<string>();
-            
-           
+
+
             try
             {
                 connect.Open();
@@ -332,9 +337,9 @@ namespace CCMR_GUI
 
 
 
-                sqlcmd = new MySqlCommand("SELECT * FROM "+ table, connect);
+                sqlcmd = new MySqlCommand("SELECT * FROM " + table, connect);
                 dr = sqlcmd.ExecuteReader();
-               
+
                 while (dr.Read())
                 {
                     output.Add(dr.GetString(column));
@@ -347,7 +352,7 @@ namespace CCMR_GUI
             connect.Close();
             return output;
         }
-        void Mysql_write(String table, String column,int index)
+        void Mysql_write(String table, String column, int index)
         {
             MySqlConnection connect = new MySqlConnection("Server=192.168.1.102; Database=test; Uid=root; Pwd=root;SslMode=none");
             try
@@ -356,12 +361,12 @@ namespace CCMR_GUI
 
                 status.Text = "connected";
                 MySqlCommand sqlcmd;
-               
+
 
 
 
                 sqlcmd = new MySqlCommand("UPDATE `new_table` SET `COL_A`='3' WHERE `COL_A`='2'", connect);
-           
+
             }
             catch (Exception ex)
             {
@@ -382,32 +387,67 @@ namespace CCMR_GUI
             {
                 case 101: //oven temp
                     gauge_ovenTemp = cmdval.ToString();
+                    OV_TMP = cmdval.ToString();
                     this.Bindings.Update();
                     break;
-                case 108: //CO2 pressure
-                    gauge_ovenTemp = cmdval.ToString();
+                case 110: //CO2 pressure
+                    gauge_CO2pressure = cmdval.ToString();
+                    P004 = cmdval.ToString();
                     this.Bindings.Update();
                     break;
                 case 106: //CO2
-                    gauge_ovenTemp = cmdval.ToString();
+                    gauge_CO2 = cmdval.ToString();
                     this.Bindings.Update();
                     break;
                 case 107: //h2
-                    gauge_ovenTemp = cmdval.ToString();
+                    gauge_H2 = cmdval.ToString();
                     this.Bindings.Update();
                     break;
-                case 109: //H2 pressure
+                case 109: //H2 stor pressure
                     gauge_H2pressure = cmdval.ToString();
                     P003 = cmdval.ToString();
                     this.Bindings.Update();
                     break;
-                case 102: //cooler temp
-                    gauge_ovenTemp = cmdval.ToString();
+                case 103: //peltier temp
+                    gauge_6 = cmdval.ToString();
+                    this.Bindings.Update();
+                    break;
+                case 104: //H2 water
+                    WAT_H2 = cmdval.ToString();
+                    this.Bindings.Update();
+                    break;
+                case 105: //CH water
+                    WAT_CH4 = cmdval.ToString();
+                    this.Bindings.Update();
+                    break;
+                case 108: //O2 stor press
+                    P002 = cmdval.ToString();
+                    this.Bindings.Update();
+                    break;
+                case 111: //O2 water
+                    WAT_O2 = cmdval.ToString();
+                    this.Bindings.Update();
+                    break;
+                case 112: //H2 valve
+                    STM000 = cmdval.ToString();
+                    this.Bindings.Update();
+                    break;
+                case 113: //CO2 valve
+                    STM001 = cmdval.ToString();
+                    this.Bindings.Update();
+                    break;
+                case 114: //O2 elec press
+                    P000 = cmdval.ToString();
+                    this.Bindings.Update();
+                    break;
+                case 115: //H2 elec press
+                    P001 = cmdval.ToString();
                     this.Bindings.Update();
                     break;
 
+
                 case 200:
-                    CO2VALVE = cmdval==1 ? true:false;
+                    CO2VALVE = cmdval == 1 ? true : false;
                     break;
                 case 201:
                     H2INVALVE = cmdval == 1 ? true : false;
@@ -444,7 +484,7 @@ namespace CCMR_GUI
                     break;
             }
 
-            btn_CO2OUT.Background = CO2VALVE ? Green : Red ;
+            btn_CO2OUT.Background = CO2VALVE ? Green : Red;
             btn_H2IN.Background = H2INVALVE ? Green : Red;
             btn_H2OUT.Background = H2OUTVALVE ? Green : Red;
             btn_O2IN.Background = O2INVALVE ? Green : Red;
@@ -457,48 +497,48 @@ namespace CCMR_GUI
 
         }
 
-       
+
 
         private async void btn_02IN_Click(object sender, RoutedEventArgs e)
         {
-            await Send_to_CCMR(203, O2INVALVE ? inactive : active); 
+            await Send_to_CCMR(203, O2INVALVE ? inactive : active);
 
         }
         private async void btn_H2IN_Click(object sender, RoutedEventArgs e)
         {
-           
-                await Send_to_CCMR(201,H2INVALVE ? inactive : active);
-           
+
+            await Send_to_CCMR(201, H2INVALVE ? inactive : active);
+
         }
         private async void btn_H2WATER_Click(object sender, RoutedEventArgs e)
         {
-           
-                await Send_to_CCMR(205,H2REFLUX ? inactive : active);
-           
+
+            await Send_to_CCMR(205, H2REFLUX ? inactive : active);
+
         }
         private async void btn_O2WATER_Click(object sender, RoutedEventArgs e)
         {
-           
-                await Send_to_CCMR(206,O2REFLUX ? inactive : active);
-           
+
+            await Send_to_CCMR(206, O2REFLUX ? inactive : active);
+
         }
         private async void btn_O2OUT_Click(object sender, RoutedEventArgs e)
         {
-            
-                await Send_to_CCMR(204,O2OUTVALVE ? inactive : active);
-            
+
+            await Send_to_CCMR(204, O2OUTVALVE ? inactive : active);
+
         }
         private async void btn_H2OUT_Click(object sender, RoutedEventArgs e)
         {
-            
-                await Send_to_CCMR(202,H2OUTVALVE ? inactive : active);
-           
+
+            await Send_to_CCMR(202, H2OUTVALVE ? inactive : active);
+
         }
         private async void btn_CO2OUT_Click(object sender, RoutedEventArgs e)
         {
-            
-                await Send_to_CCMR(200,CO2VALVE ? inactive : active);
-           
+
+            await Send_to_CCMR(200, CO2VALVE ? inactive : active);
+
         }
         private async void btn_PM000_Click(object sender, RoutedEventArgs e)
         {

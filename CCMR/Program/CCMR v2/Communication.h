@@ -1,16 +1,22 @@
 #pragma once
 //command ID list\\
 
-#define SNS_emergency_val       100
-#define SNS_ovenTemp_val        101
-#define SNS_coolerTemp_val      102
-#define SNS_peltier             103
-#define SNS_H2water_val         104
-#define SNS_CHwater_val         105
-#define SNS_CO2_val             106
-#define SNS_H2_val              107
-#define SNS_CO2storagepressure_val     108
-#define SNS_H2Storagepressure_val      109
+#define SNS_emergency_val				 100
+#define SNS_ovenTemp_deg				 101
+#define SNS_coolerTemp_deg				 102
+#define SNS_peltier_deg					 103
+#define SNS_H2water_val					 104//0=0;1=1;2=1&2
+#define SNS_CHwater_val					 105//0=0;1=1;2=1&2
+#define SNS_CO2_perc					 106
+#define SNS_H2_perc						 107
+#define SNS_O2storagepressure_mbar		 108
+#define SNS_H2Storagepressure_mbar       109
+#define SNS_CO2pressure_mbar		     110
+#define SNS_O2water_val                  111//0=0;1=1;2=1&2
+#define SNS_H2valve_perc				 112
+#define SNS_CO2valve_perc				 113
+#define SNS_O2electrolyzerpressure_mbar  114
+#define SNS_H2electrolyzerpressure_mbar  114
 
 #define STT_CO2VALVE            200
 #define STT_H2INVALVE			201
