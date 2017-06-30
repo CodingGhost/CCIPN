@@ -216,6 +216,18 @@ void handleCommands()
 		}
 		break;
 	}
+	case STT_CHWATER:
+	{
+		if (cmdval == 1)
+		{
+			CCMR.valves.CH_Water(true);
+		}
+		else
+		{
+			CCMR.valves.CH_Water(false);
+		}
+		break;
+	}
 	default:
 
 		break;
@@ -224,19 +236,6 @@ void handleCommands()
 
 void updateGUI()
 {
-  /*CCMR.utils.Send_to_GUI(STT_CO2VALVE, CCMR.sys_stat.CO2());
-	CCMR.utils.Send_to_GUI(STT_H2INVALVE, CCMR.sys_stat.H2_in());
-	CCMR.utils.Send_to_GUI(STT_H2OUTVALVE, CCMR.sys_stat.H2_out());
-	CCMR.utils.Send_to_GUI(STT_O2INVALVE, CCMR.sys_stat.O2_in());
-	CCMR.utils.Send_to_GUI(STT_O2OUTVALVE, CCMR.sys_stat.O2_out());
-	CCMR.utils.Send_to_GUI(STT_H2REFLUX, CCMR.sys_stat.Water_reflux_H2());
-	CCMR.utils.Send_to_GUI(STT_O2REFLUX, CCMR.sys_stat.Water_reflux_O2());
-	CCMR.utils.Send_to_GUI(STT_PUMP, CCMR.sys_stat.Pump());*/
-	
-	//utils.Send_to_GUI(SNS_coolerTemp_deg, CCMR.sensors.cooler());
-	//utils.Send_to_GUI(SNS_peltier_deg, CCMR.sensors.peltier());
-	//utils.Send_to_GUI(SNS_CO2_perc, CCMR.sensors.CO2_percentage());
-	//utils.Send_to_GUI(SNS_H2_perc, CCMR.sensors.H2_percentage());	
 
 	utils.Send_to_GUI(SNS_ovenTemp_deg, CCMR.sensors.Oven_temp());
 	delay(1);

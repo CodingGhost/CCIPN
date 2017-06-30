@@ -1225,8 +1225,7 @@ public:
 	Utils utils;
   void init(boolean Flush) 
   {
-    Serial.begin(9600);
-	Serial2.begin(9600);
+    Serial.begin(19200);
     
 
 
@@ -1251,7 +1250,7 @@ public:
 	//END INIT
     Serial.println("\nCCMR program initialized");
 	Serial.println("registering Serial --> GUI...");
-		Serial2.begin(9600);
+		Serial2.begin(115200);
 
 		utils.Send_to_GUI(STT_CO2VALVE, sys_stat.CO2());
 		delay(5);

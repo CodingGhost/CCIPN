@@ -125,7 +125,7 @@ namespace CCMR_GUI
                 serialPort = await SerialDevice.FromIdAsync(SERIAL_DEVICE);
                 serialPort.WriteTimeout = TimeSpan.FromMilliseconds(1000);
                 serialPort.ReadTimeout = TimeSpan.FromMilliseconds(20); //IMPORTANT!!!!!!
-                serialPort.BaudRate = 9600;
+                serialPort.BaudRate = 115200;
                 serialPort.Parity = SerialParity.None;
                 serialPort.StopBits = SerialStopBitCount.One;
                 serialPort.DataBits = 8;
@@ -550,7 +550,7 @@ namespace CCMR_GUI
         private async void btn_CH4WATER_Click(object sender, RoutedEventArgs e)
         {
 
-            await Send_to_CCMR(210, PUMP ? inactive : active);
+            await Send_to_CCMR(210, CHWATER ? inactive : active);
 
         }
 
