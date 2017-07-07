@@ -15,6 +15,7 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="1024" Height="600">
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -60,7 +61,6 @@
                     <controls:NumericUpDown x:Name="Num2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,175" VerticalAlignment="Bottom" Width="164" Height="37"/>
                     <controls:NumericUpDown x:Name="Num3" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,212" VerticalAlignment="Bottom" Width="164" Height="37"/>
                     <TextBlock x:Name="status" Grid.Column="1" HorizontalAlignment="Left" Margin="487,-32,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="462" Height="25"/>
-
                 </Grid>
             </PivotItem>
             <PivotItem Header="Manual Control">
@@ -206,15 +206,16 @@
             <PivotItem Header="RAW">
 
                 <Grid Height="505">
+                    <TextBox x:Name="RAWCONSOLE" HorizontalAlignment="Left" Margin="0,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="485" Width="990"/>
 
 
-                    <Button x:Name="button5" Content="Button2" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
 
                 </Grid>
             </PivotItem>
         </Pivot>
         <Button x:Name="button" Content="EMERGENCY STOP" HorizontalAlignment="Stretch" Height="45" Margin="52,10,88,0" VerticalAlignment="Top" Background="#E5FF0000" d:LayoutOverrides="HorizontalAlignment"/>
+        <TextBlock x:Name="buffersize" HorizontalAlignment="Left" Margin="937,60,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 
 
 

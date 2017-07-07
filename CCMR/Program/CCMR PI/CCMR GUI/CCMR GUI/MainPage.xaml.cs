@@ -92,6 +92,8 @@ namespace CCMR_GUI
         {
             this.InitializeComponent();
             this.DataContextChanged += (s, e) => this.Bindings.Update();
+            RAWCONSOLE.TextChanged += new TextChangedEventHandler(TextBox_TextChanged);
+
             //init
             status.Text = "GUI Initialized";
             showmode.IsChecked = true;
@@ -100,7 +102,8 @@ namespace CCMR_GUI
 
             connect();
         }
-
+   
+        void App_UnhandledException(object sender, UnhandledExceptionEventArgs e) { }
         public void tweakmode_Checked(object sender, RoutedEventArgs e)
         {
             Num1.IsEnabled = true;
@@ -123,8 +126,8 @@ namespace CCMR_GUI
             {
 
                 serialPort = await SerialDevice.FromIdAsync(SERIAL_DEVICE);
-                serialPort.WriteTimeout = TimeSpan.FromMilliseconds(1000);
-                serialPort.ReadTimeout = TimeSpan.FromMilliseconds(20); //IMPORTANT!!!!!!
+                serialPort.WriteTimeout = TimeSpan.FromMilliseconds(50);
+                serialPort.ReadTimeout = TimeSpan.FromMilliseconds(50); //IMPORTANT!!!!!!
                 serialPort.BaudRate = 115200;
                 serialPort.Parity = SerialParity.None;
                 serialPort.StopBits = SerialStopBitCount.One;
@@ -244,7 +247,7 @@ namespace CCMR_GUI
                 // Cleanup once complete
                 if (dataReaderObject != null)
                 {
-                    dataReaderObject.DetachStream();
+                    dataReaderObject.DetachStream(); //HIER!!!!!
                     dataReaderObject = null;
                 }
             }
@@ -253,7 +256,7 @@ namespace CCMR_GUI
         {
             Task<UInt32> loadAsyncTask;
 
-            uint ReadBufferLength = 1024;
+            uint ReadBufferLength = 2048;
 
             // If task cancellation was requested, comply
             cancellationToken.ThrowIfCancellationRequested();
@@ -264,7 +267,9 @@ namespace CCMR_GUI
             // Create a task object to wait for data on the serialPort.InputStream
             loadAsyncTask = dataReaderObject.LoadAsync(ReadBufferLength).AsTask(cancellationToken);
             uint t = dataReaderObject.UnconsumedBufferLength;
-            if (t > 1000)
+       
+            buffersize.Text = Convert.ToString(t);
+            if (t > 2000)
             {
                 throw new OverflowException();
             }
@@ -272,10 +277,28 @@ namespace CCMR_GUI
             UInt32 bytesRead = await loadAsyncTask;
             if (bytesRead > 0)
             {
-                cmdid = dataReaderObject.ReadByte();
-                cmdval = dataReaderObject.ReadByte();
+                byte[] readb = new byte[bytesRead];
+                     dataReaderObject.ReadBytes(readb);
+                cmdid = readb[0];//dataReaderObject.ReadBytes();
+                
+                RAWCONSOLE.Text += (cmdid + " || ");
+                cmdval = readb[1];  //dataReaderObject.ReadByte();
+                RAWCONSOLE.Text += (cmdval + "\n");
             }
+            
             handleCommands();
+            
+        }
+         void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var grid = (Grid)VisualTreeHelper.GetChild(RAWCONSOLE, 0);
+            for (var i = 0; i <= VisualTreeHelper.GetChildrenCount(grid) - 1; i++)
+            {
+                object obj = VisualTreeHelper.GetChild(grid, i);
+                if (!(obj is ScrollViewer)) continue;
+                ((ScrollViewer)obj).ChangeView(0.0f, ((ScrollViewer)obj).ExtentHeight, 1.0f);
+                break;
+            }
         }
         private void CancelReadTask()
         {

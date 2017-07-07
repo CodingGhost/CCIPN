@@ -1105,7 +1105,7 @@ public:
 	 utils.I2CWRITE_M(PSW_PCF8575::adress,0,0); //5V open
      
 
-
+	 
     }
     else
     {
@@ -1225,7 +1225,7 @@ public:
 	Utils utils;
   void init(boolean Flush) 
   {
-    Serial.begin(19200);
+    Serial.begin(9600);
     
 
 
@@ -1253,41 +1253,41 @@ public:
 		Serial2.begin(115200);
 
 		utils.Send_to_GUI(STT_CO2VALVE, sys_stat.CO2());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(STT_H2INVALVE, sys_stat.H2_in());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(STT_H2OUTVALVE, sys_stat.H2_out());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(STT_O2INVALVE, sys_stat.O2_in());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(STT_O2OUTVALVE, sys_stat.O2_out());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(STT_H2REFLUX, sys_stat.Water_reflux_H2());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(STT_O2REFLUX, sys_stat.Water_reflux_O2());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(STT_PUMP, sys_stat.Pump());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(SNS_ovenTemp_deg, sensors.Oven_temp());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(SNS_H2water_val, sensors.H2_water(1) ? (sensors.H2_water(2) ? 2 : 1) : 0);//0=0;1=1;2=1&2
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(SNS_CHwater_val, sensors.CH_water(1) ? (sensors.CH_water(2) ? 2 : 1) : 0);//0=0;1=1;2=1&2
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(SNS_O2storagepressure_mbar, sensors.O2_storagepressure());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(SNS_H2Storagepressure_mbar, sensors.H2_storagepressure());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(SNS_CO2pressure_mbar, sensors.CO2_pressure());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(SNS_H2valve_perc, sensors.H2_outvalve());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(SNS_CO2valve_perc, sensors.CO2_valve());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(SNS_O2electrolyzerpressure_mbar, sensors.O2_pressure_Electrolyzer());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(SNS_H2electrolyzerpressure_mbar, sensors.H2_pressure_Electrolyzer());
-		delay(5);
+		delay(100);
 		utils.Send_to_GUI(SNS_O2water_val, sensors.O2_water(1) ? (sensors.O2_water(2) ? 2 : 1) : 0);//0=0;1=1;2=1&2
 
 

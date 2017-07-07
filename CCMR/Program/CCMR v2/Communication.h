@@ -16,7 +16,7 @@
 #define SNS_H2valve_perc				 112
 #define SNS_CO2valve_perc				 113
 #define SNS_O2electrolyzerpressure_mbar  114
-#define SNS_H2electrolyzerpressure_mbar  114
+#define SNS_H2electrolyzerpressure_mbar  115
 
 #define STT_CO2VALVE            200
 #define STT_H2INVALVE			201
