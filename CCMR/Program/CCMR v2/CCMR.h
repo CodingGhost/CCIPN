@@ -26,10 +26,13 @@ byte RT[1];
 class Utils
 {
 public:
-void Send_to_GUI(byte CMDID, byte CMDVAL)
+void Send_to_GUI(byte CMDID, word CMDVAL)
   {
+	byte bL = lowByte(CMDVAL);
+	byte bH = highByte(CMDVAL);
 	Serial2.write(CMDID);
-	Serial2.write(CMDVAL);
+	Serial2.write(bL);
+	Serial2.write(bH);
   }
 void channel_switch_2(int num)
 {
@@ -400,6 +403,7 @@ public:
 		//double p = (((fout / 5000) - 0.04) / 0.009) * 10;
 		double p = map(fout,160,3150,0,2000);
 		utils.channel_switch(0);
+		//Serial.println(p);
 		return p;
 	}
 	int O2_storagepressure()//Y
@@ -570,7 +574,7 @@ public:
       a = (a - 512) / 2;
     }
 	Serial.print(" || degree:");
-		Serial.println(a);
+		//Serial.println(a);
     return a;
   }
   int peltier()
@@ -700,8 +704,8 @@ public:
         Wire.requestFrom(0x00, 2);
         volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
-        Serial.write("1:");
-        Serial.println(volt);
+      //  Serial.write("1:");
+       // Serial.println(volt);
         if (volt > 4000) {
           return false;
         } 
@@ -717,8 +721,8 @@ public:
         Wire.requestFrom(0x00, 2);
         volt = ((Wire.read() << 8) + Wire.read());
         Wire.endTransmission();
-        Serial.write("2:");
-        Serial.println(volt);
+       // Serial.write("2:");
+      //  Serial.println(volt);
 
         if (volt > 3000) {
           return false;

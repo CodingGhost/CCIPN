@@ -58,7 +58,7 @@ namespace CCMR_GUI
         //END BINDINGS\\
         String SERIAL_DEVICE = "\\\\?\\ACPI#BCM2836#0#{86e0d1e0-8089-11d0-9ce4-08003e301f73}";
         byte cmdid;
-        byte cmdval;
+        ushort cmdval;
         Boolean[] Valve_stat = new Boolean[6];
         /// <summary>
         /// Private variables
@@ -126,21 +126,88 @@ namespace CCMR_GUI
             {
 
                 serialPort = await SerialDevice.FromIdAsync(SERIAL_DEVICE);
-                serialPort.WriteTimeout = TimeSpan.FromMilliseconds(50);
-                serialPort.ReadTimeout = TimeSpan.FromMilliseconds(50); //IMPORTANT!!!!!!
+                serialPort.WriteTimeout = TimeSpan.FromMilliseconds(30);
+                serialPort.ReadTimeout = TimeSpan.FromMilliseconds(30); //IMPORTANT!!!!!!
                 serialPort.BaudRate = 115200;
                 serialPort.Parity = SerialParity.None;
                 serialPort.StopBits = SerialStopBitCount.One;
                 serialPort.DataBits = 8;
                 serialPort.Handshake = SerialHandshake.None;
                 ReadCancellationTokenSource = new CancellationTokenSource();
+                dataReaderObject = new DataReader(serialPort.InputStream);
+                dataReaderObject.InputStreamOptions = InputStreamOptions.Partial;
+                dataWriteObject = new DataWriter(serialPort.OutputStream);
 
+               
             }
             catch (Exception ex)
             {
                 status.Text = ex.Message;
             }
-            Listen();
+            //  Listen();
+            StartReceive();
+            System.Diagnostics.Debug.WriteLine("TERMINATION");
+        }
+        public async void StartReceive()
+        {
+
+            ReadCancellationTokenSource = new CancellationTokenSource();
+
+            while (true)
+            {
+                await ListenT();
+                if ((ReadCancellationTokenSource.Token.IsCancellationRequested) || (serialPort == null))
+                    break;
+            }
+        }
+        private async Task ListenT()
+        {
+            const int NUMBER_OF_BYTES_TO_RECEIVE = 3;           //<<<<<SET THE NUMBER OF BYTES YOU WANT TO WAIT FOR
+
+            Task<UInt32> loadAsyncTask;
+            byte[] ReceiveData;
+            UInt32 bytesRead;
+
+            try
+            {
+                if (serialPort != null)
+                {
+                    while (true)
+                    {
+                        //###### WINDOWS IoT MEMORY LEAK BUG 2017-03 - USING CancellationToken WITH LoadAsync() CAUSES A BAD MEMORY LEAK.  WORKAROUND IS
+                        //TO BUILD RELEASE WITHOUT USING THE .NET NATIVE TOOLCHAIN OR TO NOT USE A CancellationToken IN THE CALL #####
+                        //bytesRead = await dataReaderObject.LoadAsync(NUMBER_OF_BYTES_TO_RECEIVE).AsTask(ReadCancellationTokenSource.Token);	//Wait until buffer is full
+                        bytesRead = await dataReaderObject.LoadAsync(NUMBER_OF_BYTES_TO_RECEIVE).AsTask();  //Wait until buffer is full
+
+                        if ((ReadCancellationTokenSource.Token.IsCancellationRequested) || (serialPort == null))
+                            break;
+
+                        if (bytesRead > 0)
+                        {
+                            ReceiveData = new byte[NUMBER_OF_BYTES_TO_RECEIVE];
+                            dataReaderObject.ReadBytes(ReceiveData);
+
+                            cmdid = ReceiveData[0];//dataReaderObject.ReadBytes();
+
+                            cmdval = (UInt16)((ReceiveData[2] << 8) + ReceiveData[1]);
+                            System.Diagnostics.Debug.Write(cmdid + " || ");
+                            System.Diagnostics.Debug.WriteLine(cmdval);
+                            RAWCONSOLE.Text += (cmdid + " || ");
+                            //dataReaderObject.ReadByte();
+                            RAWCONSOLE.Text += (cmdval + "\n");
+
+                        }
+                        handleCommands();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                //We will get here often if the USB serial cable is removed so reset ready for a new connection (otherwise a never ending error occurs)
+                if (ReadCancellationTokenSource != null)
+                    ReadCancellationTokenSource.Cancel();
+                System.Diagnostics.Debug.WriteLine("UART ReadAsync Exception: {0}", e.Message);
+            }
         }
         private async void Serial_send(String _text)
         {
@@ -198,21 +265,51 @@ namespace CCMR_GUI
         private async Task Send_to_CCMR(byte cmdid, byte cmdval)
         {
             Task<UInt32> storeAsyncTask;
-            dataWriteObject = new DataWriter(serialPort.OutputStream);
-
-            // Load the text from the sendText input text box to the dataWriter object
-            dataWriteObject.WriteByte(cmdid);
-            dataWriteObject.WriteByte(cmdval);
-            // Launch an async task to complete the write operation
-            storeAsyncTask = dataWriteObject.StoreAsync().AsTask();
-
-            UInt32 bytesWritten = await storeAsyncTask;
-            if (bytesWritten > 0)
+            try
             {
-                status.Text += "||bytes written successfully!";
+                if (serialPort != null)
+                {
 
+                    // Create the DataWriter object and attach to OutputStream
+                    dataWriteObject = new DataWriter(serialPort.OutputStream);
+
+                    //Launch the WriteAsync task to perform the write
+                    dataWriteObject.WriteByte(cmdid);
+                    dataWriteObject.WriteByte(cmdval);
+
+
+                }
+                else
+                {
+                    status.Text = "No Device Found";
+                }
+            }
+           catch(Exception ex)
+            {
+                status.Text = ex.Message;
+            }
+            finally
+            {
+                storeAsyncTask = dataWriteObject.StoreAsync().AsTask();
+                UInt32 bytesWritten = await storeAsyncTask;
+                if (bytesWritten > 0)
+                {
+                    status.Text += "||bytes written successfully!";
+
+                }
+                // Cleanup once complete
+                if (dataWriteObject != null)
+                {
+                    dataWriteObject.DetachStream();
+                    dataWriteObject = null;
+                }
             }
 
+
+            
+
+            
+            
 
         }
         private async void Listen()
@@ -226,6 +323,7 @@ namespace CCMR_GUI
                     // keep reading the serial input
                     while (true)
                     {
+                        //System.Diagnostics.Debug.WriteLine("Loop");
                         await ReadAsync(ReadCancellationTokenSource.Token);
                     }
                 }
@@ -255,39 +353,49 @@ namespace CCMR_GUI
         private async Task ReadAsync(CancellationToken cancellationToken)
         {
             Task<UInt32> loadAsyncTask;
-
-            uint ReadBufferLength = 2048;
+            
+                uint ReadBufferLength = 1024;
 
             // If task cancellation was requested, comply
             cancellationToken.ThrowIfCancellationRequested();
-
-            // Set InputStreamOptions to complete the asynchronous read operation when one or more bytes is available
-            dataReaderObject.InputStreamOptions = InputStreamOptions.Partial;
-
-            // Create a task object to wait for data on the serialPort.InputStream
-            loadAsyncTask = dataReaderObject.LoadAsync(ReadBufferLength).AsTask(cancellationToken);
-            uint t = dataReaderObject.UnconsumedBufferLength;
+            
+                // Set InputStreamOptions to complete the asynchronous read operation when one or more bytes is available
+                dataReaderObject.InputStreamOptions = InputStreamOptions.Partial;
+            
+                // Create a task object to wait for data on the serialPort.InputStream
+                loadAsyncTask = dataReaderObject.LoadAsync(ReadBufferLength).AsTask(cancellationToken);
+            
+                uint t = dataReaderObject.UnconsumedBufferLength;
        
             buffersize.Text = Convert.ToString(t);
-            if (t > 2000)
-            {
-                throw new OverflowException();
-            }
+            //    System.Diagnostics.Debug.WriteLine(t);
+            
+                if (t > 1000)
+                {
+                    throw new OverflowException();
+                }
             // Launch the task and wait
-            UInt32 bytesRead = await loadAsyncTask;
-            if (bytesRead > 0)
-            {
-                byte[] readb = new byte[bytesRead];
-                     dataReaderObject.ReadBytes(readb);
-                cmdid = readb[0];//dataReaderObject.ReadBytes();
+           
+                UInt32 bytesRead = await loadAsyncTask;
+                if (bytesRead >= 3)
+                {
+                    byte[] readb = new byte[bytesRead];
+                    dataReaderObject.ReadBytes(readb);
+
+
+
+                    cmdid = readb[0];//dataReaderObject.ReadBytes();
+
+                    cmdval = (UInt16)((readb[2] << 8) + readb[1]);
+                    System.Diagnostics.Debug.Write(cmdid + " || ");
+                    System.Diagnostics.Debug.WriteLine(cmdval);
+                    RAWCONSOLE.Text += (cmdid + " || ");
+                    //dataReaderObject.ReadByte();
+                    RAWCONSOLE.Text += (cmdval + "\n");
                 
-                RAWCONSOLE.Text += (cmdid + " || ");
-                cmdval = readb[1];  //dataReaderObject.ReadByte();
-                RAWCONSOLE.Text += (cmdval + "\n");
+
+               // handleCommands();
             }
-            
-            handleCommands();
-            
         }
          void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -406,6 +514,7 @@ namespace CCMR_GUI
 
         private void handleCommands()
         {
+          // Send_to_CCMR(201, 1);
             switch (cmdid)
             {
                 case 101: //oven temp

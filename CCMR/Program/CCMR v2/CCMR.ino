@@ -54,7 +54,7 @@ void Timed_loop()
 		previousMillis_A = currentMillis;
 		FastLoop();
 	}
-	if (currentMillis - previousMillis_S >= 1000)
+	if (currentMillis - previousMillis_S >= 500)
 	{
 		previousMillis_S = currentMillis;
 		specialloop();
@@ -88,7 +88,7 @@ void MidLoop()
 }
 void SlowLoop()
 {
-
+	Serial.println(CCMR.sensors.H2_storagepressure());
 }
 void specialloop()
 {
@@ -128,7 +128,6 @@ void handleCommands()
 	{
 		if (cmdval == 1)
 		{
-			Serial.println("ON!");
 			CCMR.valves.H2_in(true);
 		}
 		else

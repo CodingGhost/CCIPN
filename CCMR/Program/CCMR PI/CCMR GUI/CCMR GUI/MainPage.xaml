@@ -42,19 +42,23 @@
                         <ColumnDefinition Width="929*"/>
                     </Grid.ColumnDefinitions>
 
-                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_ovenTemp}" Maximum="100" Unit="mbar"  HorizontalAlignment="Left" Margin="298,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
-                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_CO2pressure}" TrailBrush="Aqua" Maximum="100" Unit="mbar"  HorizontalAlignment="Left" Margin="-38,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
-                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_CO2}" TrailBrush="Aqua" Maximum="100" Unit="mbar"  HorizontalAlignment="Left" Margin="466,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
-                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_H2}" TrailBrush="Aqua" Maximum="100" Unit="mbar"  HorizontalAlignment="Left" Margin="130,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
-                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_H2pressure}" TrailBrush="Aqua" Maximum="100" Unit="mbar"  HorizontalAlignment="Left" Margin="634,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
+                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_ovenTemp}" Maximum="400" Unit="°C"  HorizontalAlignment="Left" Margin="629,15,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
+                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_CO2pressure}" TrailBrush="Aqua" Maximum="2000" Unit="mbar"  HorizontalAlignment="Left" Margin="-38,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
+                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_CO2}" TrailBrush="Aqua" Maximum="100" Unit="%"  HorizontalAlignment="Left" Margin="466,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
+                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_H2}" TrailBrush="Aqua" Maximum="100" Unit="%"  HorizontalAlignment="Left" Margin="298,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
+                    <controls:Gauge Minimum="0" Value="{x:Bind gauge_H2pressure}" TrailBrush="Aqua" Maximum="2000" Unit="mbar"  HorizontalAlignment="Left" Margin="130,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
                     <controls:Gauge Minimum="0" Value="{x:Bind gauge_H2pressure}" TrailBrush="Aqua" Maximum="100" Unit="mbar"  HorizontalAlignment="Left" Margin="802,10,0,0" Width="168" Grid.Column="1" Height="152" VerticalAlignment="Top"/>
 
-                    <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Height="23" Margin="22,0,0,315" TextWrapping="Wrap" Text="oven temperature" VerticalAlignment="Bottom" Width="125" Grid.ColumnSpan="2"/>
-                    <TextBlock x:Name="textBlock1_Copy" HorizontalAlignment="Left" Height="23" Margin="152,0,0,315" TextWrapping="Wrap" Text="CO2 Pressure" VerticalAlignment="Bottom" Width="125" Grid.Column="1"  TextAlignment="Center"/>
-                    <TextBlock x:Name="textBlock1_Copy1" HorizontalAlignment="Left" Height="23" Margin="320,0,0,315" TextWrapping="Wrap" Text="CO2 percentage" VerticalAlignment="Bottom" Width="125" Grid.Column="1" TextAlignment="Center"/>
-                    <TextBlock x:Name="textBlock1_Copy2" HorizontalAlignment="Left" Height="23" Margin="487,0,0,315" TextWrapping="Wrap" Text="H2 precentage" VerticalAlignment="Bottom" Width="125" Grid.Column="1" TextAlignment="Center"/>
-                    <TextBlock x:Name="textBlock1_Copy3" HorizontalAlignment="Left" Height="23" Margin="656,0,0,315" TextWrapping="Wrap" Text="H2 pressure" VerticalAlignment="Bottom" Width="125" Grid.Column="1" TextAlignment="Center"/>
-                    <TextBlock x:Name="textBlock1_Copy4" HorizontalAlignment="Left" Height="23" Margin="824,0,0,315" TextWrapping="Wrap" Text="note yet defined" VerticalAlignment="Bottom" Width="125" Grid.Column="1" TextAlignment="Center"/>
+                    <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Height="23" Margin="651,0,0,308" TextWrapping="Wrap" Text="oven temperature" VerticalAlignment="Bottom" Width="125" Grid.Column="1"/>
+                    <TextBlock x:Name="textBlock1_Copy" HorizontalAlignment="Left" Height="23" Margin="0,0,0,308" TextWrapping="Wrap" Text="CO2 Pressure" VerticalAlignment="Bottom" Width="125"  TextAlignment="Center" Grid.ColumnSpan="2"/>
+                    <TextBlock x:Name="textBlock1_Copy1" HorizontalAlignment="Left" Height="23" Margin="487,0,0,308" TextWrapping="Wrap" Text="CO2 percentage" VerticalAlignment="Bottom" Width="125" TextAlignment="Center" Grid.Column="1"/>
+                    <TextBlock x:Name="textBlock1_Copy2" HorizontalAlignment="Left" Height="23" Margin="321,0,0,308" TextWrapping="Wrap" Text="H2 precentage" VerticalAlignment="Bottom" Width="125" Grid.Column="1" TextAlignment="Center"/>
+                    <TextBlock x:Name="textBlock1_Copy3" HorizontalAlignment="Left" Height="23" Margin="151,0,0,308" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="125" Grid.Column="1" TextAlignment="Center">
+                        <Run Text="H2 "/>
+                        <Run Text="Storag"/>
+                        <Run Text="pressure"/>
+                    </TextBlock>
+                    <TextBlock x:Name="textBlock1_Copy4" HorizontalAlignment="Left" Height="23" Margin="824,0,0,308" TextWrapping="Wrap" Text="note yet defined" VerticalAlignment="Bottom" Width="125" Grid.Column="1" TextAlignment="Center"/>
                     <RadioButton x:Name="showmode" Content="Show Mode" Grid.Column="1" HorizontalAlignment="Right" Height="33" Margin="0,214,10,0" VerticalAlignment="Top" Width="102" Checked="showmode_Checked"/>
                     <RadioButton x:Name="tweakmode" Content="Tweak Mode" Grid.Column="1" HorizontalAlignment="Right" Margin="0,246,10,226" VerticalAlignment="Stretch" Width="102" d:LayoutOverrides="TopPosition, BottomPosition" Checked="tweakmode_Checked"/>
                     <controls:NumericUpDown x:Name="Num1" Grid.Column="1" HorizontalAlignment="Left" Margin="10,219,0,249" VerticalAlignment="Stretch" Width="164" d:LayoutOverrides="TopPosition, BottomPosition"/>
