@@ -1229,6 +1229,7 @@ public:
 	Utils utils;
   void init(boolean Flush) 
   {
+	  boolean GUI_LINK = false;
     Serial.begin(9600);
     
 
@@ -1255,7 +1256,20 @@ public:
     Serial.println("\nCCMR program initialized");
 	Serial.println("registering Serial --> GUI...");
 		Serial2.begin(115200);
-
+		byte cmdid;
+		byte cmdval;
+		while (!GUI_LINK && !debug)
+		{
+			utils.Send_to_GUI(INF_AKNOWLEDGE, 0);
+			delay(10);
+			if (Serial2.available())
+			{
+				cmdid = Serial2.read();
+				cmdval = Serial2.read();
+			}
+			if (cmdid == INF_AKNOWLEDGE) { GUI_LINK = true; }
+			delay(500);
+		}
 		utils.Send_to_GUI(STT_CO2VALVE, sys_stat.CO2());
 		delay(100);
 		utils.Send_to_GUI(STT_H2INVALVE, sys_stat.H2_in());

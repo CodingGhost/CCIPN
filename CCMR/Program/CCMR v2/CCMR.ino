@@ -32,6 +32,7 @@ unsigned long previousMillis_B = 0;
 unsigned long previousMillis_C = 0;
 unsigned long previousMillis_S = 0;
 int upd = 0;
+boolean Produce_flag = false;
 void setup()
 {
 	
@@ -74,21 +75,34 @@ void Timed_loop()
 //LOOPS
 void continousLoop()
 {
-	/*CCMR.valves.CO2_Flowrate_step(0);
-	delay(4);*/
+	if (Produce_flag)
+	{
+		Mix();
+	}
 }
 void FastLoop()
 {
-	handleCommands();
+	if (Produce_flag)
+	{
+		check_H2();
+		handleCommands();
+	}
+	
 }
 void MidLoop()
 {
-	
-
+	if (Produce_flag)
+	{
+		check_Oven();
+		check_water();
+	}
 }
 void SlowLoop()
 {
-	Serial.println(CCMR.sensors.H2_storagepressure());
+	if (Produce_flag)
+	{
+		check_temperature();
+	}
 }
 void specialloop()
 {

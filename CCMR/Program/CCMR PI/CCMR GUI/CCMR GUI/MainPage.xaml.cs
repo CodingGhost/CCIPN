@@ -55,6 +55,7 @@ namespace CCMR_GUI
         public string WAT_O2 = "Nothing";
         public string WAT_H2 = "Nothing";
         public string WAT_CH4 = "Nothing";
+        
         //END BINDINGS\\
         String SERIAL_DEVICE = "\\\\?\\ACPI#BCM2836#0#{86e0d1e0-8089-11d0-9ce4-08003e301f73}";
         byte cmdid;
@@ -96,7 +97,7 @@ namespace CCMR_GUI
 
             //init
             status.Text = "GUI Initialized";
-            showmode.IsChecked = true;
+            //showmode.IsChecked = true;
 
             //scroller.MouseRightClickedAndHoverChildControl += OnMouseHoverChildControl;
 
@@ -104,20 +105,20 @@ namespace CCMR_GUI
         }
    
         void App_UnhandledException(object sender, UnhandledExceptionEventArgs e) { }
-        public void tweakmode_Checked(object sender, RoutedEventArgs e)
-        {
-            Num1.IsEnabled = true;
-            Num2.IsEnabled = true;
-            Num3.IsEnabled = true;
-            //buttonx.Background = new SolidColorBrush(Color.FromArgb(40, 255, 0, 0));
-        }
-        public void showmode_Checked(object sender, RoutedEventArgs e)
-        {
-            Num1.IsEnabled = false;
-            Num2.IsEnabled = false;
-            Num3.IsEnabled = false;
-            // buttonx.Background = new SolidColorBrush(Color.FromArgb(40, 0, 255, 0));
-        }
+        //public void tweakmode_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    Num1.IsEnabled = true;
+        //    Num2.IsEnabled = true;
+        //    Num3.IsEnabled = true;
+        //    //buttonx.Background = new SolidColorBrush(Color.FromArgb(40, 255, 0, 0));
+        //}
+        //public void showmode_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    Num1.IsEnabled = false;
+        //    Num2.IsEnabled = false;
+        //    Num3.IsEnabled = false;
+        //    // buttonx.Background = new SolidColorBrush(Color.FromArgb(40, 0, 255, 0));
+        //}
         //serial Functions
         private async void connect()
         {
@@ -512,11 +513,15 @@ namespace CCMR_GUI
         }
         //real program
 
-        private void handleCommands()
+        private async void handleCommands()
         {
           // Send_to_CCMR(201, 1);
             switch (cmdid)
             {
+                case 002:
+                    status.Text = " >> Connection established";
+                    await Send_to_CCMR(002, 1);
+                    break;
                 case 101: //oven temp
                     gauge_ovenTemp = cmdval.ToString();
                     OV_TMP = cmdval.ToString();
@@ -546,10 +551,12 @@ namespace CCMR_GUI
                     break;
                 case 104: //H2 water
                     WAT_H2 = cmdval.ToString();
+                    WATER_H2.Value = cmdval;
                     this.Bindings.Update();
                     break;
                 case 105: //CH water
                     WAT_CH4 = cmdval.ToString();
+                    WATER_CH4.Value = cmdval;
                     this.Bindings.Update();
                     break;
                 case 108: //O2 stor press
@@ -603,7 +610,6 @@ namespace CCMR_GUI
                     PUMP = cmdval == 1 ? true : false;
                     break;
                 case 208:
-                    status.Text += " >> Connection established";
                     break;
                 case 209:
                     FLUSH = cmdval == 1 ? true : false;
@@ -690,5 +696,7 @@ namespace CCMR_GUI
         {
             await Send_to_CCMR(209, FLUSH ? inactive : active);
         }
+
+        
     }
 }

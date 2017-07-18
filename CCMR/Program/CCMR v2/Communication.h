@@ -1,5 +1,9 @@
 #pragma once
 //command ID list\\
+//MAX									 255
+
+#define INF_HEARTBEAT					 001
+#define INF_AKNOWLEDGE					 002
 
 #define SNS_emergency_val				 100
 #define SNS_ovenTemp_deg				 101
@@ -26,13 +30,12 @@
 #define STT_H2REFLUX			205
 #define STT_O2REFLUX			206
 #define STT_PUMP				207
-#define STT_HEARTBEAT           208
 #define STT_FLUSH				209
 #define STT_CHWATER             210
 
-#define CMD_start_CMD           300
-#define CMD_oventemp_val        301
-#define CMD_CO2VALVE            302
+//#define CMD_start_CMD           300
+//#define CMD_oventemp_val        301
+//#define CMD_CO2VALVE            302
 
 
 
