@@ -85,9 +85,9 @@ void FastLoop()
 	if (Produce_flag)
 	{
 		check_H2();
-		handleCommands();
+		
 	}
-	
+	handleCommands();
 }
 void MidLoop()
 {
@@ -121,7 +121,7 @@ void handleCommands()
 	}
 	switch (cmdid)
 	{
-	case CMD_start_CMD:
+	case 000:
 	{
 		break;
 	}
@@ -260,6 +260,7 @@ void handleCommands()
 
 void updateGUI()
 {
+
 	switch (upd)
 	{
 	default: break;
@@ -271,7 +272,9 @@ void updateGUI()
 		utils.Send_to_GUI(SNS_H2water_val, CCMR.sensors.H2_water(1) ? (CCMR.sensors.H2_water(2) ? 2 : 1) : 0);//0=0;1=1;2=1&2
 		break;
 	case 2:
+		
 		utils.Send_to_GUI(SNS_CHwater_val, CCMR.sensors.CH_water(1) ? (CCMR.sensors.CH_water(2) ? 2 : 1) : 0);//0=0;1=1;2=1&2
+		//Serial.println(CCMR.sensors.CH_water(1));
 		break;
 	case 3:
 		utils.Send_to_GUI(SNS_O2storagepressure_mbar, CCMR.sensors.O2_storagepressure());
@@ -281,6 +284,7 @@ void updateGUI()
 		break;
 	case 5:
 		utils.Send_to_GUI(SNS_CO2pressure_mbar, CCMR.sensors.CO2_pressure());
+		Serial.println(CCMR.sensors.CO2_pressure());
 		break;
 	case 6:
 		utils.Send_to_GUI(SNS_H2valve_perc, CCMR.sensors.H2_outvalve());
@@ -352,14 +356,16 @@ void check_H2()
 	  if (CCMR.sensors.H2_storagepressure() > desired_H2_storage_pressure)
 	  {
 		  CCMR.valves.H2_in(false);
+		  CCMR.items.Pump(false);
 	  }
 	  else
 	  {
-
+		  CCMR.items.Pump(true);
 		  CCMR.valves.H2_in(true);
 	  }
   }
-  
+  //PUMPCONTROL
+
 
 }
 

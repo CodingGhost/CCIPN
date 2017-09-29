@@ -54,8 +54,8 @@ void Timed_loop()
 //LOOPS
 void continousLoop()
 {
-	CCMR.valves.Butan_Flowrate_step(map(analogRead(A0), 0, 1023, 0, 100));
-	
+	//CCMR.valves.Butan_Flowrate_step(map(analogRead(A0), 0, 1023, 0, 100));
+	//
 }
 void FastLoop()
 {

@@ -369,7 +369,8 @@ namespace CCMR_GUI
                 uint t = dataReaderObject.UnconsumedBufferLength;
        
             buffersize.Text = Convert.ToString(t);
-            //    System.Diagnostics.Debug.WriteLine(t);
+           
+                System.Diagnostics.Debug.WriteLine("BUF: " + t);
             
                 if (t > 1000)
                 {
@@ -556,7 +557,7 @@ namespace CCMR_GUI
                     break;
                 case 105: //CH water
                     WAT_CH4 = cmdval.ToString();
-                    WATER_CH4.Value = cmdval;
+                    //WATER_CH4.Value = cmdval;
                     this.Bindings.Update();
                     break;
                 case 108: //O2 stor press
@@ -565,6 +566,7 @@ namespace CCMR_GUI
                     break;
                 case 111: //O2 water
                     WAT_O2 = cmdval.ToString();
+                    WATER_O2.Value = cmdval;
                     this.Bindings.Update();
                     break;
                 case 112: //H2 valve

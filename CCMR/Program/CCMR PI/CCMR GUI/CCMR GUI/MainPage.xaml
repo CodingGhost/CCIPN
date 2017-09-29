@@ -63,12 +63,12 @@
                             <CompositeTransform Rotation="270"/>
                         </ProgressBar.RenderTransform>
                     </ProgressBar>
-                    <ProgressBar x:Name="WATER_CH4" HorizontalAlignment="Left" Height="102" Margin="42.5,288.5,0,0" VerticalAlignment="Top" Width="259" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Maximum="2" Background="#33003AFF" Foreground="#FF0046FF" Grid.Column="1">
+                    <ProgressBar x:Name="WATER_O2" HorizontalAlignment="Left" Height="102" Margin="42.5,288.5,0,0" VerticalAlignment="Top" Width="259" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Maximum="2" Background="#33003AFF" Foreground="#FF0046FF" Grid.Column="1">
                         <ProgressBar.RenderTransform>
                             <CompositeTransform Rotation="270"/>
                         </ProgressBar.RenderTransform>
                     </ProgressBar>
-                    <TextBlock x:Name="textBlock1_Copy4" HorizontalAlignment="Left" Height="23" Margin="10,0,0,10" TextWrapping="Wrap" Text="H2     WATER     CH4" VerticalAlignment="Bottom" Width="222"  TextAlignment="Center" Grid.Column="1"/>
+                    <TextBlock x:Name="textBlock1_Copy4" HorizontalAlignment="Left" Height="23" Margin="10,0,0,10" TextWrapping="Wrap" Text="H2     WATER     O2" VerticalAlignment="Bottom" Width="222"  TextAlignment="Center" Grid.Column="1"/>
                 </Grid>
             </PivotItem>
             <PivotItem Header="Manual Control">

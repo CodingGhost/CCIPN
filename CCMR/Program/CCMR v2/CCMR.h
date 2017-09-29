@@ -1234,7 +1234,7 @@ public:
     
 
 
-
+	
     Wire.begin();
 	
   
@@ -1270,6 +1270,7 @@ public:
 			if (cmdid == INF_AKNOWLEDGE) { GUI_LINK = true; }
 			delay(500);
 		}
+		Serial.println("TX INIT");
 		utils.Send_to_GUI(STT_CO2VALVE, sys_stat.CO2());
 		delay(100);
 		utils.Send_to_GUI(STT_H2INVALVE, sys_stat.H2_in());
